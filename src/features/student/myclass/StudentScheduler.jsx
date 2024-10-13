@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -13,12 +13,6 @@ const retroTheme = {
   buttonActiveBackground:   "#ffffff",
 };
 
-const modernTheme = {
-  buttonBackground: "#4CAF50",
-  buttonText: "#ffffff",
-  buttonHoverBackground: "#FFC107",
-  buttonActiveBackground: "#2196F3",
-};
 
 // Styled component cho FullCalendar button
 const CalendarWrapper = styled.div`
@@ -40,27 +34,10 @@ const CalendarWrapper = styled.div`
 `;
 
 // Styled component cho nút chuyển đổi theme
-const ThemeToggleButton = styled.button`
-  background-color: ${(props) => props.theme.buttonBackground};
-  color: ${(props) => props.theme.buttonText};
-  border: none;
-  padding: 10px 15px;
-  margin: 20px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.buttonHoverBackground};
-  }
-`;
 
 const ScheduleCalendar = () => {
   const { isLoading, schedules, error } = useSchedule();
-  const [theme, setTheme] = useState(retroTheme); // Theme mặc định
-
-  // Hàm chuyển đổi theme
-  // const toggleTheme = () => {
-  //   setTheme(theme === retroTheme ? modernTheme : retroTheme);
-  // };
+  const [theme] = useState(retroTheme); // Theme mặc định
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -93,10 +70,6 @@ const ScheduleCalendar = () => {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ width: "100%", margin: "0 auto" }}>
-        {/* <ThemeToggleButton onClick={toggleTheme}>
-          Toggle Theme
-        </ThemeToggleButton> */}
-
         <CalendarWrapper>
           <FullCalendar
             plugins={[timeGridPlugin, interactionPlugin]}
