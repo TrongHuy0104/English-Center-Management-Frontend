@@ -1,58 +1,47 @@
-// src/features/fees/FeeTable.jsx
-import React, { useEffect, useState } from "react";
+// export default FeeTable;
 import FeeRow from "./FeeRow";
+// import useBookings from "./useBookings";
+import React, { useState, useEffect } from "react";
+
+import useFee from "./useFee";
 import Spinner from "../../../ui/Spinner";
 import Empty from "../../../ui/Empty";
 import Menus from "../../../ui/Menus";
 import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
-import FeeTableOperations from "./FeeOperations";
-import { getAllFees } from "../../../services/apiAuth";
 
 function FeeTable() {
-  const [fees, setFees] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, fees: initialFees, error } = useFee(); // Fetch all fees from the custom hook
+  const [fees, setFees] = useState([]); // Declare a state for managing fees
 
-  //   useEffect(() => {
-  //     // Fetch fees data
-  //   //   fetch("http://localhost:3000/api/v1/fees", {
-  //   //     method: "GET",
-  //   //     headers: {
-  //   //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //   //       "Content-Type": "application/json",
-  //   //     },
-  //   //   })
-  //   //     .then((response) => response.json())
-  //   //     .then((data) => {
-  //   //       if (data.status === "success") {
-  //   //         setFees(data.data.fees);
-  //   //       } else {
-  //   //         console.error("Error fetching fees:", data);
-  //   //       }
-  //   //     })
-  //   //     .catch((error) => console.error("Fetch error:", error))
-  //   //     .finally(() => setIsLoading(false));
-  //   }, []
-  // );
+  console.log(initialFees);
 
+  // Use the initial fees from the API when they are available
   useEffect(() => {
-    async function fetchData() {
-      const feesData = await getAllFees();
-      console.log(feesData);
-
-      if (feesData) {
-        setFees(feesData); // Đặt đúng mảng dữ liệu từ API
-      }
-      setIsLoading(false);
+    if (initialFees) {
+      setFees(initialFees); // Set the initial fees from the API call
     }
-    fetchData();
-  }, []);
+  }, [initialFees]);
+
+  // Function to handle updating in the frontend after API call
+  const handleUpdateFee = (updatedFee) => {
+    setFees((prevFees) =>
+      prevFees.map((fee) => (fee._id === updatedFee._id ? updatedFee : fee))
+    );
+  };
+
+  const handleDeleteFee = async (id) => {
+    // Filter out the deleted fee from the list
+    setFees((prevFees) => prevFees.filter((fee) => fee._id !== id));
+  };
+
   if (isLoading) return <Spinner />;
-  if (!fees.length) return <Empty resource="fee" />;
+  if (error) return <p>Error loading fees: {error.message}</p>;
+  if (!fees?.length) return <Empty resource="fees" />;
 
   return (
     <Menus>
-      <Table columns="1.5fr 2fr 1.5fr 1fr 1fr 3.2rem">
+      <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
         <Table.Header>
           <div>Student Name</div>
           <div>Contact</div>
@@ -64,7 +53,14 @@ function FeeTable() {
 
         <Table.Body
           data={fees}
-          render={(fee) => <FeeRow key={fee._id} fee={fee} />}
+          render={(fee) => (
+            <FeeRow
+              key={fee._id}
+              fee={fee}
+              onDelete={(e) => handleDeleteFee(fee._id)}
+              onUpdate={handleUpdateFee}
+            />
+          )}
         />
       </Table>
       <Table.Footer>

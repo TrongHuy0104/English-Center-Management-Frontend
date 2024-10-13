@@ -25,34 +25,44 @@ export async function getCurrentUser() {
 export async function getAllFees() {
   try {
     const res = await axios.get("/fees", { withCredentials: true });
-    return res.data.data.data;
+    return res;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getStudentById(userId) {
+export async function deleteFee(id) {
   try {
-    const res = await axios.get(`/users/${userId}`, {
+    const res = await axios.delete(`/fees/${id}`, { withCredentials: true });
+    console.log("delete complete");
+
+    return res;
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
+}
+
+export async function updateFee(id, updatedData) {
+  try {
+    const res = await axios.patch(`/fees/${id}`, updatedData, {
       withCredentials: true,
     });
+    console.log("dsadas: ", res);
 
-    // Kiểm tra xem API có trả về đúng định dạng không
-    if (res.data && res.data.status === "success") {
-      const student = res.data.data;
-      return {
-        name: student.name, // Nếu bạn có trường `name` thực sự, hãy thay thế `student.email` bằng `student.name`
-        email: student.email,
-      };
-    } else {
-      console.error(
-        "API response format is incorrect or status is not success:",
-        res.data
-      );
-      return null;
-    }
+    return res;
   } catch (error) {
-    console.error("Error fetching student data:", error);
-    return null;
+    console.error("Update error:", error.response || error.message);
+    throw error; // Ném lỗi để có thể xử lý lỗi tại nơi gọi hàm này
+  }
+}
+
+export async function getFee(id) {
+  try {
+    const res = await axios.get(`/fees/${id}`, { withCredentials: true });
+    console.log("get Fee: ", res);
+
+    return res;
+  } catch (error) {
+    console.error("Get Fee by ID error:", error);
   }
 }
