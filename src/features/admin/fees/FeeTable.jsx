@@ -1,9 +1,6 @@
-// export default FeeTable;
-import FeeRow from "./FeeRow";
-// import useBookings from "./useBookings";
 import React, { useState, useEffect } from "react";
-
-import useFee from "./useFee";
+import FeeRow from "./FeeRow";
+import useFee from "./useFee"; // Hook để lấy dữ liệu từ API
 import Spinner from "../../../ui/Spinner";
 import Empty from "../../../ui/Empty";
 import Menus from "../../../ui/Menus";
@@ -11,19 +8,16 @@ import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
 
 function FeeTable() {
-  const { isLoading, fees: initialFees, error } = useFee(); // Fetch all fees from the custom hook
-  const [fees, setFees] = useState([]); // Declare a state for managing fees
+  const { isLoading, fees: initialFees, error } = useFee(); // Fetch all fees from custom hook
+  const [fees, setFees] = useState([]); // State lưu dữ liệu fees
 
-  console.log(initialFees);
-
-  // Use the initial fees from the API when they are available
   useEffect(() => {
     if (initialFees) {
-      setFees(initialFees); // Set the initial fees from the API call
+      setFees(initialFees); // Gán dữ liệu ban đầu
     }
   }, [initialFees]);
 
-  // Function to handle updating in the frontend after API call
+  // Hàm để cập nhật dữ liệu fee sau khi cập nhật thành công
   const handleUpdateFee = (updatedFee) => {
     setFees((prevFees) =>
       prevFees.map((fee) => (fee._id === updatedFee._id ? updatedFee : fee))
@@ -31,13 +25,12 @@ function FeeTable() {
   };
 
   const handleDeleteFee = async (id) => {
-    // Filter out the deleted fee from the list
     setFees((prevFees) => prevFees.filter((fee) => fee._id !== id));
   };
 
   if (isLoading) return <Spinner />;
   if (error) return <p>Error loading fees: {error.message}</p>;
-  if (!fees?.length) return <Empty resource="fees" />;
+  if (!fees.length) return <Empty resource="fees" />;
 
   return (
     <Menus>
@@ -57,8 +50,8 @@ function FeeTable() {
             <FeeRow
               key={fee._id}
               fee={fee}
-              onDelete={(e) => handleDeleteFee(fee._id)}
-              onUpdate={handleUpdateFee}
+              onDelete={handleDeleteFee}
+              onUpdate={handleUpdateFee} // Truyền callback handleUpdateFee
             />
           )}
         />

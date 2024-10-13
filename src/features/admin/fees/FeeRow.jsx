@@ -119,6 +119,7 @@ import ConfirmDelete from "../../../ui/ConfirmDelete";
 import Table from "../../../ui/Table";
 import Menus from "../../../ui/Menus";
 import { deleteFee } from "../../../services/apiAuth";
+import Tag from "../../../ui/Tag";
 
 const StudentName = styled.div`
   font-size: 1.6rem;
@@ -135,6 +136,17 @@ const Amount = styled.div`
 function FeeRow({ fee, onDelete, onUpdate }) {
   const { _id, student, amount, due_date, paid } = fee;
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const status = paid
+    ? "paid"
+    : new Date(due_date) < new Date()
+    ? "overdue"
+    : "unpaid";
+  const statusToTagName = {
+    unpaid: "red",
+    paid: "green",
+    overdue: "yellow",
+  };
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -154,6 +166,7 @@ function FeeRow({ fee, onDelete, onUpdate }) {
         <StudentName>{student?.name || "Student not found"}</StudentName>
         <p>{student?.phone || "No phone"}</p>
         <p>Due Date: {due_date}</p>
+        <Tag type={statusToTagName[status]}>{status}</Tag>
         <Amount>${amount}</Amount>
         <div>
           <Modal>
