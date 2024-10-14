@@ -1,80 +1,100 @@
-import useUser from "../features/authentication/useUser"; // Lấy thông tin user
-import useTeacherSchedule from "../features/Teacher/useTeacherSchedule"; // Lấy lịch trình của giáo viên
-import styled from "styled-components"; // Sử dụng styled-components để tạo các thành phần giao diện
+import { useState } from "react";
+import useUser from "../features/authentication/useUser"; 
+import useTeacherSchedule from "../features/Teacher/useTeacherSchedule"; 
+import styled, { ThemeProvider } from "styled-components";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
-// Các thành phần styled-components
-const ScheduleContainer = styled.div`
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+// Define theme
+const retroTheme = {
+  buttonBackground: "#0d0149",
+  buttonText: "#ffffff",
+  buttonHoverBackground: "#4f46e5",
+  buttonActiveBackground: "#ffffff",
+};
+
+
+// Styled component for FullCalendar buttons
+const CalendarWrapper = styled.div`
+
+
+    .fc .fc-button {
+        background-color: ${(props) => props.theme.buttonBackground};
+        color: ${(props) => props.theme.buttonText};
+        border: none;
+    }
+
+    .fc .fc-button:hover {
+        background-color: ${(props) => props.theme.buttonHoverBackground};
+        color: ${(props) => props.theme.buttonText};
+    }
+
+    .fc .fc-button-active {
+        background-color: ${(props) => props.theme.buttonActiveBackground};
+        color: ${(props) => props.theme.buttonText};
+    }
 `;
 
-const ScheduleList = styled.ul`
-    margin-top: 20px;
-    padding: 0;
-`;
-
-const ScheduleItem = styled.li`
-    list-style: none;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-`;
-
-const TeacherInfo = styled.p`
-    font-size: 1em;
-    color: #777;
-`;
-
-const PageHeader = styled.h1`
-    font-size: 2em;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-`;
 
 function TeacherSchedule() {
-    const { isLoading: isLoadingUser, user } = useUser(); // Lấy thông tin user
-    const teacherId = user.roleDetails._id; // Lấy ID của giáo viên
-    const { isLoading: isLoadingSchedule, schedule } = useTeacherSchedule(teacherId); // Lấy dữ liệu lịch trình của giáo viên
+  const { isLoading: isLoadingUser, user } = useUser(); 
+  const teacherId = user?.roleDetails?._id; 
+  const { isLoading: isLoadingSchedule, schedule, error } = useTeacherSchedule(teacherId); 
+  const [theme] = useState(retroTheme); 
+  
+  if (isLoadingUser || isLoadingSchedule) {
+    return <div>Loading...</div>;
+  }
+  
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
-    if (isLoadingUser || isLoadingSchedule) {
-        return <div>Loading...</div>; // Hiển thị trạng thái loading nếu đang tải dữ liệu
-    }
-    
-    const schedules = schedule?.schedules || [];
+  const schedules = schedule?.schedules || [];
+  const retroColors = ["#6B5B95", "#FF6F61"]; 
 
-    return (
-        <>
-            {/* Hiển thị tiêu đề của trang Teacher Schedule */}
-            <PageHeader>Teacher Schedule</PageHeader>
+  // Ensure that the date field is valid before splitting it
+  const events = schedules.flatMap(cls =>
+    cls.schedule.map(item => {
+      if (!item.date) {
+        return null; // Skip events with missing date
+      }
 
-            {schedules.length > 0 ? (
-                <>
-                    
-                    <ScheduleContainer>
-                    <h1>{schedules[0].className}</h1> {/* Hiển thị className */}
-                        {schedules[0].schedule.length > 0 ? (
-                            <ScheduleList>
-                                {schedules[0].schedule.map((item) => (
-                                    <ScheduleItem key={item._id}>
-                                        {item.day} - {item.start_time} to {item.end_time}
-                                    </ScheduleItem>
-                                ))}
-                            </ScheduleList>
-                        ) : (
-                            <TeacherInfo>No schedule available.</TeacherInfo>
-                        )}
-                    </ScheduleContainer>
-                </>
-            ) : (
-                <TeacherInfo>No teacher schedule available.</TeacherInfo>
-            )}
-        </>
-    );
+      const randomColor = retroColors[Math.floor(Math.random() * retroColors.length)];
+      return {
+        title: cls.className,
+        start: `${item.date.split("T")[0]}T${item.start_time}:00`,
+        end: `${item.date.split("T")[0]}T${item.end_time}:00`,
+        backgroundColor: randomColor,
+        textColor: "#ffffff",
+      };
+    }).filter(event => event !== null) // Filter out any null values
+  );
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CalendarWrapper>
+        <FullCalendar
+          plugins={[timeGridPlugin, interactionPlugin]}
+          initialView="timeGridWeek"
+          initialDate={new Date()}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "timeGridWeek,timeGridDay",
+          }}
+          events={events}
+          contentHeight="500px"
+          slotMinTime="06:00:00"
+          slotMaxTime="20:00:00"
+          selectable={true}
+          editable={false}
+          nowIndicator={true}
+        />
+      </CalendarWrapper>
+    </ThemeProvider>
+  );
 }
 
 export default TeacherSchedule;

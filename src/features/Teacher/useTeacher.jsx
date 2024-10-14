@@ -7,12 +7,10 @@ function useTeacher(teacherId) {
         queryFn: () => getTeacherById(teacherId), 
         refetchOnWindowFocus: false,
     });
-    console.log(data);
-    
-    
+
     const teacher = data?.data?.data?.data;
-    console.log(teacher);
-    
+  
+
     return { isLoading, teacher, error };
 }
 
