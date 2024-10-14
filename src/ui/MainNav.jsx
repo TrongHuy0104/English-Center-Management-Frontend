@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { HiOutlineHome, HiUserGroup } from "react-icons/hi2";
+import { HiOutlineHome, HiUserGroup, HiEnvelopeOpen  } from "react-icons/hi2";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
 import useUser from "../features/authentication/useUser";
@@ -86,12 +86,17 @@ const navTeacherList = [
     },
     {
         title: "Schedule",
-        route: "schedule",
+        route: "Teacher/schedule",
         icon: <HiOutlineCalendarDays />,
     },
     {
+        title: "Messages",
+        route: "Teaher/messages",
+        icon: <HiEnvelopeOpen />,
+    },
+    {
         title: "Profile",
-        route: "profile",
+        route: "Teacher/rrofile",
         icon: <HiOutlineUsers />,
     },
 ];
