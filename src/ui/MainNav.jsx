@@ -77,14 +77,31 @@ const navAdminList = [
         icon: <HiOutlineUsers />,
     },
 ];
-const navStudentList = [];
-const navTeacherList = [];
+
+const navTeacherList = [
+    {
+        title: "Home",
+        route: "dashboard",
+        icon: <HiOutlineHome />,
+    },
+    {
+        title: "Schedule",
+        route: "schedule",
+        icon: <HiOutlineCalendarDays />,
+    },
+    {
+        title: "Profile",
+        route: "profile",
+        icon: <HiOutlineUsers />,
+    },
+];
 
 function MainNav() {
     const { user } = useUser();
 
     let navList;
-    if (user.user?.role === "admin") navList = navAdminList;
+ if (user.user?.role === "admin") navList = navAdminList;
+ if (user.user?.role === "teacher") navList = navTeacherList;
     return (
         <nav>
             <NavList>
