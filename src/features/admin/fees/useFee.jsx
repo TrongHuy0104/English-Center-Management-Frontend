@@ -8,7 +8,10 @@ function useFee() {
     refetchOnWindowFocus: false,
   });
 
-  const fees = data?.data?.data?.fees; // Truy cập dữ liệu đơn giản hơn
+  console.log("data", data);
+
+  const fees = data?.data?.data?.fees;
+  console.log("useFee:", fees);
 
   return { isLoading, fees, error };
 }

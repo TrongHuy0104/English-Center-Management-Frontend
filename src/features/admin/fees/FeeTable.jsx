@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+// export default FeeTable;
 import FeeRow from "./FeeRow";
-import useFee from "./useFee"; // Hook để lấy dữ liệu từ API
+// import useBookings from "./useBookings";
+import React, { useState, useEffect } from "react";
+
+import useFee from "./useFee";
 import Spinner from "../../../ui/Spinner";
 import Empty from "../../../ui/Empty";
 import Menus from "../../../ui/Menus";
@@ -8,29 +11,49 @@ import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
 
 function FeeTable() {
-  const { isLoading, fees: initialFees, error } = useFee(); // Fetch all fees from custom hook
-  const [fees, setFees] = useState([]); // State lưu dữ liệu fees
+  const { isLoading, fees: initialFees, error } = useFee(); // Fetch all fees from the custom hook
+  const [fees, setFees] = useState([]); // Declare a state for managing fees
 
+  console.log(initialFees);
+
+  // Use the initial fees from the API when they are available
   useEffect(() => {
-    if (initialFees) {
-      setFees(initialFees); // Gán dữ liệu ban đầu
+    if (initialFees && Array.isArray(initialFees)) {
+      console.log("Initial fees from API:", initialFees);
+      setFees(initialFees);
+    } else {
+      console.log("Initial fees are undefined or not an array");
     }
   }, [initialFees]);
 
-  // Hàm để cập nhật dữ liệu fee sau khi cập nhật thành công
+  // Function to handle updating in the frontend after API call
   const handleUpdateFee = (updatedFee) => {
-    setFees((prevFees) =>
-      prevFees.map((fee) => (fee._id === updatedFee._id ? updatedFee : fee))
-    );
+    console.log("Updated Fee received:", updatedFee);
+    if (!updatedFee || !updatedFee._id) {
+      console.error("Updated fee is invalid:", updatedFee);
+      return;
+    }
+
+    setFees((prevFees) => {
+      if (!Array.isArray(prevFees)) {
+        console.error("prevFees is not an array:", prevFees);
+        return prevFees;
+      }
+
+      return prevFees.map((fee) =>
+        fee._id === updatedFee._id ? updatedFee : fee
+      );
+    });
   };
 
   const handleDeleteFee = async (id) => {
+    // Filter out the deleted fee from the list
     setFees((prevFees) => prevFees.filter((fee) => fee._id !== id));
   };
 
   if (isLoading) return <Spinner />;
   if (error) return <p>Error loading fees: {error.message}</p>;
-  if (!fees.length) return <Empty resource="fees" />;
+  if (!fees?.length) return <Empty resource="fees" />;
 
   return (
     <Menus>
@@ -50,8 +73,8 @@ function FeeTable() {
             <FeeRow
               key={fee._id}
               fee={fee}
-              onDelete={handleDeleteFee}
-              onUpdate={handleUpdateFee} // Truyền callback handleUpdateFee
+              onDelete={(e) => handleDeleteFee(fee._id)}
+              onUpdate={handleUpdateFee}
             />
           )}
         />
