@@ -3,6 +3,8 @@ import useTeacher from "../features/Teacher/useTeacher";
 import useUpdateTeacher from "../features/Teacher/useUpdateTeacher";
 import { useState } from "react";
 import styled from "styled-components";
+import useTeacherSalary from "../features/Teacher/useTeachersalary";
+import useTeacherCenter from "../features/Teacher/useTeachercenter"; // Import the useTeacherCenter hook
 
 // Các thành phần styled-components
 const ProfileContainer = styled.div`
@@ -21,7 +23,6 @@ const ProfileHeader = styled.h1`
 const TeacherDetails = styled.div`
     margin-top: 30px;
 `;
-
 
 const TeacherInfo = styled.p`
     font-size: 1em;
@@ -78,10 +79,9 @@ function TeacherProfile() {
     const { isLoading: isLoadingUser, user } = useUser();
     const teacherId = user.roleDetails._id;
     const { isLoading: isLoadingTeacher, teacher } = useTeacher(teacherId);
-    
-    
+    const { isLoading: isLoadingSalary, salary } = useTeacherSalary(teacherId); // Fetch salary data
+    const { isLoading: isLoadingCenter, center } = useTeacherCenter(teacherId); // Fetch center data
     const { updateTeacher, isUpdating } = useUpdateTeacher(teacherId);
-
     const [formData, setFormData] = useState({
         name: teacher?.name || "",
         phone: teacher?.phone || "",
@@ -108,7 +108,7 @@ function TeacherProfile() {
         setFormVisible((prevVisible) => !prevVisible);
     };
 
-    if (isLoadingUser || isLoadingTeacher) {
+    if (isLoadingUser || isLoadingTeacher || isLoadingSalary || isLoadingCenter) {
         return <div>Loading...</div>;
     }
 
@@ -122,7 +122,9 @@ function TeacherProfile() {
                         <TeacherInfo>Phone: {teacher.phone}</TeacherInfo>
                         <TeacherInfo>Gender: {teacher.gender}</TeacherInfo>
                         <TeacherInfo>Date of Birth: {teacher.dateOfBirth}</TeacherInfo>
-                        <TeacherInfo>Salary: {teacher.salary}</TeacherInfo>
+                        <TeacherInfo>Salary: {salary.salary[0].calculatedSalary}</TeacherInfo> 
+                        <TeacherInfo>Center: {center.center.name}</TeacherInfo>
+                        <TeacherInfo>Location: {center.center.location}</TeacherInfo>  
                     </TeacherDetails>
 
                     {/* Nút để hiện form cập nhật */}

@@ -96,7 +96,7 @@ const navTeacherList = [
     },
     {
         title: "Profile",
-        route: "Teacher/rrofile",
+        route: "Teacher/profile",
         icon: <HiOutlineUsers />,
     },
 ];

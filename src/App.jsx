@@ -42,8 +42,8 @@ function App() {
                         <Route path="user" element={<User />} />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
-                        <Route path="schedule" element={<TeacherSchedule/>} />
-                        <Route path="profile" element={<TeacherProfile/>} />
+                        <Route path="Teacher/schedule" element={<TeacherSchedule/>} />
+                        <Route path="Teacher/profile" element={<TeacherProfile/>} />
                     </Route>
                     <Route path="login" element={<Login />} />
                 </Routes>

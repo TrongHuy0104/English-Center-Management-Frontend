@@ -10,7 +10,8 @@ function useTeacher(teacherId) {
 
     const teacher = data?.data?.data?.data;
   
-
+    
+    
     return { isLoading, teacher, error };
 }
 

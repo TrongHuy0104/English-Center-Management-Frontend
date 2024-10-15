@@ -40,9 +40,9 @@ const CalendarWrapper = styled.div`
 function TeacherSchedule() {
   const { isLoading: isLoadingUser, user } = useUser(); 
   const teacherId = user?.roleDetails?._id; 
-  const { isLoading: isLoadingSchedule, schedule, error } = useTeacherSchedule(teacherId); 
-  const [theme] = useState(retroTheme); 
+  const { isLoading: isLoadingSchedule, teacherschedule, error } = useTeacherSchedule(teacherId); 
   
+  const [theme] = useState(retroTheme); 
   if (isLoadingUser || isLoadingSchedule) {
     return <div>Loading...</div>;
   }
@@ -50,30 +50,28 @@ function TeacherSchedule() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  const schedules = schedule?.schedules || [];
+  
+  const schedules = teacherschedule?.data.classes || [];
+  (schedules);
   const retroColors = ["#6B5B95", "#FF6F61"]; 
-
-  // Ensure that the date field is valid before splitting it
+  console.log(schedules);
+  
   const events = schedules.flatMap(cls =>
     cls.schedule.map(item => {
-      if (!item.date) {
-        return null; // Skip events with missing date
-      }
-
       const randomColor = retroColors[Math.floor(Math.random() * retroColors.length)];
       return {
-        title: cls.className,
+        title: cls.name,
         start: `${item.date.split("T")[0]}T${item.start_time}:00`,
         end: `${item.date.split("T")[0]}T${item.end_time}:00`,
         backgroundColor: randomColor,
         textColor: "#ffffff",
       };
-    }).filter(event => event !== null) // Filter out any null values
+    })
   );
-
+  
   return (
     <ThemeProvider theme={theme}>
+    <div style={{ width: "100%", margin: "0 auto" }}>
       <CalendarWrapper>
         <FullCalendar
           plugins={[timeGridPlugin, interactionPlugin]}
@@ -84,15 +82,18 @@ function TeacherSchedule() {
             center: "title",
             right: "timeGridWeek,timeGridDay",
           }}
-          events={events}
           contentHeight="500px"
           slotMinTime="06:00:00"
           slotMaxTime="20:00:00"
+          events={events}
           selectable={true}
           editable={false}
+          locale="en"
           nowIndicator={true}
+          weekNumbers={true}
         />
       </CalendarWrapper>
+      </div>
     </ThemeProvider>
   );
 }

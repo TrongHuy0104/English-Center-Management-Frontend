@@ -9,9 +9,10 @@ function useTeacherSchedule(teacherId) {
     });
     
     
-    const schedule = data?.data?.data;
-
-    return { isLoading, schedule, error };
+    const teacherschedule = data?.data;
+    console.log(teacherschedule);
+    
+    return { isLoading, teacherschedule, error };
 }
 
 
