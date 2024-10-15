@@ -99,12 +99,7 @@ const navStudentList = [
         title: "Messages",
         route: "student/messages",
         icon: <HiEnvelopeOpen />,
-    },
-    {
-      title: "Profile",
-      route: "student/profile",
-      icon: <HiOutlineUsers />,
-    },
+    }
 ];
 
 // const navTeacherList = [];
