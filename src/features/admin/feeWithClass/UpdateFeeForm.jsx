@@ -53,10 +53,10 @@ function FeeForm({ feeId, onCloseModal, onUpdate }) {
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-    console.log("Form data:", data); // In ra dữ liệu form để kiểm tra
+    console.log("Form data:", data);
     try {
-      const response = await updateFee(feeId, data); // Gửi dữ liệu lên APi
-      const updatedFee = response.data.data; // Nhận updatedFee từ API
+      const response = await updateFee(feeId, data);
+      const updatedFee = response.data.data;
 
       onUpdate(updatedFee);
       onCloseModal?.();

@@ -8,24 +8,23 @@ function useFee() {
   const { isLoading, data, error } = useQuery({
     queryKey: ["fees"],
     queryFn: getAllFees,
-    refetchOnWindowFocus: false, // Không refetch khi chuyển về tab này
+    refetchOnWindowFocus: false,
   });
 
   // Hàm tạo mới phí
   const createFeeMutation = useMutation({
     mutationFn: CreateFee,
     onSuccess: () => {
-      queryClient.invalidateQueries(["fees"]); // Làm mới danh sách phí sau khi tạo thành công
+      queryClient.invalidateQueries(["fees"]);
     },
   });
 
   // Hàm cập nhật phí
   const updateFeeMutation = useMutation({
     mutationFn: (updatedFeeData) =>
-      updateFee(updatedFeeData.id, updatedFeeData), // Truyền đúng `id` và dữ liệu cập nhật
-
+      updateFee(updatedFeeData.id, updatedFeeData),
     onSuccess: () => {
-      queryClient.invalidateQueries(["fees"]); // Invalidate cache để làm mới danh sách phí
+      queryClient.invalidateQueries(["fees"]);
     },
   });
 

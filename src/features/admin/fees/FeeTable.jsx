@@ -31,47 +31,36 @@ const StyledButton = styled(Button)`
 `;
 
 function FeeTable() {
-  const { isLoading, fees: initialFees, error } = useFee(); // Fetch all fees từ custom hook
-  const [fees, setFees] = useState([]); // Quản lý danh sách fees
-  const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị modal
-
+  const { isLoading, fees: initialFees, error } = useFee();
+  const [fees, setFees] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     if (initialFees && Array.isArray(initialFees)) {
-      setFees(initialFees); // Cập nhật danh sách fees từ API
     }
   }, [initialFees]);
   console.log("initialFees: ", initialFees);
 
-  // Hàm cập nhật fee trong danh sách sau khi gọi API
   const handleUpdateFee = (updatedFee) => {
     setFees((prevFees) =>
       prevFees.map((fee) => (fee._id === updatedFee._id ? updatedFee : fee))
     );
   };
 
-  // Hàm xóa fee khỏi danh sách
   const handleDeleteFee = async (id) => {
     setFees((prevFees) => prevFees.filter((fee) => fee._id !== id));
   };
 
-  // Hàm tạo fee mới
   const handleCreateFee = async (newFeeData) => {
     try {
-      // Gọi API để tạo fee mới
       const response = await CreateFee(newFeeData);
 
       if (response?.data?.data) {
-        // Thêm fee mới vào danh sách mà không cần tải lại trang
         setFees((prevFees) => [...prevFees, response.data.data]);
-        // console.log("initialFeesaaa: ", ...prevFees, response.data.data);
-
-        // Đóng modal sau khi tạo thành công
         setShowModal(false);
       } else {
         console.error("Failed to create fee: No data returned from server");
       }
     } catch (error) {
-      // Thêm thông tin chi tiết về lỗi để dễ debug hơn
       console.error(
         "Error creating fee:",
         error.response?.data || error.message
@@ -90,7 +79,6 @@ function FeeTable() {
 
   return (
     <Menus>
-      {/* Nút mở modal tạo fee mới */}
       <Modal>
         <Modal.Open opens="create-fee">
           <StyledButton onClick={toggleModal}>Create New Fee</StyledButton>
@@ -98,7 +86,7 @@ function FeeTable() {
 
         <Modal.Window name="create-fee">
           <CreateNewFeeForm
-            onSubmit={handleCreateFee} // Pass callback để cập nhật danh sách phí
+            onSubmit={handleCreateFee}
             onCloseModal={toggleModal}
           />
         </Modal.Window>
@@ -133,8 +121,3 @@ function FeeTable() {
 }
 
 export default FeeTable;
-
-//tên fee, tên lớp, bảng phí ban đầu sẽ là viewdetail
-//trang 1 : tên phí , giá , description
-//trang 2: dsach lớp, dua_date, giá, status: complete or not, ngày tạo
-//trang3: dsach hs(link), dua_date, giá,(status: unpaid, overdate, paid)

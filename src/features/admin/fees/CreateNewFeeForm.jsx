@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useFee from "./useFee"; // Sử dụng useFee hook
+import useFee from "./useFee";
 import Button from "../../../ui/Button";
 import FormRow from "../../../ui/FormRow";
 import Input from "../../../ui/Input";
@@ -16,19 +16,18 @@ function CreateNewFeeForm({ onCloseModal, onSubmit }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(); // Sử dụng react-hook-form
-  const { createFee, isLoading } = useFee(); // Lấy hàm createFee từ useFee
+  } = useForm();
+  const { createFee, isLoading } = useFee();
 
-  // Hàm xử lý khi submit form
   const onSubmitHandler = async (formData) => {
     try {
       await createFee(formData, {
         onSuccess: (data) => {
-          onSubmit(data); // Cập nhật danh sách phí ở component cha
-          onCloseModal?.(); // Đóng modal sau khi tạo thành công
+          onSubmit(data);
+          onCloseModal?.();
         },
         onError: (error) => {
-          console.error("Error creating fee:", error); // Xử lý lỗi nếu có
+          console.error("Error creating fee:", error);
         },
       });
     } catch (error) {

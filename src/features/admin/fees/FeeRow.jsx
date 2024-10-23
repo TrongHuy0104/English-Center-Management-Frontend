@@ -39,15 +39,13 @@ function FeeRow({ fee, onDelete, onUpdate }) {
 
   const navigate = useNavigate();
 
-  // Hàm điều hướng đến trang chi tiết của phí
   const handleNavigate = () => {
-    navigate(`/fees/${fee._id}`); // Điều hướng đến trang chi tiết phí với fee._id
+    navigate(`/fees/${fee._id}`);
   };
 
   return (
     <Table.Row>
       <StudentName>{fee.fee_name || "Fee not found"}</StudentName>
-      {/* <Tag type={statusToTagName[status]}>{status}</Tag> */}
       <Amount>${fee.price}</Amount>
       <p>{fee.description}</p>
 

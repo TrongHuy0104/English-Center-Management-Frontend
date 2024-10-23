@@ -54,8 +54,7 @@ function FeeRow({ fee, onDelete, onUpdate }) {
   return (
     <>
       {classDetails.map((classDetail, index) => {
-        const classInfo = classes[index]; // Lấy thông tin của lớp từ `classes` dựa trên index
-        console.log("ferow: ", classInfo);
+        const classInfo = classes[index];
 
         return (
           <Table.Row key={classDetail._id}>
