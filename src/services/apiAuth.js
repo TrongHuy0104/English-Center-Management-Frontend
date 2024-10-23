@@ -1,16 +1,23 @@
 import axios from "../utils/axios";
 
 export async function login(data) {
-  try {
+
     const res = await axios({
-      method: "POST",
-      url: `/users/login`,
-      data: data,
+        method: "POST",
+        url: `/users/login`,
+        data: data,
     });
     return res;
-  } catch (error) {
-    console.log(error);
-  }
+}
+
+export async function register(data) {
+    const res = await axios({
+        method: "POST",
+        url: `/users/signup`,
+        data: data,
+    });
+    return res;
+
 }
 
 export async function getCurrentUser() {
