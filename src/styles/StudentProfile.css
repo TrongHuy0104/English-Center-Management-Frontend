@@ -9,16 +9,6 @@
 
 }
 
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
 label {
     margin: 10px 0 5px;
     font-weight: bold;
@@ -26,56 +16,40 @@ label {
 
 }
 
-input[type="text"],
-input[type="date"],
 select {
     padding: 10px;
-
     border: 1px solid #ccc;
-
     border-radius: 4px;
-
     font-size: 16px;
-
 }
 
-input[type="text"][readOnly] {
-    background-color: #e9ecef;
-
+.avata {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-
-button {
-    padding: 10px;
-
-    margin-top: 15px;
-
-    border: none;
-
-    border-radius: 4px;
-
-    background-color: #007bff;
-
-    color: white;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    transition: background-color 0.3s;
-
+.form-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 20px;
 }
 
-button:hover {
-    background-color: #0056b3;
-
+.form-content .form-content__avatar {
+    width: 100%;
+    margin-bottom: 20px;
 }
 
-p {
-    text-align: center;
+.form-content__avatar img {
+    border-radius: 100%;
+    object-fit: cover;
+    width: 250px;
+    height: 250px;
+}
 
-    color: #d9534f;
-
-    margin-top: 15px;
-
+.form-content .form-content__avatar img {
+    object-fit: cover;
 }

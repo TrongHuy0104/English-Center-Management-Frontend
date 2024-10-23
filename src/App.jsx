@@ -41,7 +41,7 @@ function App() {
             <Route path="booking" element={<Bookings />} />
             <Route path="cabin" element={<Cabins />} />
             <Route path="students" element={<StudentProfile />} />
-            <Route path="attendence-report" element={<AttendanceReport />} />
+            <Route path="attendance-report" element={<AttendanceReport />} />
           </Route>
           <Route path="login" element={<Login />} />
         </Routes>

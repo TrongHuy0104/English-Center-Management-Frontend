@@ -90,8 +90,8 @@ const navStudentList = [
     icon: <HiOutlineCalendarDays />,
   },
   {
-    title: "Attendence Reports",
-    route: "attendence-report",
+    title: "Attendance",
+    route: "attendance-report",
     icon: <HiOutlineUsers />,
   },
   {
