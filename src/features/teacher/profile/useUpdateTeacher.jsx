@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast"; // Đảm bảo bạn đã cài đặt react-hot-toast
-import { updateTeacherById } from "../../services/apiTeacher"; // Import hàm cập nhật giáo viên
+import { updateTeacherById } from "../../../services/apiTeacher"; // Import hàm cập nhật giáo viên
 
 function useUpdateTeacher(teacherId) {
     const queryClient = useQueryClient();

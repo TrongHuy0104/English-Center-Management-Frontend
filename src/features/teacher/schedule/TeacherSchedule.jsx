@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useUser from "../features/authentication/useUser"; 
-import useTeacherSchedule from "../features/Teacher/useTeacherSchedule"; 
+import useUser from "../../authentication/useUser"; 
+import useTeacherSchedule from "./useTeacherSchedule"
 import styled, { ThemeProvider } from "styled-components";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";

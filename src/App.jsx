@@ -10,8 +10,9 @@ import Dashboard from "./pages/Dashboard";
 import User from "./pages/User";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
-import TeacherProfile from "./pages/TeacherProfile";
-import TeacherSchedule from "./pages/TeacherSchedule";
+import ProfileTeacher from "./pages/ProfileTeacher";
+import Schedule from "./pages/Schedule";
+import UpdateProfilePage from "./pages/UpdateTeacherProfile";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -42,8 +43,9 @@ function App() {
                         <Route path="user" element={<User />} />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
-                        <Route path="Teacher/schedule" element={<TeacherSchedule/>} />
-                        <Route path="Teacher/profile" element={<TeacherProfile/>} />
+                        <Route path="teacher/schedule" element={<Schedule/>} />
+                        <Route path="teacher/profile" element={<ProfileTeacher/>} />
+                        <Route path="/teacher/profile/update-profile" element={<UpdateProfilePage/>} />
                     </Route>
                     <Route path="login" element={<Login />} />
                 </Routes>

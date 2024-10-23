@@ -86,17 +86,17 @@ const navTeacherList = [
     },
     {
         title: "Schedule",
-        route: "Teacher/schedule",
+        route: "teacher/schedule",
         icon: <HiOutlineCalendarDays />,
     },
     {
         title: "Messages",
-        route: "Teaher/messages",
+        route: "teaher/messages",
         icon: <HiEnvelopeOpen />,
     },
     {
         title: "Profile",
-        route: "Teacher/profile",
+        route: "teacher/profile",
         icon: <HiOutlineUsers />,
     },
 ];

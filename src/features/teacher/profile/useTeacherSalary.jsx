@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSalaryByTeacherId } from "../../services/apiTeacher"; 
+import { getSalaryByTeacherId } from "../../../services/apiTeacher"; 
 function useTeacherSalary(teacherId) {
     const { isLoading, data, error } = useQuery({
         queryKey: ["teachersalary", teacherId], 
@@ -9,7 +9,6 @@ function useTeacherSalary(teacherId) {
     });
 
     const salary = data?.data?.data; 
-    
     return { isLoading, salary, error };
 }
 

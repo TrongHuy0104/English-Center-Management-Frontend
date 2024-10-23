@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTeacherSchedule } from "../../services/apiTeacher";
+import { getTeacherSchedule } from "../../../services/apiTeacher";
 
 function useTeacherSchedule(teacherId) {
     const { isLoading, data, error } = useQuery({
