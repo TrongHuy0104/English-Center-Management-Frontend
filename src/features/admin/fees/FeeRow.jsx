@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { HiOutlinePencilSquare, HiTrash, HiEye } from "react-icons/hi2";
-import FeeForm from "./FeeForm";
+import FeeForm from "./UpdateFeeForm";
 import Modal from "../../../ui/Modal";
 import ConfirmDelete from "../../../ui/ConfirmDelete";
 import Table from "../../../ui/Table";
 import Menus from "../../../ui/Menus";
-import { deleteFee } from "../../../services/apiAuth";
+import { deleteFee } from "../../../services/apiFee";
 import Tag from "../../../ui/Tag";
+import { useNavigate } from "react-router-dom";
 
 const StudentName = styled.div`
   font-size: 1.6rem;
@@ -22,25 +23,13 @@ const Amount = styled.div`
 `;
 
 function FeeRow({ fee, onDelete, onUpdate }) {
-  const { _id, student, amount, due_date, paid } = fee;
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const status = paid
-    ? "paid"
-    : new Date(due_date) < new Date()
-    ? "overdue"
-    : "unpaid";
-  const statusToTagName = {
-    unpaid: "red",
-    paid: "green",
-    overdue: "yellow",
-  };
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteFee(_id);
-      onDelete(_id);
+      await deleteFee(fee._id);
+      onDelete(fee._id);
     } catch (error) {
       console.error("Delete error:", error);
     } finally {
@@ -48,22 +37,26 @@ function FeeRow({ fee, onDelete, onUpdate }) {
     }
   };
 
+  const navigate = useNavigate();
+
+  // Hàm điều hướng đến trang chi tiết của phí
+  const handleNavigate = () => {
+    navigate(`/fees/${fee._id}`); // Điều hướng đến trang chi tiết phí với fee._id
+  };
+
   return (
     <Table.Row>
-      <StudentName>{student?.name || "Student not found"}</StudentName>
-      <p>{student?.phone || "No phone"}</p>
-      <p>Due Date: {due_date}</p>
-      <Tag type={statusToTagName[status]}>{status}</Tag>
-      <Amount>${amount}</Amount>
+      <StudentName>{fee.fee_name || "Fee not found"}</StudentName>
+      {/* <Tag type={statusToTagName[status]}>{status}</Tag> */}
+      <Amount>${fee.price}</Amount>
+      <p>{fee.description}</p>
+
       <div>
         <Modal>
           <Menus.Menu>
-            <Menus.Toggle id={_id} />
-            <Menus.List id={_id}>
-              <Menus.Button
-                icon={<HiEye />}
-                onClick={() => console.log(`View fee: ${_id}`)}
-              >
+            <Menus.Toggle id={fee._id} />
+            <Menus.List id={fee._id}>
+              <Menus.Button icon={<HiEye />} onClick={handleNavigate}>
                 See Details
               </Menus.Button>
 
@@ -87,7 +80,7 @@ function FeeRow({ fee, onDelete, onUpdate }) {
 
           <Modal.Window name="edit-fee">
             <FeeForm
-              feeId={_id}
+              feeId={fee._id}
               onCloseModal={() => console.log("Modal closed")}
               onUpdate={(updatedFee) => onUpdate(updatedFee)} // Pass updated fee back to parent
             />

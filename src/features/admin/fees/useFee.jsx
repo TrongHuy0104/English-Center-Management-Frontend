@@ -1,19 +1,44 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllFees } from "../../../services/apiAuth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAllFees, CreateFee, updateFee } from "../../../services/apiFee";
 
 function useFee() {
+  const queryClient = useQueryClient(); // QueryClient để thao tác lại với cache
+
+  // Lấy danh sách phí
   const { isLoading, data, error } = useQuery({
     queryKey: ["fees"],
     queryFn: getAllFees,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false, // Không refetch khi chuyển về tab này
   });
 
-  console.log("data", data);
+  // Hàm tạo mới phí
+  const createFeeMutation = useMutation({
+    mutationFn: CreateFee,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["fees"]); // Làm mới danh sách phí sau khi tạo thành công
+    },
+  });
 
-  const fees = data?.data?.data?.fees;
-  console.log("useFee:", fees);
+  // Hàm cập nhật phí
+  const updateFeeMutation = useMutation({
+    mutationFn: (updatedFeeData) =>
+      updateFee(updatedFeeData.id, updatedFeeData), // Truyền đúng `id` và dữ liệu cập nhật
 
-  return { isLoading, fees, error };
+    onSuccess: () => {
+      queryClient.invalidateQueries(["fees"]); // Invalidate cache để làm mới danh sách phí
+    },
+  });
+
+  // Lấy danh sách phí từ dữ liệu trả về
+  const fees = data?.data?.data?.data;
+
+  return {
+    isLoading,
+    fees,
+    error,
+    createFee: createFeeMutation.mutate, // Gọi hàm tạo mới
+    updateFee: updateFeeMutation.mutate, // Gọi hàm cập nhật
+  };
 }
 
 export default useFee;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getFee, updateFee } from "../../../services/apiAuth"; // Import hàm API
+import { getFee, updateFee } from "../../../services/apiFee"; // Import hàm API
 import Input from "../../../ui/Input";
 import Button from "../../../ui/Button";
 import FormRow from "../../../ui/FormRow";
@@ -34,12 +34,11 @@ function FeeForm({ feeId, onCloseModal, onUpdate }) {
         try {
           const res = await getFee(feeId);
           const fee = res.data.data.data;
-          console.log("dsadsadjasda", fee);
 
           setFeeData(fee);
           reset({
             amount: fee.amount || 0,
-            due_date: fee.due_date ? fee.due_date.split("T")[0] : "",
+            due_date: fee.due_date ? fee.due_date.split(" / ")[0] : "",
             status: fee.paid ? "paid" : "unpaid",
             student_name: fee.student || "Unknown",
             contact: fee.contact || "No contact",
@@ -56,10 +55,8 @@ function FeeForm({ feeId, onCloseModal, onUpdate }) {
     e.preventDefault();
     console.log("Form data:", data); // In ra dữ liệu form để kiểm tra
     try {
-      const response = await updateFee(feeId, data); // Gửi dữ liệu lên AP
+      const response = await updateFee(feeId, data); // Gửi dữ liệu lên APi
       const updatedFee = response.data.data; // Nhận updatedFee từ API
-      console.log("Updated Feeee:", response);
-      console.log("Updated Fee:", updatedFee); // Kiểm tra xem updatedFee có dữ liệu không
 
       onUpdate(updatedFee);
       onCloseModal?.();

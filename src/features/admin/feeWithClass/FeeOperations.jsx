@@ -6,6 +6,16 @@ import TableOperations from "../../../ui/TableOperations";
 function FeeTableOperations() {
   return (
     <TableOperations>
+      <Filter
+        filterField="status"
+        options={[
+          { value: "all", label: "All" },
+          { value: "paid", label: "Paid" },
+          { value: "unpaid", label: "Unpaid" },
+          { value: "overdue", label: "Overdue" },
+        ]}
+      />
+
       <SortBy
         options={[
           {

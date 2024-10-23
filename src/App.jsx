@@ -11,6 +11,7 @@ import User from "./pages/User";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import FeesPage from "./pages/FeePages";
+import FeeWithClass from "./pages/FeeWithClass";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,6 +41,7 @@ function App() {
             <Route path="booking" element={<Bookings />} />
             <Route path="cabin" element={<Cabins />} />
             <Route path="fees" element={<FeesPage />} />
+            <Route path="fees/:feeId" element={<FeeWithClass />} />
           </Route>
           <Route path="login" element={<Login />} />
         </Routes>
