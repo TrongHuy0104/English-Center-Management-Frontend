@@ -5,7 +5,7 @@ import { login as loginApi } from "../../services/apiAuth";
 import { useCookies } from "react-cookie";
 
 function useLogin() {
-    const [cookies, setCookie] = useCookies([import.meta.env.VITE_SERVER_JWT]);
+    const [_, setCookie] = useCookies([import.meta.env.VITE_SERVER_JWT]);
     const navigate = useNavigate();
     const { isPending: isLoadingLogin, mutate: login } = useMutation({
         mutationFn: ({ email, password }) => loginApi({ email, password }),
