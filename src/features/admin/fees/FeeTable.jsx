@@ -36,6 +36,7 @@ function FeeTable() {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     if (initialFees && Array.isArray(initialFees)) {
+      setFees(initialFees);
     }
   }, [initialFees]);
   console.log("initialFees: ", initialFees);
@@ -69,7 +70,6 @@ function FeeTable() {
   };
 
   const toggleModal = () => setShowModal(!showModal); // Toggle modal
-  console.log("initialFeesssss: ", fees);
 
   if (isLoading) return <Spinner />;
   if (error) return <p>Error loading fees: {error.message}</p>;
