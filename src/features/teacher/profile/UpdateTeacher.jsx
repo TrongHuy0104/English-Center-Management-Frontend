@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 import useUser from "../../authentication/useUser";
 import useUpdateTeacher from "./useUpdateTeacher";
 import Input from "../../../ui/Input";
@@ -17,25 +17,42 @@ function UpdateTeacherProfile() {
     gender: user.roleDetails.gender || "",
     dateOfBirth: user.roleDetails.dateOfBirth?.split("T")[0] || "",
   });
-  
-const handleChange = (e) => {
-    setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-    });
-};
 
-const handleSubmit = async (e) => {
+  const [hasChanges, setHasChanges] = useState(false); // Theo dõi sự thay đổi
+
+  // Hàm kiểm tra sự thay đổi
+  useEffect(() => {
+    setHasChanges(
+      formData.name !== user.roleDetails.name ||
+      formData.phone !== user.roleDetails.phone ||
+      formData.gender !== user.roleDetails.gender ||
+      formData.dateOfBirth !== user.roleDetails.dateOfBirth?.split("T")[0]
+    );
+  }, [formData, user.roleDetails]);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-        await updateTeacher(formData);
-        // Handle success (e.g., show a success message or redirect)
-    } catch (error) {
-        console.error("Error updating profile:", error);
-        // Handle error (e.g., show an error message)
+    // Chỉ cho phép cập nhật nếu có sự thay đổi
+    if (!hasChanges) {
+      return; // Không làm gì cả nếu không có sự thay đổi
     }
-};
+
+    try {
+      await updateTeacher(formData);
+      // Handle success (e.g., show a success message or redirect)
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      // Handle error (e.g., show an error message)
+    }
+  };
 
   if (isLoadingUser) {
     return <div>Loading...</div>;
@@ -61,6 +78,13 @@ const handleSubmit = async (e) => {
       </FormRow>
       <FormRow label="Gender">
         <select
+          style={{
+            height: "40px",
+            borderRadius: "var(--border-radius-sm)",
+            border: "1px solid var(--color-grey-300)",
+            padding: "0.8rem 1.2rem",
+            marginLeft: "-100px"
+          }}
           name="gender"
           value={formData.gender}
           onChange={handleChange}
@@ -78,9 +102,7 @@ const handleSubmit = async (e) => {
         />
       </FormRow>
 
-
-
-      <Button type="submit" disabled={isUpdating}>
+      <Button type="submit" disabled={isUpdating || !hasChanges}>
         {isUpdating ? "Updating..." : "Update Profile"}
       </Button>
     </Form>

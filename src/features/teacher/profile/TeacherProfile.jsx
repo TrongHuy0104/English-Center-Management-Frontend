@@ -1,78 +1,97 @@
+import { useNavigate } from "react-router-dom";
 import useUser from "../../authentication/useUser";
-import useTeacherSalary from "./useTeacherSalary";
-import useTeacherCenter from "./useTeacherCenter";
+import useTeacherSalary from "../profile/useTeacherSalary";
+import useTeacherCenter from "../profile/useTeacherCenter";
+import "../../../styles/TeacherProfile.css";
+import Input from "../../../ui/Input";
+import FormRow from "../../../ui/FormRow";
+
 import Button from "../../../ui/Button";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom"; // Import for navigation
-
-// Styled-components
-const ProfileContainer = styled.div`
-  width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ccc; /* Add border style */
-`;
-
-const TeacherDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const TeacherInfo = styled.p`
-  font-size: 1em;
-  color: #333;
-  margin-bottom: 10px;
-
-  span {
-    font-weight: bold;
-    margin-right: 10px;
-  }
-`;
 
 function TeacherProfile() {
   const { isLoading: isLoadingUser, user } = useUser();
-  const teacherId = user?.roleDetails?._id; // Use optional chaining
+  const teacherId = user?.roleDetails?._id;
+
   const { isLoading: isLoadingSalary, salary } = useTeacherSalary(teacherId);
   const { isLoading: isLoadingCenter, center } = useTeacherCenter(teacherId);
-  const navigate = useNavigate(); // Use navigate to redirect
+  const navigate = useNavigate();
 
+  // Navigate to update profile page
   const handleUpdate = () => {
-    navigate("update-profile"); // Correct the path here
+    navigate("update-profile"); 
   };
-   console.log("User Role:", user.roleDetails);
 
+  // Log user role for debugging purposes
+  console.log("User Role:", user?.roleDetails);
+
+  // Handle loading states
   if (isLoadingUser || isLoadingSalary || isLoadingCenter) {
     return <div>Loading...</div>;
   }
 
+  // Render the profile details
   return (
-    <ProfileContainer>
-      {user ? (
-        <>
-          <TeacherDetails>
-            <TeacherInfo>Name: {user.roleDetails.name}</TeacherInfo>
-            <TeacherInfo>Phone: {user.roleDetails.phone}</TeacherInfo>
-            <TeacherInfo>Gender: {user.roleDetails.gender}</TeacherInfo>
-            <TeacherInfo>
-              Date of Birth: {user.roleDetails.dateOfBirth.split("T")[0]}
-            </TeacherInfo>
-            <TeacherInfo>Salary: {salary.data[0].calculatedSalary}</TeacherInfo>
-
-            {center.data.map((centerItem, index) => (
-              <div key={index}>
-                <TeacherInfo>Center: {centerItem.name}</TeacherInfo>
-                <TeacherInfo>Location: {centerItem.location}</TeacherInfo>
-              </div>
-            ))}
-          </TeacherDetails>
-
-          <Button onClick={handleUpdate}>Update Profile</Button>
-        </>
-      ) : (
-        <TeacherInfo>No teacher data available.</TeacherInfo>
-      )}
-    </ProfileContainer>
+    <div>
+      <div style={{ textAlign: "right" }}>
+        <Button className="button1" onClick={handleUpdate}>
+          Update Profile
+        </Button>
+      </div>
+      <div className="form-content">
+        <div className="avatar">
+          <div className="form-content__avatar">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGBcKAZtzJFFI4jhSgqrXvgrMnfGQNNdCyr3Ho64RgWgOalZG9R9M5XBEDo9Kv4H0SSds&usqp=CAU"
+              alt="Teacher Avatar"
+            />
+          </div>
+          <Button className="button" type="submit" style={{ margin: "auto" }}>
+            Update Avatar
+          </Button>
+        </div>
+        <div className="container">
+          <FormRow>
+            <label>Name:</label>
+            <Input type="text" name="name" value={user.roleDetails.name} readOnly />
+          </FormRow>
+          <FormRow>
+            <label>Phone:</label>
+            <Input type="text" name="phone" value={user.roleDetails.phone} readOnly />
+          </FormRow>
+          <FormRow>
+            <label>Gender:</label>
+            <Input type="text" name="gender" value={user.roleDetails.gender} readOnly />
+          </FormRow>
+          <FormRow>
+            <label>Date of Birth:</label>
+            <Input
+              type="date"
+              name="dateOfBirth"
+              value={user.roleDetails.dateOfBirth.split("T")[0]}
+              readOnly
+            />
+          </FormRow>
+          <FormRow>
+            <label>Salary:</label>
+            <Input
+              type="text"
+              name="salary"
+              value={salary ? salary.data[0].calculatedSalary : "N/A"}
+              readOnly
+            />
+          </FormRow>
+          <FormRow>
+            <label>Centers:</label>
+            <Input
+              type="text"
+              name="centers"
+              value={center ? center.data.map((c) => c.name).join(", ") : "N/A"}
+              readOnly
+            />
+          </FormRow>
+        </div>
+      </div>
+    </div>
   );
 }
 
