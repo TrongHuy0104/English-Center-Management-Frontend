@@ -10,7 +10,7 @@ import Menus from "../../../ui/Menus";
 import Modal from "../../../ui/Modal";
 import ConfirmDelete from "../../../ui/ConfirmDelete";
 
-const StudentName = styled.div`
+const ClassName = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
@@ -38,17 +38,27 @@ const Amount = styled.div`
 `;
 
 function FeeRow({
-  fee: { _id, class: feeClass, student, amount, due_date, paid },
+  fee: { _id, classDetails, students, price, classes, fee_name },
   onEdit,
   onDelete,
 }) {
   const navigate = useNavigate();
 
-  const status = paid
+  // Lấy thông tin của class từ classDetails
+  const classInfo = classDetails?.[0] || {};  // Tránh lỗi null
+  const className = classInfo?.name || "Class not found";
+
+  // Lấy thông tin sinh viên và trạng thái thanh toán
+  const studentInfo = students?.[0] || {};  // Tránh lỗi null
+  const studentStatus = studentInfo?.status || "Status not found";
+
+  // Lấy trạng thái thanh toán của học phí
+  const feeStatus = studentStatus === "paid"
     ? "paid"
-    : new Date(due_date) < new Date()
+    : new Date(classes?.[0]?.due_date) < new Date()
     ? "overdue"
     : "unpaid";
+
   const statusToTagName = {
     unpaid: "red",
     paid: "green",
@@ -57,23 +67,24 @@ function FeeRow({
 
   return (
     <Table.Row>
-      {/* Hiển thị tên của class */}
-      <StudentName>{feeClass?.name || "Class not found"}</StudentName>
+      {/* Hiển thị tên lớp */}
+      <ClassName>{className}</ClassName>
 
       <Stacked>
-        {/* Hiển thị thông tin student */}
-        {/* <span>{student?.name || "Student not found"}</span>
-        <span>{student?.email || "No email"}</span> */}
+        {/* Hiển thị tên học phí */}
+        <span>{fee_name}</span>
       </Stacked>
 
       <Stacked>
-        <span>Due Date: {format(new Date(due_date), "MMM dd yyyy")}</span>
-        <span>Amount: ${amount}</span>
+        {/* Hiển thị ngày đến hạn */}
+        <span>Due Date: {format(new Date(classes?.[0]?.due_date), "MMM dd yyyy")}</span>
       </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status}</Tag>
+      {/* Hiển thị trạng thái thanh toán */}
+      <Tag type={statusToTagName[feeStatus]}>{feeStatus}</Tag>
 
-      <Amount>${amount}</Amount>
+      {/* Hiển thị số tiền */}
+      <Amount>${price}</Amount>
 
       <Modal>
         <Menus.Menu>

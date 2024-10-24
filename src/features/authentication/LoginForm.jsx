@@ -10,8 +10,8 @@ import useUser from "./useUser";
 
 function LoginForm() {
     const { user } = useUser();
-    const [email, setEmail] = useState("admin4@example.com");
-    const [password, setPassword] = useState("hashedpassword13");
+    const [email, setEmail] = useState("student4@example.com");
+    const [password, setPassword] = useState("hashedpassword9");
     const { isLoadingLogin, login } = useLogin();
 
     function handleSubmit(e) {

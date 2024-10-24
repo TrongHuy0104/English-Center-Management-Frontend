@@ -1,26 +1,18 @@
 import FeeRow from "./FeeRow";
 import useFee from "./useFee";
 import Spinner from "../../../ui/Spinner";
-import { add } from "date-fns";
 import Empty from "../../../ui/Empty";
 import Menus from "../../../ui/Menus";
 import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
-
-function fromToday(numDays, withTime = false) {
-    const date = add(new Date(), { days: numDays });
-    if (!withTime) date.setUTCHours(0, 0, 0, 0);
-    return date.toISOString().slice(0, -1);
-}
 
 function FeeTable() {
     const {isLoading, fees, error} = useFee();
     
     if (isLoading) return <Spinner />;
     if (error) return <p>Error loading fees: {error.message}</p>;
-    const TableHeader = ['Class',"", 'Due Date', 'Status', 'Amount']
+    const TableHeader = ['Class', 'Fee Type', 'Due Date', 'Status', 'Amount']
     if (!fees?.length) return <Empty resource="fees" />;
-
 
     return (
         <Menus>
