@@ -91,6 +91,7 @@ function RegisterForm() {
                     type="text"
                     id="name"
                     name="name"
+                    full-width
                     autoComplete="username"
                     value={inputFields.name}
                     onChange={handleChange}
@@ -101,6 +102,7 @@ function RegisterForm() {
                     type="text"
                     id="email"
                     name="email"
+                    full-width
                     autoComplete="username"
                     value={inputFields.email}
                     onChange={handleChange}
@@ -111,6 +113,7 @@ function RegisterForm() {
                     type="password"
                     id="password"
                     name="password"
+                    full-width
                     autoComplete="current-password"
                     value={inputFields.password}
                     onChange={handleChange}
@@ -124,6 +127,7 @@ function RegisterForm() {
                     type="password"
                     id="confirm-password"
                     name="passwordConfirm"
+                    full-width
                     autoComplete="current-confirm-password"
                     value={inputFields.passwordConfirm}
                     onChange={handleChange}

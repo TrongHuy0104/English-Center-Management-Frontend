@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
@@ -72,6 +72,7 @@ function LoginForm() {
                     type="text"
                     id="email"
                     name="email"
+                    full-width
                     isError={errors?.email}
                     // This makes this form better for password managers
                     autoComplete="username"
@@ -84,6 +85,7 @@ function LoginForm() {
                     type="password"
                     id="password"
                     name="password"
+                    full-width
                     isError={errors?.password}
                     autoComplete="current-password"
                     value={inputFields.password}
@@ -96,7 +98,7 @@ function LoginForm() {
                 </Button>
             </FormRowVertical>
             <Text>
-                Don't have an account?{" "}
+                Do not have an account?
                 <TextLink to="/register">Sign up</TextLink>
             </Text>
         </Form>
