@@ -10,6 +10,8 @@ import Dashboard from "./pages/Dashboard";
 import User from "./pages/User";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
+import MyClass from "./pages/MyClass";
+import Fees from "./pages/Fees";
 import FeesPage from "./pages/FeePages";
 import FeeWithClass from "./pages/FeeWithClass";
 import Register from "./pages/Register";
@@ -46,6 +48,9 @@ function App() {
                         <Route path="cabin" element={<Cabins />} />
                         <Route path="fees" element={<FeesPage />} />
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
+                        {/* Student */}
+                        <Route path="student/my-class" element={<MyClass />} />
+                        <Route path="student/fees" element={<Fees />} />
                     </Route>
                     <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />
