@@ -36,6 +36,7 @@ function FeeTable() {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     if (initialFees && Array.isArray(initialFees)) {
+      setFees(initialFees);
     }
   }, [initialFees]);
   console.log("initialFees: ", initialFees);

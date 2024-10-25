@@ -12,6 +12,7 @@ import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import FeesPage from "./pages/FeePages";
 import FeeWithClass from "./pages/FeeWithClass";
+import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +43,7 @@ function App() {
             <Route path="cabin" element={<Cabins />} />
             <Route path="fees" element={<FeesPage />} />
             <Route path="fees/:feeId" element={<FeeWithClass />} />
+            <Route path="salaries" element={<AdminSalaryPage />} />
           </Route>
           <Route path="login" element={<Login />} />
         </Routes>
