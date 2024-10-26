@@ -9,7 +9,6 @@ function useCenters() {
     });
 
     const centers = data?.data?.data?.data;
-    console.log("centers", centers);
 
     return { isLoading, centers, error };
 }

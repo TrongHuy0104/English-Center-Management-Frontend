@@ -45,6 +45,15 @@ function CreateUserForm() {
         label: center.name,
     }));
 
+    let genderOptions = [
+        { value: "male", label: "Male" },
+        { value: "female", label: "Female" },
+        {
+            value: "other",
+            label: "Other",
+        },
+    ];
+
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormRow label="Full name" error={errors?.fullName?.message}>
@@ -53,7 +62,12 @@ function CreateUserForm() {
                     id="name"
                     {...register("name", {
                         required: "This field is required",
+                        pattern: {
+                            value: /^(?!\s*$).+/,
+                            message: "Please enter a valid name",
+                        },
                     })}
+                    disabled={isLoadingCreate}
                 />
             </FormRow>
 
@@ -68,6 +82,7 @@ function CreateUserForm() {
                             message: "Please enter a valid email address",
                         },
                     })}
+                    disabled={isLoadingCreate}
                 />
             </FormRow>
             <FormRow label="Role" error={errors?.role?.message}>
@@ -78,6 +93,7 @@ function CreateUserForm() {
                     {...register("role", {
                         required: "This field is required",
                     })}
+                    disabled={isLoadingCreate}
                 />
             </FormRow>
             <FormRow label="Center" error={errors?.center?.message}>
@@ -88,6 +104,40 @@ function CreateUserForm() {
                     {...register("center", {
                         required: "This field is required",
                     })}
+                    disabled={isLoadingCreate}
+                />
+            </FormRow>
+
+            <FormRow label="Phone" error={errors?.phone?.message}>
+                <Input
+                    type="phone"
+                    id="phone"
+                    {...register("phone", {
+                        pattern: {
+                            value: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/,
+                            message: "Please enter a valid phone number",
+                        },
+                    })}
+                    disabled={isLoadingCreate}
+                />
+            </FormRow>
+
+            <FormRow label="Gender" error={errors?.role?.message}>
+                <Select
+                    id="role"
+                    options={genderOptions}
+                    style={{ width: "70%" }}
+                    {...register("gender")}
+                    disabled={isLoadingCreate}
+                />
+            </FormRow>
+
+            <FormRow label="Date Of Birth" error={errors?.dateOfBirth?.message}>
+                <Input
+                    type="date"
+                    id="dateOfBirth"
+                    {...register("dateOfBirth")}
+                    disabled={isLoadingCreate}
                 />
             </FormRow>
 
@@ -106,6 +156,7 @@ function CreateUserForm() {
                                 "Please enter a valid password at least 8 characters",
                         },
                     })}
+                    disabled={isLoadingCreate}
                 />
             </FormRow>
 
@@ -122,6 +173,7 @@ function CreateUserForm() {
                             value === getValues().password ||
                             "Passwords do not match",
                     })}
+                    disabled={isLoadingCreate}
                 />
             </FormRow>
 
