@@ -8,6 +8,7 @@ import {
     HiClipboardDocumentCheck,
     HiEnvelopeOpen,
 } from "react-icons/hi2";
+import { RiAdminFill } from "react-icons/ri";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
 import useUser from "../features/authentication/useUser";
@@ -62,6 +63,11 @@ const navAdminList = [
         title: "Home",
         route: "dashboard",
         icon: <HiOutlineHome />,
+    },
+    {
+        title: "Admins",
+        route: "admin",
+        icon: <RiAdminFill />,
     },
     {
         title: "Users",

@@ -1,9 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { createNewUser as createNewUserApi } from "../../../services/apiUser";
+import { createAdmin as createAdminApi } from "../../../services/apiAdmin";
 
-function useCreateUser() {
-    const { isPending: isLoadingCreate, mutate: createNewUser } = useMutation({
+function useCreateAdmin() {
+    const queryClient = useQueryClient();
+    const { isPending: isLoadingCreate, mutate: createAdmin } = useMutation({
         mutationFn: ({
             name,
             email,
@@ -15,7 +16,7 @@ function useCreateUser() {
             phone,
             dateOfBirth,
         }) =>
-            createNewUserApi({
+            createAdminApi({
                 name,
                 email,
                 password,
@@ -27,7 +28,10 @@ function useCreateUser() {
                 dateOfBirth,
             }),
         onSuccess: () => {
-            toast.success("Registered successfully!");
+            toast.success("Create successfully!");
+            queryClient.invalidateQueries({
+                queryKey: ["admins"],
+            });
         },
         onError: (err) => {
             if (err.response.data.error.code === 11000) {
@@ -38,7 +42,7 @@ function useCreateUser() {
         },
     });
 
-    return { isLoadingCreate, createNewUser };
+    return { isLoadingCreate, createAdmin };
 }
 
-export default useCreateUser;
+export default useCreateAdmin;
