@@ -84,15 +84,26 @@ export async function getCenterByTeacherId(teacherId) {
 //     }
 // }
 //Teacher get attendance data
-export async function getAttendanceData(classId, date, slot) {
+
+export async function getAttendanceData(teacherId, date, slot) {
     try {
-        const res = await axios.get(`/attendance/classes/${classId}/${date}/${slot}`,{ withCredentials: true }
+        const res = await axios.get(`/teachers/${teacherId}/attendance/${date}/${slot}`, { withCredentials: true }
         );
-        console.log(res);
-        return res;
-        
+        return res; 
     } catch (error) {
         console.error('Error fetching attendance data:', error);
-        throw error; 
+        throw error;
     }
+}
+// Teacher get classes by teacherId
+export async function getClassesByTeacherId(teacherId) {
+  try {
+    const res = await axios.get(`teachers/${teacherId}/classes`, { withCredentials: true });
+    console.log(res);
+    return res; 
+
+  } catch (error) {
+    console.error('Error fetching classes by teacher ID:', error);
+    throw error; 
+  }
 }

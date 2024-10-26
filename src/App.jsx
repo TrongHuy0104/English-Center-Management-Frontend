@@ -14,6 +14,7 @@ import ProfileTeacher from "./pages/ProfileTeacher";
 import Schedule from "./pages/Schedule";
 import UpdateProfilePage from "./pages/UpdateTeacherProfile";
 import TakeAttendance from "./pages/TakeAttendance";
+import TakeAttendancePage from "./pages/Attendance";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -44,10 +45,12 @@ function App() {
                         <Route path="user" element={<User />} />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
+                        {/* Teacher */}
                         <Route path="teacher/attendance" element={<TakeAttendance />} />
                         <Route path="teacher/schedule" element={<Schedule/>} />
                         <Route path="teacher/profile" element={<ProfileTeacher/>} />
                         <Route path="/teacher/profile/update-profile" element={<UpdateProfilePage/>} />
+                        <Route path="/teacher/attendance/takeattendance" element={<TakeAttendancePage />} />
                     </Route>
                     <Route path="login" element={<Login />} />
                 </Routes>

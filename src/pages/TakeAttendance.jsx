@@ -1,7 +1,6 @@
 // src/pages/FeesPage.jsx
-import DashboardFilter from "../features/admin/dashboard/DashboardFilter";
 import Row from "../ui/Row";
-
+import TeacherAttendance from "../features/teacher/attendance/TeacherAttendance";
 
 function AttendancePage() {
   return (
@@ -9,7 +8,8 @@ function AttendancePage() {
       <Row type="horizontal">
         <h2>TeacherAttendance</h2>
       </Row>
-      <DashboardFilter />
+      
+      <TeacherAttendance />
     </>
   );
 }

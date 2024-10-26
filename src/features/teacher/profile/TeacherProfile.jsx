@@ -10,7 +10,7 @@ import Button from "../../../ui/Button";
 function TeacherProfile() {
   const { isLoading: isLoadingUser, user } = useUser();
   const teacherId = user?.roleDetails?._id;
-
+ 
   const { isLoading: isLoadingSalary, salary } = useTeacherSalary(teacherId);
   const { isLoading: isLoadingCenter, center } = useTeacherCenter(teacherId);
   const navigate = useNavigate();
