@@ -5,7 +5,6 @@ import useTeacherCenter from "../profile/useTeacherCenter";
 import "../../../styles/TeacherProfile.css";
 import Input from "../../../ui/Input";
 import FormRow from "../../../ui/FormRow";
-
 import Button from "../../../ui/Button";
 
 function TeacherProfile() {
@@ -18,11 +17,8 @@ function TeacherProfile() {
 
   // Navigate to update profile page
   const handleUpdate = () => {
-    navigate("update-profile"); 
+    navigate("update-profile");
   };
-
-  // Log user role for debugging purposes
-  console.log("User Role:", user?.roleDetails);
 
   // Handle loading states
   if (isLoadingUser || isLoadingSalary || isLoadingCenter) {

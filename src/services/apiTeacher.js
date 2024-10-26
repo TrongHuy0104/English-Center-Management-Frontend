@@ -1,4 +1,17 @@
 import axios from "../utils/axios";
+
+export async function login(data) {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `/teachers/login`,
+      data: data,
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
 //Get data of a teacher by teacherId
     export async function getTeacherById(idTeacher) {
     try {
@@ -56,3 +69,31 @@ export async function getCenterByTeacherId(teacherId) {
         throw error;
     }
 }
+// //Teacher take attendance
+// export async function takeAttendance(classId, date, slot, attendanceList) {
+//     try {
+//         const res = await axios.post(
+//             `/attendance/classes/${classId}/${date}/${slot}`,
+//             { attendanceList },
+//             { withCredentials: true }
+//         );
+//         console.log('Attendance data:', res.data);
+//         return res.data; // Trả về dữ liệu từ server
+//     } catch (error) {
+//         console.error('Error taking attendance:', error);
+//         throw error; // Ném lỗi để xử lý ở nơi khác
+//     }
+// }
+// //Teacher get attendance data
+// export async function getAttendanceData(classId, date, slot) {
+//     try {
+//         const res = await axios.get(
+//             `/attendance/classes/${classId}/${date}/${slot}`,
+//             { withCredentials: true }
+//         );
+//         return res.data; 
+//     } catch (error) {
+//         console.error('Error fetching attendance data:', error);
+//         throw error; 
+//     }
+// }

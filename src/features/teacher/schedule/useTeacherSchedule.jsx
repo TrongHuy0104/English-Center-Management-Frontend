@@ -7,11 +7,7 @@ function useTeacherSchedule(teacherId) {
         queryFn: () => getTeacherSchedule(teacherId), 
         refetchOnWindowFocus: false,
     });
-    
-    
     const teacherschedule = data?.data;
-    console.log(teacherschedule);
-    
     return { isLoading, teacherschedule, error };
 }
 

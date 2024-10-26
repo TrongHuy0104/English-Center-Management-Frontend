@@ -18,9 +18,9 @@ function UpdateTeacherProfile() {
     dateOfBirth: user.roleDetails.dateOfBirth?.split("T")[0] || "",
   });
 
-  const [hasChanges, setHasChanges] = useState(false); // Theo dõi sự thay đổi
+  const [hasChanges, setHasChanges] = useState(false); 
 
-  // Hàm kiểm tra sự thay đổi
+
   useEffect(() => {
     setHasChanges(
       formData.name !== user.roleDetails.name ||
@@ -40,9 +40,9 @@ function UpdateTeacherProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Chỉ cho phép cập nhật nếu có sự thay đổi
+
     if (!hasChanges) {
-      return; // Không làm gì cả nếu không có sự thay đổi
+      return; 
     }
 
     try {
@@ -59,7 +59,7 @@ function UpdateTeacherProfile() {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} >
       <FormRow label="Name">
         <Input
           type="text"
@@ -102,7 +102,11 @@ function UpdateTeacherProfile() {
         />
       </FormRow>
 
-      <Button type="submit" disabled={isUpdating || !hasChanges}>
+      <Button type="submit" disabled={isUpdating || !hasChanges} style={{
+            marginTop: "20px",
+            position: "relative",
+            left: "700px"
+          }} >
         {isUpdating ? "Updating..." : "Update Profile"}
       </Button>
     </Form>

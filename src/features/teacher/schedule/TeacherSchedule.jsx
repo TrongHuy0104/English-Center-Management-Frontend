@@ -14,50 +14,44 @@ const retroTheme = {
   buttonActiveBackground: "#ffffff",
 };
 
-
 // Styled component for FullCalendar buttons
 const CalendarWrapper = styled.div`
+  .fc .fc-button {
+    background-color: ${(props) => props.theme.buttonBackground};
+    color: ${(props) => props.theme.buttonText};
+    border: none;
+  }
 
+  .fc .fc-button:hover {
+    background-color: ${(props) => props.theme.buttonHoverBackground};
+    color: ${(props) => props.theme.buttonText};
+  }
 
-    .fc .fc-button {
-        background-color: ${(props) => props.theme.buttonBackground};
-        color: ${(props) => props.theme.buttonText};
-        border: none;
-    }
-
-    .fc .fc-button:hover {
-        background-color: ${(props) => props.theme.buttonHoverBackground};
-        color: ${(props) => props.theme.buttonText};
-    }
-
-    .fc .fc-button-active {
-        background-color: ${(props) => props.theme.buttonActiveBackground};
-        color: ${(props) => props.theme.buttonText};
-    }
+  .fc .fc-button-active {
+    background-color: ${(props) => props.theme.buttonActiveBackground};
+    color: ${(props) => props.theme.buttonText};
+  }
 `;
 
-
 function TeacherSchedule() {
-  const { isLoading: isLoadingUser, user } = useUser(); 
-  const teacherId = user?.roleDetails?._id; 
-  const { isLoading: isLoadingSchedule, teacherschedule, error } = useTeacherSchedule(teacherId); 
+  const { isLoading: isLoadingUser, user } = useUser();
+  const teacherId = user?.roleDetails?._id;
+  const { isLoading: isLoadingSchedule, teacherschedule, error } = useTeacherSchedule(teacherId);
   
-  const [theme] = useState(retroTheme); 
+  const [theme] = useState(retroTheme);
   if (isLoadingUser || isLoadingSchedule) {
     return <div>Loading...</div>;
   }
-  
+
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  
+
   const schedules = teacherschedule?.data.classes || [];
-  (schedules);
-  const retroColors = ["#6B5B95", "#FF6F61"]; 
-  console.log(schedules);
-  
-  const events = schedules.flatMap(cls =>
-    cls.schedule.map(item => {
+  const retroColors = ["#6B5B95", "#FF6F61"];
+
+  const events = schedules.flatMap((cls) =>
+    cls.schedule.map((item) => {
       const randomColor = retroColors[Math.floor(Math.random() * retroColors.length)];
       return {
         title: cls.name,
@@ -68,31 +62,31 @@ function TeacherSchedule() {
       };
     })
   );
-  
+  console.log(events);
   return (
     <ThemeProvider theme={theme}>
-    <div style={{ width: "100%", margin: "0 auto" }}>
-      <CalendarWrapper>
-        <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
-          initialDate={new Date()}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "timeGridWeek,timeGridDay",
-          }}
-          contentHeight="500px"
-          slotMinTime="06:00:00"
-          slotMaxTime="20:00:00"
-          events={events}
-          selectable={true}
-          editable={false}
-          locale="en"
-          nowIndicator={true}
-          weekNumbers={true}
-        />
-      </CalendarWrapper>
+      <div style={{ width: "100%", margin: "0 auto" }}>
+        <CalendarWrapper>
+          <FullCalendar
+            plugins={[timeGridPlugin, interactionPlugin]}
+            initialView="timeGridWeek"
+            initialDate={new Date()}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "timeGridWeek,timeGridDay",
+            }}
+            contentHeight="500px"
+            slotMinTime="06:00:00"
+            slotMaxTime="20:00:00"
+            events={events}
+            selectable={true}
+            editable={false}
+            locale="en"
+            nowIndicator={true}
+            weekNumbers={true}
+          />
+        </CalendarWrapper>
       </div>
     </ThemeProvider>
   );

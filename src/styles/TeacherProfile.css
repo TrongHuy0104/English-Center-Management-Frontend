@@ -14,19 +14,11 @@ label {
     color: #555;
     padding-left: 10px;
     /* Reduced padding to make it closer */
-    border-left: 5px solid #007bff;
     display: inline-block;
     width: 150px;
     
 }
-.MvhHV {
-    border: 1px solid var(--color-grey-300);
-    background-color: var(--color-grey-0);
-    border-radius: var(--border-radius-sm);
-    padding: 0.8rem 1.2rem;
-    box-shadow: var(--shadow-sm);
-    margin-left: -100px;
-}
+
 
 .FormRow {
     display: flex;
