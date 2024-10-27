@@ -6,19 +6,19 @@ import Row from "../ui/Row";
 import useUser from "../features/authentication/useUser";
 import { useNavigate } from "react-router-dom";
 
-function Admin() {
+function Student() {
     const { user } = useUser();
 
     const navigate = useNavigate();
     useEffect(() => {
-        if (!user.roleDetails?.isSuperAdmin) {
+        if (user.user.role !== "admin") {
             navigate("/");
         }
-    }, [user.user?.role, user.roleDetails.isSuperAdmin, navigate]);
+    }, [user.user.role, navigate]);
     return (
         <>
             <Row type="horizontal">
-                <Heading as="h1">Admins</Heading>
+                <Heading as="h1">Students</Heading>
                 <AdminOperations />
             </Row>
             <Row>
@@ -28,4 +28,4 @@ function Admin() {
     );
 }
 
-export default Admin;
+export default Student;

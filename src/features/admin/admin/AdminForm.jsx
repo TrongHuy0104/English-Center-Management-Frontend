@@ -5,8 +5,6 @@ import Form from "../../../ui/Form";
 import Button from "../../../ui/Button";
 import FormRow from "../../../ui/FormRow";
 import Select from "../../../ui/Select";
-import useCenters from "../center/useCenters";
-import Spinner from "../../../ui/Spinner";
 import useCreateAdmin from "./useCreateAdmin";
 import useUpdateAdmin from "./useUpdateAdmin";
 
@@ -24,13 +22,11 @@ function AdminForm({ adminToEdit = {}, onCloseModal }) {
                 "yyyy-MM-dd"
             ),
             email: adminToEdit.user[0]?.email, // Get email from the first user object
-            center: adminToEdit.centers[0]?._id, // Get name from the first center
         };
     }
 
     const isEditSession = Boolean(editId);
 
-    const { isLoading: isLoadingCenter, centers } = useCenters();
     const { register, handleSubmit, reset, getValues, formState } = useForm({
         defaultValues: isEditSession ? editValues : {},
     });
@@ -65,8 +61,6 @@ function AdminForm({ adminToEdit = {}, onCloseModal }) {
         console.log(errors);
     }
 
-    if (isLoadingCenter) return <Spinner />;
-
     let genderOptions = [
         { value: "male", label: "Male" },
         { value: "female", label: "Female" },
@@ -75,11 +69,6 @@ function AdminForm({ adminToEdit = {}, onCloseModal }) {
             label: "Other",
         },
     ];
-
-    let centerOptions = centers.map((center) => ({
-        value: center._id,
-        label: center.name,
-    }));
 
     return (
         <Form
@@ -130,9 +119,9 @@ function AdminForm({ adminToEdit = {}, onCloseModal }) {
                 />
             </FormRow>
 
-            <FormRow label="Gender" error={errors?.role?.message}>
+            <FormRow label="Gender" error={errors?.gender?.message}>
                 <Select
-                    id="role"
+                    id="gender"
                     options={genderOptions}
                     style={{ width: "70%" }}
                     {...register("gender")}
@@ -149,15 +138,6 @@ function AdminForm({ adminToEdit = {}, onCloseModal }) {
                 />
             </FormRow>
 
-            <FormRow label="Center" error={errors?.center?.message}>
-                <Select
-                    id="center"
-                    options={centerOptions}
-                    style={{ width: "70%" }}
-                    {...register("center")}
-                    disabled={isWorking}
-                />
-            </FormRow>
             {!isEditSession && (
                 <FormRow
                     label="Password (min 8 characters)"

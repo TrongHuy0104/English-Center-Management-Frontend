@@ -11,6 +11,7 @@ import {
 import { RiAdminFill } from "react-icons/ri";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
+import { PiStudentDuotone } from "react-icons/pi";
 import useUser from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -68,6 +69,11 @@ const navAdminList = [
         title: "Admins",
         route: "admin",
         icon: <RiAdminFill />,
+    },
+    {
+        title: "Students",
+        route: "student",
+        icon: <PiStudentDuotone />,
     },
     {
         title: "Users",

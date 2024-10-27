@@ -15,13 +15,12 @@ function AdminTable() {
 
     return (
         <Menus>
-            <Table columns="1.2fr 0.8fr 1.2fr 1fr 1.2fr 0.6fr">
+            <Table columns="1.2fr 0.8fr 1.2fr 1fr 0.6fr">
                 <Table.Header>
                     <div>Name</div>
                     <div>Phone</div>
                     <div>Email</div>
                     <div>Status</div>
-                    <div>Centers</div>
                     <div></div>
                 </Table.Header>
                 <Table.Body
