@@ -43,9 +43,8 @@ const StyledButton = styled.button`
 `;
 
 function AdminRow({ admin }) {
-    const { id, name, phone, centers, user } = admin;
+    const { id, name, phone, user } = admin;
     const { email, active } = user[0];
-    const centerList = centers.map((center) => center.name);
 
     const { isLoadingDisable, disableAdmin } = useDisableAdmin();
     const { isLoadingEnable, enableAdmin } = useEnableAdmin();
@@ -59,11 +58,6 @@ function AdminRow({ admin }) {
                 <Tag type={active ? "green" : "red"}>
                     {active ? "Active" : "Inactive"}
                 </Tag>
-                {centerList.map((item) => (
-                    <Tag type="blue" key={item}>
-                        {item}
-                    </Tag>
-                ))}
                 <div>
                     <Modal>
                         {active && (

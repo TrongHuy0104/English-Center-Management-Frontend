@@ -5,13 +5,11 @@ import FormRow from "../../../ui/FormRow";
 import Input from "../../../ui/Input";
 import Select from "../../../ui/Select";
 import useUser from "../../authentication/useUser";
-import useCenters from "../center/useCenters";
 import Spinner from "../../../ui/Spinner";
 import useCreateUser from "./useCreateUser";
 
 function CreateUserForm() {
     const { user } = useUser();
-    const { isLoading: isLoadingCenter, centers } = useCenters();
     const { isLoadingCreate, createNewUser } = useCreateUser();
 
     const {
@@ -37,13 +35,6 @@ function CreateUserForm() {
     function onSubmit(data) {
         createNewUser({ ...data }, { onSettled: reset() });
     }
-
-    if (isLoadingCenter) return <Spinner />;
-
-    let centerOptions = centers.map((center) => ({
-        value: center._id,
-        label: center.name,
-    }));
 
     let genderOptions = [
         { value: "male", label: "Male" },
@@ -91,17 +82,6 @@ function CreateUserForm() {
                     options={roleOptions}
                     style={{ width: "70%" }}
                     {...register("role", {
-                        required: "This field is required",
-                    })}
-                    disabled={isLoadingCreate}
-                />
-            </FormRow>
-            <FormRow label="Center" error={errors?.center?.message}>
-                <Select
-                    id="center"
-                    options={centerOptions}
-                    style={{ width: "70%" }}
-                    {...register("center", {
                         required: "This field is required",
                     })}
                     disabled={isLoadingCreate}
