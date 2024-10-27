@@ -1,55 +1,71 @@
-import useAttendance from "./useTeacherAttendance";
+import React, { useEffect, useState } from "react";
 import useUser from "../../authentication/useUser";
-import useSlotAttendance from "./useSlotAttendance";
-import { useNavigate } from "react-router-dom"; // Make sure to import useNavigate
+import { useNavigate } from "react-router-dom";
+import { getClassesByTeacherId, takeAttendance, getAttendanceData } from "../../../services/apiTeacher";
 
 function DashboardFilter() {
     const { isLoading: isLoadingUser, user } = useUser();
     const teacherId = user?.roleDetails?._id;
-    const date = new Date(Date.now());
+    const navigate = useNavigate();
+    const date = new Date();
     date.setHours(date.getHours() + 7);
-    const formattedDate = date.toISOString();
-    const { isLoading: isLoadingSlot, classData } = useSlotAttendance(teacherId);
-    const slot = classData?.classes[0]?.schedule || [];
+    const todayDate = date.toISOString().split("T")[0]; 
+    const [classData, setClassData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const matchingSlots = slot.filter((s) => s.date.split("T")[0] === formattedDate.split("T")[0]);
-
-    const attendanceHooks = matchingSlots.map((s) => useAttendance(teacherId, formattedDate.split("T")[0], s.slot));
-
-    const isLoadingAttendance = attendanceHooks.some((data) => data.isLoading);
-
-    const navigate = useNavigate(); // Initialize navigate here
-
-    const handleTakeAttendance = (index) => {
-        const students = attendanceHooks[index].attendanceData?.data?.attendance?.student_attendance || [];
-        navigate('/teacher/attendance/takeattendance', { state: { students } }); // Use navigate for navigation
+    useEffect(() => {
+        const fetchClassData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getClassesByTeacherId(teacherId);
+                const classes = response.data?.data?.classes || [];
+                const slotsToday = classes[0]?.schedule.filter(
+                    (s) => s.date.split("T")[0] === todayDate
+                ) || [];
+                setClassData({ ...classes[0], schedule: slotsToday });
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+            
+        if (teacherId) fetchClassData();
+    }, [teacherId, todayDate]);
+    const handleTakeAttendance = ( slot) => {
+        console.log(teacherId, todayDate, slot);
+        
+        navigate("/teacher/attendance/takeattendance", { 
+            state: { teacherId, todayDate, slot }
+        });
     };
 
-    if (isLoadingUser || isLoadingSlot || isLoadingAttendance) {
+    if (isLoadingUser || isLoading) {
         return <div>Loading...</div>;
     }
-
+    
     return (
         <div>
             <h2>Attendance Data</h2>
-            {matchingSlots.length > 0 ? (
-                matchingSlots.map((slot, index) => {
-                    const attendance = attendanceHooks[index].attendanceData?.data?.attendance;
-
+            {classData?.schedule.length > 0 ? (
+                classData.schedule.map((slot) => {
                     return (
                         <div key={slot.slot}>
                             <h3>Class Attendance for Slot {slot.slot}</h3>
-                            <p>Class Name: {classData.classes[0]?.name }</p>
-                            <p>Date: {new Date(attendance?.date).toLocaleDateString()}</p>
-                            <p>Slot: {attendance?.slot}</p>
-                            <p>Time: {attendance?.start_time} - {attendance?.end_time}</p>
-                            <button onClick={() => handleTakeAttendance(index)}>Take Attendance</button>
+                            <p>Class Name: {classData.name}</p>
+                            <p>Date: {new Date().toLocaleDateString()}</p>
+                            <p>Slot: {slot.slot}</p>
+                            <p>Time: {slot.start_time} - {slot.end_time}</p>
+                            <button onClick={() => handleTakeAttendance(slot.slot)}>Take Attendance</button> 
                         </div>
                     );
                 })
             ) : (
                 <p>No attendance data available for today.</p>
             )}
+            {error && <p>Error: {error.message}</p>} 
         </div>
     );
 }

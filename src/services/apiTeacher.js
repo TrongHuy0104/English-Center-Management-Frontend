@@ -69,23 +69,24 @@ export async function getCenterByTeacherId(teacherId) {
         throw error;
     }
 }
-// // //Teacher take attendance
-// export async function takeAttendance(classId, date, slot, attendanceList) {
-//     try {
-//         const res = await axios.post(`/attendance/classes/${classId}/${date}/${slot}`,
-//             { attendanceList },
-//             { withCredentials: true }
-//         );
-        
-//         return res; 
-//     } catch (error) {
-//         console.error('Error taking attendance:', error);
-//         throw error; 
-//     }
-// }
-//Teacher get attendance data
+// //Teacher take attendance
+export async function takeAttendance(teacherId, date, slot, attendanceList = []) {
+    
+    try {
+        const res = await axios.put(`/teachers/${teacherId}/attendance/${date}/${slot}`, 
+            { attendanceList },
+            { withCredentials: true }
+        );
+        return res;
+    } catch (error) {
+        console.error("Error taking attendance:", error);
+        throw error;
+    }
+}
 
-export async function getAttendanceData(teacherId, date, slot) {
+
+// em test cái getAttendanceData 
+export async function getAttendanceData(teacherId, date, slot)  {
     try {
         const res = await axios.get(`/teachers/${teacherId}/attendance/${date}/${slot}`, { withCredentials: true }
         );
@@ -99,7 +100,6 @@ export async function getAttendanceData(teacherId, date, slot) {
 export async function getClassesByTeacherId(teacherId) {
   try {
     const res = await axios.get(`teachers/${teacherId}/classes`, { withCredentials: true });
-    console.log(res);
     return res; 
 
   } catch (error) {

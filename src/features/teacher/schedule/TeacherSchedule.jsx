@@ -62,7 +62,7 @@ function TeacherSchedule() {
       };
     })
   );
-  console.log(events);
+ 
   return (
     <ThemeProvider theme={theme}>
       <div style={{ width: "100%", margin: "0 auto" }}>
