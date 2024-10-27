@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import styled, { ThemeProvider } from "styled-components";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import useSchedule from "./useSchedule";
 
 // Định nghĩa các theme với styled-components
@@ -10,9 +11,8 @@ const retroTheme = {
   buttonBackground: "#0d0149",
   buttonText: "#ffffff",
   buttonHoverBackground: "#4f46e5",
-  buttonActiveBackground:   "#ffffff",
+  buttonActiveBackground: "#ffffff",
 };
-
 
 // Styled component cho FullCalendar button
 const CalendarWrapper = styled.div`
@@ -33,11 +33,10 @@ const CalendarWrapper = styled.div`
   }
 `;
 
-// Styled component cho nút chuyển đổi theme
-
 const ScheduleCalendar = () => {
   const { isLoading, schedules, error } = useSchedule();
   const [theme] = useState(retroTheme); // Theme mặc định
+  const navigate = useNavigate(); // Khởi tạo hook điều hướng
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -47,25 +46,26 @@ const ScheduleCalendar = () => {
     return <div>Error loading schedules: {error.message}</div>;
   }
 
-  // Mảng màu retro để sự kiện có màu khác nhau
-  const retroColors = [
-    // "#FF6F61", "#6B5B95", "#88B04B", "#F7CAC9", "#92A8D1", "#955251", "#B565A7",
-
-    "#6B5B95"
-  ];
-
   const events = schedules.flatMap((cls) =>
     cls.schedule.map((item) => {
-      const randomColor = retroColors[Math.floor(Math.random() * retroColors.length)];
       return {
-        title: cls.name,
+        title: `${cls.name} - slot ${item.slot}`,
         start: `${item.date.split("T")[0]}T${item.start_time}:00`,
         end: `${item.date.split("T")[0]}T${item.end_time}:00`,
-        backgroundColor: randomColor,
+        backgroundColor: "#6B5B95",
         textColor: "#ffffff",
+        extendedProps: {
+          classId: cls._id, // Thêm ID của lớp học để dùng khi điều hướng
+        },
       };
     })
   );
+
+  // Hàm xử lý sự kiện khi nhấn vào sự kiện trên calendar
+  const handleEventClick = (clickInfo) => {
+    const classId = clickInfo.event.extendedProps.classId;
+    navigate(`/student/classes/${classId}`); 
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -80,10 +80,11 @@ const ScheduleCalendar = () => {
               center: "title",
               right: "timeGridWeek,timeGridDay",
             }}
-            contentHeight="500px"
-            slotMinTime="06:00:00"
+            contentHeight="600px"
+            slotMinTime="07:00:00"
             slotMaxTime="20:00:00"
             events={events} // Đưa dữ liệu vào FullCalendar
+            eventClick={handleEventClick} // Xử lý sự kiện khi nhấn vào sự kiện
             selectable={true} // Cho phép chọn tuần
             editable={false} // Không cho phép chỉnh sửa lịch trực tiếp
             locale="en"

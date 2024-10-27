@@ -7,6 +7,7 @@ import {
     HiCurrencyDollar,
     HiClipboardDocumentCheck,
     HiEnvelopeOpen,
+    HiOutlineAcademicCap,
 } from "react-icons/hi2";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
@@ -100,6 +101,11 @@ const navStudentList = [
         title: "My CLass",
         route: "student/my-class",
         icon: <HiOutlineCalendarDays />,
+    },
+    {
+        title: "Classes",
+        route: "student/classes",
+        icon: <HiOutlineAcademicCap />,
     },
     {
         title: "Attendance",

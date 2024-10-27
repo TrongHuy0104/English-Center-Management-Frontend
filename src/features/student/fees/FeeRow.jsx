@@ -77,7 +77,7 @@ function FeeRow({
 
       <Stacked>
         {/* Hiển thị ngày đến hạn */}
-        <span>Due Date: {format(new Date(classes?.[0]?.due_date), "MMM dd yyyy")}</span>
+        <span>{format(new Date(classes?.[0]?.due_date), "MMM dd yyyy")}</span>
       </Stacked>
 
       {/* Hiển thị trạng thái thanh toán */}

@@ -24,8 +24,8 @@ function LoginForm() {
     const { isLoadingLogin, login } = useLogin();
 
     const [inputFields, setInputFields] = useState({
-        email: "admin4@example.com",
-        password: "hashedpassword13",
+        email: "student4@example.com",
+        password: "hashedpassword9",
     });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);

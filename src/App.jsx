@@ -15,6 +15,8 @@ import Fees from "./pages/Fees";
 import FeesPage from "./pages/FeePages";
 import FeeWithClass from "./pages/FeeWithClass";
 import Register from "./pages/Register";
+import StudentClass from "./pages/StudentClass";
+import ClassDetail from "./features/student/myclass/ClassDetail";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -50,6 +52,8 @@ function App() {
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
                         {/* Student */}
                         <Route path="student/my-class" element={<MyClass />} />
+                        <Route path="student/classes" element={<StudentClass />} />
+                        <Route path="student/classes/:classid" element={<ClassDetail />} />
                         <Route path="student/fees" element={<Fees />} />
                     </Route>
                     <Route path="register" element={<Register />} />
