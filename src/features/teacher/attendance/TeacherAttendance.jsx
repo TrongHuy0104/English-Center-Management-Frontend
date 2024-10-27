@@ -37,7 +37,7 @@ function DashboardFilter() {
     const handleTakeAttendance = ( slot) => {
         console.log(teacherId, todayDate, slot);
         
-        navigate("/teacher/attendance/takeattendance", { 
+        navigate("/teacher/attendance/take-attendance", { 
             state: { teacherId, todayDate, slot }
         });
     };
