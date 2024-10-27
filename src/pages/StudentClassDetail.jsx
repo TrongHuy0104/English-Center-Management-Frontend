@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import useClassById from './useClassById';
+import useClassById from '../features/student/myclass/useClassById';
 import { format } from 'date-fns'; // Để định dạng lại ngày tháng
-import Row from '../../../ui/Row';
-import Heading from '../../../ui/Heading';
-import useSendEnrollRequest from './useSendEnrollRequest';
+import Row from '../ui/Row';
+import Heading from '../ui/Heading';
+import useSendEnrollRequest from '../features/student/myclass/useSendEnrollRequest';
 
 const ClassDetailWrapper = styled.div`
   background: #ffffff;
@@ -16,7 +16,7 @@ const ClassDetailWrapper = styled.div`
   height: max-content;
   margin: 30px auto;
   color: #333;
-  position: relative; /* Đặt vị trí tương đối để chứa nút Enroll */
+  position: relative; 
 `;
 
 const ClassContent = styled.div`
@@ -95,7 +95,7 @@ const EnrollButton = styled.button`
   }
 `;
 
-const ClassDetail = () => {
+const StudentClassDetail = () => {
     const { classid } = useParams();
     const { isLoading, classDetail, error } = useClassById(classid);
     const { mutate: enroll, isLoading: isEnrolling } = useSendEnrollRequest();
@@ -171,4 +171,4 @@ const ClassDetail = () => {
     );
 };
 
-export default ClassDetail;
+export default StudentClassDetail;
