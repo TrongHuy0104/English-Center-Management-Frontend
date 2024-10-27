@@ -6,7 +6,7 @@ const StyledFilter = styled.div`
     background-color: var(--color-grey-0);
     box-shadow: var(--shadow-sm);
     border-radius: var(--border-radius-sm);
-    padding: 0.4rem;
+    padding: 0.5rem;
     display: flex;
     gap: 0.4rem;
 `;
@@ -26,7 +26,7 @@ const FilterButton = styled.button`
     font-weight: 500;
     font-size: 1.4rem;
     /* To give the same height as select */
-    padding: 0.44rem 0.8rem;
+    padding: 0.6rem 0.8rem;
     transition: all 0.3s;
 
     &:hover:not(:disabled) {

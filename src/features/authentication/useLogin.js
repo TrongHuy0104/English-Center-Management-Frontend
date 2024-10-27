@@ -5,12 +5,12 @@ import { login as loginApi } from "../../services/apiAuth";
 import { useCookies } from "react-cookie";
 
 function useLogin() {
-    const [cookies, setCookie] = useCookies(["jwt"]);
+    const [_, setCookie] = useCookies([import.meta.env.VITE_SERVER_JWT]);
     const navigate = useNavigate();
     const { isPending: isLoadingLogin, mutate: login } = useMutation({
         mutationFn: ({ email, password }) => loginApi({ email, password }),
         onSuccess: (user) => {
-            setCookie("jwt", user.data?.token, {
+            setCookie(import.meta.env.VITE_SERVER_JWT, user.data?.token, {
                 expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
             });
             navigate("/", { replace: true });

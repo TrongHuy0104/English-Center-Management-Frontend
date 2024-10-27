@@ -70,7 +70,6 @@ function FeeTable() {
   };
 
   const toggleModal = () => setShowModal(!showModal); // Toggle modal
-  console.log("initialFeesssss: ", fees);
 
   if (isLoading) return <Spinner />;
   if (error) return <p>Error loading fees: {error.message}</p>;

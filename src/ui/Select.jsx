@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import React from "react";
 
 const StyledSelect = styled.select`
     font-size: 1.4rem;
-    padding: 0.8rem 1.2rem;
+    padding: 1rem 1.2rem;
     border: 1px solid
         ${(props) =>
             props.type === "white"
@@ -14,9 +15,12 @@ const StyledSelect = styled.select`
     box-shadow: var(--shadow-sm);
 `;
 
-function Select({ options, value, onChange, ...props }) {
+const Select = React.forwardRef(function Select(
+    { options, value, onChange, ...props },
+    ref
+) {
     return (
-        <StyledSelect {...props} onChange={onChange} value={value}>
+        <StyledSelect ref={ref} {...props} onChange={onChange} value={value}>
             {options.map((option) => (
                 <option value={option.value} key={option.value}>
                     {option.label}
@@ -24,6 +28,9 @@ function Select({ options, value, onChange, ...props }) {
             ))}
         </StyledSelect>
     );
-}
+});
+
+// Optionally set a display name
+Select.displayName = "Select";
 
 export default Select;
