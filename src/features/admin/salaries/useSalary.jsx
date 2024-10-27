@@ -6,13 +6,13 @@ import {
 } from "../../../services/apiSalary.js";
 // import { getTeacherShifts } from "../../../services/apiAttendance.js";
 
-function useSalary() {
+function useSalary(page = 1, limit = 10) {
   const queryClient = useQueryClient(); // QueryClient để thao tác lại với cache
 
   // Lấy danh sách phí
   const { isLoading, data, error } = useQuery({
-    queryKey: ["salaries"],
-    queryFn: getAllSalaries,
+    queryKey: ["salaries", page, limit],
+    queryFn: () => getAllSalaries(page, limit),
     refetchOnWindowFocus: false,
   });
 
@@ -34,7 +34,7 @@ function useSalary() {
   });
 
   // Lấy danh sách phí từ dữ liệu trả về
-  const salaries = data?.data?.data.salaries;
+  const salaries = data?.data;
 
   return {
     isLoading,

@@ -1,7 +1,9 @@
 import axios from "../utils/axios";
-export async function getAllSalaries() {
+export async function getAllSalaries(page = 1, limit = 10) {
   try {
-    const res = await axios.get("/salaries", { withCredentials: true });
+    const res = await axios.get(`/salaries?page=${page}&limit=${limit}`, {
+      withCredentials: true,
+    });
     return res;
   } catch (error) {
     console.log(error);

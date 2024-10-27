@@ -5,7 +5,7 @@ import Button from "../../../ui/Button";
 import FormRow from "../../../ui/FormRow";
 import Input from "../../../ui/Input";
 import styled from "styled-components";
-import { getAllTeachers } from "../../../services/apiTeacher";
+import { getAllTeachers, getTeacher } from "../../../services/apiTeacher";
 import { getTeacherAttendanceSummary } from "../../../services/apiAttendance";
 
 const StyledInput = styled(Input)`
@@ -98,6 +98,11 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
           );
 
           setShifts(shiftsData.amount); // Cập nhật số buổi dạy
+
+          const teacherData = await getTeacher(selectedTeacher);
+          console.log("teacherData", teacherData);
+
+          setShiftPay(teacherData.data.data.data.shiftPay);
         } catch (error) {
           console.error("Error fetching teacher attendance summary:", error);
         }
@@ -115,6 +120,7 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
       teacher: formData.teacher_id, // Chuyển teacher_id thành teacher
       calculatedSalary,
       shifts,
+      shiftPay,
     };
     console.log("Modified FormData: ", modifiedFormData);
     try {
@@ -135,6 +141,7 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
       console.error("Error creating Salary:", error);
     }
   };
+  console.log("shiftP", shiftPay);
 
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)}>
@@ -201,7 +208,7 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
         />
       </FormRow>
 
-      <FormRow label="Shift Pay" error={errors?.shiftPay?.message}>
+      {/* <FormRow label="Shift Pay" error={errors?.shiftPay?.message}>
         <StyledInput
           type="number"
           id="shiftPay"
@@ -212,8 +219,16 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
           })}
           onChange={(e) => setShiftPay(Number(e.target.value))}
         />
+      </FormRow> */}
+      {/* Shift Pay */}
+      <FormRow label="Shift Pay" error={errors?.shiftPay?.message}>
+        <StyledInput
+          type="number"
+          id="shiftPay"
+          value={shiftPay} // Hiển thị shiftPay từ bảng teachers
+          readOnly
+        />
       </FormRow>
-
       <FormRow>
         <Button variation="secondary" type="button" onClick={onCloseModal}>
           Cancel

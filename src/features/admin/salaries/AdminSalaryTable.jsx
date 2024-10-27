@@ -30,15 +30,24 @@ const StyledButton = styled(Button)`
   display: block;
 `;
 
+const PAGE_SIZE = 10;
+
 function AdminSalaryTable() {
-  const { isLoading, salaries: initialSalaries, error } = useSalary();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    isLoading,
+    salaries: initialSalaries,
+    error,
+  } = useSalary(currentPage, PAGE_SIZE);
   const [salaries, setSalaries] = useState([]);
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
-    if (initialSalaries && Array.isArray(initialSalaries)) {
-      setSalaries(initialSalaries);
+    if (initialSalaries && Array.isArray(initialSalaries.salaries)) {
+      setSalaries(initialSalaries.salaries);
     }
-  }, [initialSalaries]);
+  }, [initialSalaries, currentPage]);
+  console.log("initialSalaries", initialSalaries);
 
   const handleUpdateSalary = (updatedSalary) => {
     setSalaries((prevSalaries) =>
@@ -121,7 +130,12 @@ function AdminSalaryTable() {
       </Table>
 
       <Table.Footer>
-        <Pagination count={salaries.length} />
+        <Pagination
+          count={initialSalaries?.totalPages}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          total={initialSalaries?.total}
+        />
       </Table.Footer>
     </Menus>
   );

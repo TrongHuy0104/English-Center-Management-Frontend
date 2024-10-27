@@ -55,16 +55,6 @@ function AdminSalaryRow({ salary, onDelete, onUpdate }) {
           <Menus.Menu>
             <Menus.Toggle id={salary._id} />
             <Menus.List id={salary._id}>
-              {/* <Menus.Button icon={<HiEye />} onClick={handleNavigate}>
-                See Details
-              </Menus.Button> */}
-
-              <Modal.Open opens="edit-salary">
-                <Menus.Button icon={<HiOutlinePencilSquare />}>
-                  Edit
-                </Menus.Button>
-              </Modal.Open>
-
               <Modal.Open opens="delete-salary">
                 <Menus.Button
                   onClick={handleDelete}
