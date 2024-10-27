@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllFees, CreateFee, updateFee } from "../../../services/apiFee";
 
-function useFee() {
+function useFee(page = 1, limit = 10) {
   const queryClient = useQueryClient(); // QueryClient để thao tác lại với cache
 
-  // Lấy danh sách phí
+  // Lấy danh sách phí với phân trang (page và limit)
   const { isLoading, data, error } = useQuery({
-    queryKey: ["fees"],
-    queryFn: getAllFees,
+    queryKey: ["fees", page, limit], // Thêm page và limit vào queryKey
+    queryFn: () => getAllFees(page, limit), // Truyền page và limit vào hàm getAllFees
     refetchOnWindowFocus: false,
   });
 
@@ -29,7 +29,7 @@ function useFee() {
   });
 
   // Lấy danh sách phí từ dữ liệu trả về
-  const fees = data?.data?.data?.data;
+  const fees = data?.data;
 
   return {
     isLoading,

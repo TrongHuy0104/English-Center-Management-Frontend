@@ -10,10 +10,9 @@ import Dashboard from "./pages/Dashboard";
 import User from "./pages/User";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
-import FeesPage from "./pages/FeePages";
-import FeeWithClass from "./pages/FeeWithClass";
+import AdminFeesPage from "./pages/AdminFeePages";
+import AdminFeeWithClass from "./pages/AdminFeeWithClass";
 import Register from "./pages/Register";
-
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,8 +41,8 @@ function App() {
             <Route path="user" element={<User />} />
             <Route path="booking" element={<Bookings />} />
             <Route path="cabin" element={<Cabins />} />
-            <Route path="fees" element={<FeesPage />} />
-            <Route path="fees/:feeId" element={<FeeWithClass />} />
+            <Route path="fees" element={<AdminFeesPage />} />
+            <Route path="fees/:feeId" element={<AdminFeeWithClass />} />
           </Route>
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />

@@ -1,7 +1,11 @@
 import axios from "../utils/axios";
-export async function getAllFees() {
+
+export async function getAllFees(page = 1, limit = 10) {
   try {
-    const res = await axios.get("/fees", { withCredentials: true });
+    // Gửi yêu cầu với query params `page` và `limit`
+    const res = await axios.get(`/fees?page=${page}&limit=${limit}`, {
+      withCredentials: true,
+    });
     return res;
   } catch (error) {
     console.log(error);
@@ -11,7 +15,6 @@ export async function getAllFees() {
 export async function getFee(id) {
   try {
     const res = await axios.get(`/fees/${id}`, { withCredentials: true });
-    console.log("res1", res);
 
     return res;
   } catch (error) {
@@ -63,5 +66,30 @@ export async function updateFee(id, updatedData) {
   } catch (error) {
     console.error("Update error:", error.response || error.message);
     throw error; // Ném lỗi để có thể xử lý lỗi tại nơi gọi hàm này
+  }
+}
+
+// Add a new class to a fee
+export async function createClassInFee(id, newClassData) {
+  try {
+    const res = await axios.post(`/fees/${id}`, newClassData, {
+      withCredentials: true,
+    });
+    return res;
+  } catch (error) {
+    console.error("Error creating class in fee:", error);
+    throw error;
+  }
+}
+export async function deleteClassInFee(feeId, classId) {
+  try {
+    console.log("Deleting class with ID:", classId, "from fee ID:", feeId);
+    const response = await axios.delete(`/fees/${feeId}/classes/${classId}`, {
+      withCredentials: true,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error deleting class from fee:", error);
+    throw error;
   }
 }

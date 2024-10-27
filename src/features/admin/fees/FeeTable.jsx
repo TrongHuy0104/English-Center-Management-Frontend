@@ -1,22 +1,24 @@
-import FeeRow from "./FeeRow";
 import React, { useState, useEffect } from "react";
+import FeeRow from "./FeeRow";
 import styled from "styled-components";
 import useFee from "./useFee";
-import CreateNewFeeForm from "./CreateNewFeeForm"; // Form để tạo fee mới
+import CreateNewFeeForm from "./CreateNewFeeForm";
 import Spinner from "../../../ui/Spinner";
 import Empty from "../../../ui/Empty";
 import Menus from "../../../ui/Menus";
 import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
 import Button from "../../../ui/Button";
-import Modal from "../../../ui/Modal"; // Giả sử bạn có sẵn component Modal'
+import Modal from "../../../ui/Modal";
 import { CreateFee } from "../../../services/apiFee";
+
+const PAGE_SIZE = 10; // Số mục hiển thị trên mỗi trang
 
 const StyledButton = styled(Button)`
   color: white;
   background-color: #4f46e5;
-  padding: 8px 16px; /* Giảm kích thước nút */
-  font-size: 14px; /* Giảm kích thước chữ */
+  padding: 8px 16px;
+  font-size: 14px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
@@ -31,15 +33,24 @@ const StyledButton = styled(Button)`
 `;
 
 function FeeTable() {
-  const { isLoading, fees: initialFees, error } = useFee();
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+
+  const {
+    isLoading,
+    fees: initialFees,
+    error,
+    totalPages,
+  } = useFee(currentPage, 10);
   const [fees, setFees] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
-    if (initialFees && Array.isArray(initialFees)) {
-      setFees(initialFees);
+    if (initialFees && Array.isArray(initialFees.fees)) {
+      setFees(initialFees.fees);
     }
-  }, [initialFees]);
-  console.log("initialFees: ", initialFees);
+  }, [initialFees, currentPage]);
+  console.log("initialFees", initialFees);
+  console.log("fees1", fees.length);
 
   const handleUpdateFee = (updatedFee) => {
     setFees((prevFees) =>
@@ -69,13 +80,11 @@ function FeeTable() {
     }
   };
 
-  const toggleModal = () => setShowModal(!showModal); // Toggle modal
+  const toggleModal = () => setShowModal(!showModal);
 
   if (isLoading) return <Spinner />;
   if (error) return <p>Error loading fees: {error.message}</p>;
   if (!fees?.length) return <Empty resource="fees" />;
-
-  console.log("toggleModal: ", toggleModal, "modal: ", showModal);
 
   return (
     <Menus>
@@ -92,16 +101,17 @@ function FeeTable() {
         </Modal.Window>
       </Modal>
 
-      <Table columns="2.5fr 2.5fr 3fr 0.5fr 3.2rem">
+      <Table columns="2.0fr 2.0fr 4fr 0.1fr 2.5rem">
         <Table.Header>
           <div>Fee Type</div>
           <div>Price</div>
           <div>Description</div>
           <div></div>
+          <div></div>
         </Table.Header>
 
         <Table.Body
-          data={fees}
+          data={fees} // Dùng các mục trong trang hiện tại
           render={(fee) => (
             <FeeRow
               key={fee._id}
@@ -114,7 +124,12 @@ function FeeTable() {
       </Table>
 
       <Table.Footer>
-        <Pagination count={fees.length} />
+        <Pagination
+          count={initialFees?.totalPages}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage} // Thêm logic thay đổi trang
+          total={initialFees?.total}
+        />
       </Table.Footer>
     </Menus>
   );

@@ -24,6 +24,7 @@ const Amount = styled.div`
 
 function FeeRow({ fee, onDelete, onUpdate }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  console.log("gee", fee);
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -48,6 +49,7 @@ function FeeRow({ fee, onDelete, onUpdate }) {
       <StudentName>{fee.fee_name || "Fee not found"}</StudentName>
       <Amount>${fee.price}</Amount>
       <p>{fee.description}</p>
+      <div></div>
 
       <div>
         <Modal>
