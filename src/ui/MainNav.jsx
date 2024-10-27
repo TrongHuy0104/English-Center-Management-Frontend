@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { HiOutlineHome, HiUserGroup, HiEnvelopeOpen  } from "react-icons/hi2";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
-import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
+import { HiOutlineCheckCircle } from "react-icons/hi2";
 import useUser from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -88,7 +88,7 @@ const navTeacherList = [
     {
         title: "Attendance",
         route: "teacher/attendance",
-        icon: <HiOutlineBuildingOffice2 />,
+        icon: <HiOutlineCheckCircle />,
     },
     {
         title: "Schedule",

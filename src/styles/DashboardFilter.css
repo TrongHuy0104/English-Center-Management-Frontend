@@ -1,0 +1,102 @@
+.dashboard-filter {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.attendance-table {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Button Styles */
+button {
+    padding: 4px 8px; /* Smaller padding for the button */
+    background-color: #4f46e5; /* Purple background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px; /* Smaller font size for the button */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+button:hover {
+    background-color: #4841cc; /* Darker purple on hover */
+}
+
+/* Adjust the Action Column */
+.row-container > div:last-child {
+    display: flex; /* Make the last div flex */
+    justify-content: center; /* Center the button */
+    align-items: center; /* Center the button vertically */
+    min-width: 100px; /* Set a minimum width for the Action column */
+}
+
+.header-container,
+.row-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Center items vertically */
+.row-container > div {
+    display: flex; /* Make each cell a flex container */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex: 1; /* Each column takes equal width */
+    text-align: center; /* Center align text */
+}
+
+.header-container {
+    background-color: #f2f2f2; /* Light background for header */
+    font-weight: bold; /* Bold text for header */
+}
+
+/* Set row background colors */
+.row-container {
+    background-color: #fff; /* White background for rows */
+}
+
+.row-container:nth-child(even) {
+    background-color: #f9f9f9; /* Alternate row colors for better readability */
+}
+
+/* Optional: Specific width for the No. column to keep it smaller */
+.header-container > div:first-child,
+.row-container > div:first-child {
+    flex: 0 0 50px; /* Fixed width for "No." column */
+    max-width: 50px; /* Maximum width for "No." column */
+}
+
+/* Specific styles for Class Name column */
+.header-container > div:nth-child(2),
+.row-container > div:nth-child(2) {
+    flex: 2; /* Allow Class Name column to be wider */
+}
+
+/* Specific styles for Date and Slot columns */
+.header-container > div:nth-child(3),
+.row-container > div:nth-child(3),
+.header-container > div:nth-child(4),
+.row-container > div:nth-child(4) {
+    flex: 1; /* Equal width for Date and Slot columns */
+}
+
+/* Specific styles for Time column */
+.header-container > div:nth-child(5),
+.row-container > div:nth-child(5) {
+    flex: 1.5; /* Slightly wider for Time column */
+}
+
+/* Specific styles for Action column */
+.header-container > div:last-child,
+.row-container > div:last-child {
+    flex: 0 0 120px; /* Fixed width for Action column */
+    max-width: 120px; /* Maximum width for Action column */
+}

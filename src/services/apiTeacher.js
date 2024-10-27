@@ -98,7 +98,7 @@ export async function getAttendanceData(teacherId, date, slot) {
 // Teacher get classes by teacherId
 export async function getClassesByTeacherId(teacherId) {
   try {
-    const res = await axios.get(`teachers/${teacherId}/classes`, { withCredentials: true });
+    const res = await axios.get(`/teachers/${teacherId}/classes`, { withCredentials: true });
     console.log(res);
     return res; 
 

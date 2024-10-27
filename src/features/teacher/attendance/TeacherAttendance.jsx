@@ -1,7 +1,8 @@
 import useAttendance from "./useTeacherAttendance";
 import useUser from "../../authentication/useUser";
 import useSlotAttendance from "./useSlotAttendance";
-import { useNavigate } from "react-router-dom"; // Make sure to import useNavigate
+import { useNavigate } from "react-router-dom";
+import "../../../styles/DashboardFilter.css";
 
 function DashboardFilter() {
     const { isLoading: isLoadingUser, user } = useUser();
@@ -18,11 +19,11 @@ function DashboardFilter() {
 
     const isLoadingAttendance = attendanceHooks.some((data) => data.isLoading);
 
-    const navigate = useNavigate(); // Initialize navigate here
+    const navigate = useNavigate();
 
     const handleTakeAttendance = (index) => {
         const students = attendanceHooks[index].attendanceData?.data?.attendance?.student_attendance || [];
-        navigate('/teacher/attendance/takeattendance', { state: { students } }); // Use navigate for navigation
+        navigate('/teacher/attendance/takeattendance', { state: { students } });
     };
 
     if (isLoadingUser || isLoadingSlot || isLoadingAttendance) {
@@ -30,23 +31,38 @@ function DashboardFilter() {
     }
 
     return (
-        <div>
-            <h2>Attendance Data</h2>
+        <div className="dashboard-filter">
+            {/* <h2>Attendance Data</h2> */}
             {matchingSlots.length > 0 ? (
-                matchingSlots.map((slot, index) => {
-                    const attendance = attendanceHooks[index].attendanceData?.data?.attendance;
+                <div className="attendance-table">
+                    {/* Header Container */}
+                    <div className="header-container">
+                        <div>No.</div> {/* New No. Column */}
+                        <div>Class Name</div>
+                        <div>Date</div>
+                        <div>Slot</div>
+                        <div>Time</div>
+                        <div>Action</div>
+                    </div>
 
-                    return (
-                        <div key={slot.slot}>
-                            <h3>Class Attendance for Slot {slot.slot}</h3>
-                            <p>Class Name: {classData.classes[0]?.name }</p>
-                            <p>Date: {new Date(attendance?.date).toLocaleDateString()}</p>
-                            <p>Slot: {attendance?.slot}</p>
-                            <p>Time: {attendance?.start_time} - {attendance?.end_time}</p>
-                            <button onClick={() => handleTakeAttendance(index)}>Take Attendance</button>
-                        </div>
-                    );
-                })
+                    {/* Data Rows */}
+                    {matchingSlots.map((slot, index) => {
+                        const attendance = attendanceHooks[index].attendanceData?.data?.attendance;
+
+                        return (
+                            <div className="row-container" key={slot.slot}>
+                                <div>{index + 1}</div> {/* Serial number */}
+                                <div>{classData.classes[0]?.name}</div>
+                                <div>{new Date(attendance?.date).toLocaleDateString()}</div>
+                                <div>{attendance?.slot}</div>
+                                <div>{attendance?.start_time} - {attendance?.end_time}</div>
+                                <div>
+                                    <button onClick={() => handleTakeAttendance(index)}>Take Attendance</button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             ) : (
                 <p>No attendance data available for today.</p>
             )}
