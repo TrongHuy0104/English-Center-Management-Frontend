@@ -29,7 +29,7 @@ function useAdmins() {
     const total = data?.data?.results;
 
     // PREFETCHING
-    const pageCount = Math.ceil(total / PAGE_SIZE);
+    const pageCount = total < PAGE_SIZE ? total : Math.ceil(total / PAGE_SIZE);
     if (page < pageCount)
         queryClient.prefetchQuery({
             queryKey: ["admins", filter, page + 1],

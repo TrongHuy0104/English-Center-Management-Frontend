@@ -14,6 +14,7 @@ import MyClass from "./pages/MyClass";
 import Fees from "./pages/Fees";
 import FeesPage from "./pages/FeePages";
 import FeeWithClass from "./pages/FeeWithClass";
+import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Student from "./pages/Student";
@@ -52,6 +53,7 @@ function App() {
                         <Route path="cabin" element={<Cabins />} />
                         <Route path="fees" element={<FeesPage />} />
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
+                        <Route path="salaries" element={<AdminSalaryPage />} />
                         {/* Student */}
                         <Route path="student/my-class" element={<MyClass />} />
                         <Route path="student/fees" element={<Fees />} />
