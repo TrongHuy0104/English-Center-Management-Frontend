@@ -61,8 +61,6 @@ function StudentList() {
         alert("Failed to submit attendance. Please try again.");
     }
 };
-
-
     return (
         <div>
             <h1>Attendance Details</h1>
