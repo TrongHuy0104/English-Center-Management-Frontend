@@ -25,7 +25,7 @@ export async function getFee(id) {
 export async function CreateFee(formData) {
   try {
     const res = await axios.post("/fees", formData, { withCredentials: true });
-    console.log("Response from server:", res);
+
     return res;
   } catch (error) {
     if (error.response) {
@@ -44,9 +44,14 @@ export async function CreateFee(formData) {
 
 export async function deleteFee(id) {
   try {
-    const res = await axios.delete(`/fees/${id}`, { withCredentials: true });
-    console.log("delete complete");
-    console.log("feidđ", feeId);
+    const res = await axios.patch(
+      `/fees/${id}`,
+
+      { active: false },
+      {
+        withCredentials: true,
+      }
+    );
 
     return res;
   } catch (error) {
@@ -59,8 +64,6 @@ export async function updateFee(id, updatedData) {
     const res = await axios.patch(`/fees/${id}`, updatedData, {
       withCredentials: true,
     });
-    console.log("updated data: ", updatedData);
-    console.log("feidđ", id);
 
     return res;
   } catch (error) {
@@ -83,7 +86,6 @@ export async function createClassInFee(id, newClassData) {
 }
 export async function deleteClassInFee(feeId, classId) {
   try {
-    console.log("Deleting class with ID:", classId, "from fee ID:", feeId);
     const response = await axios.delete(`/fees/${feeId}/classes/${classId}`, {
       withCredentials: true,
     });

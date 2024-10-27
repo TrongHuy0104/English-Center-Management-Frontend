@@ -24,7 +24,6 @@ const Amount = styled.div`
 
 function FeeRow({ fee, onDelete, onUpdate }) {
   const [isDeleting, setIsDeleting] = useState(false);
-  console.log("gee", fee);
 
   const handleDelete = async () => {
     setIsDeleting(true);

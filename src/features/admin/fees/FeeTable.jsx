@@ -10,7 +10,8 @@ import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
 import Button from "../../../ui/Button";
 import Modal from "../../../ui/Modal";
-import { CreateFee } from "../../../services/apiFee";
+import { CreateFee, deleteFee } from "../../../services/apiFee";
+import { useQueryClient } from "@tanstack/react-query";
 
 const PAGE_SIZE = 10; // Số mục hiển thị trên mỗi trang
 
@@ -34,13 +35,14 @@ const StyledButton = styled(Button)`
 
 function FeeTable() {
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const queryClient = useQueryClient();
 
   const {
     isLoading,
     fees: initialFees,
     error,
     totalPages,
-  } = useFee(currentPage, 10);
+  } = useFee(currentPage, PAGE_SIZE);
   const [fees, setFees] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
@@ -49,8 +51,6 @@ function FeeTable() {
       setFees(initialFees.fees);
     }
   }, [initialFees, currentPage]);
-  console.log("initialFees", initialFees);
-  console.log("fees1", fees.length);
 
   const handleUpdateFee = (updatedFee) => {
     setFees((prevFees) =>
@@ -59,7 +59,13 @@ function FeeTable() {
   };
 
   const handleDeleteFee = async (id) => {
-    setFees((prevFees) => prevFees.filter((fee) => fee._id !== id));
+    try {
+      await deleteFee(id); // Gọi API xóa
+      setFees((prevFees) => prevFees.filter((fee) => fee._id !== id));
+      queryClient.invalidateQueries(["fees"]);
+    } catch (error) {
+      console.error("Error deleting salary:", error);
+    }
   };
 
   const handleCreateFee = async (newFeeData) => {
