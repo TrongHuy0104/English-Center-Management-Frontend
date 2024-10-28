@@ -30,6 +30,7 @@ function StudentList() {
                         <Table.Header>
                             <div>No.</div>
                             <div>Student ID</div>
+                            <div>Status</div>
                             <div>Mark Present</div>
                         </Table.Header>
                         <Table.Body
@@ -38,6 +39,7 @@ function StudentList() {
                                 <Table.Row key={student._id}>
                                     <div>{index + 1}</div>
                                     <div>{student.student_id}</div>
+                                    <div>{student.status}</div>
                                     <div>
                                         <input
                                             type="checkbox"
