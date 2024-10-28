@@ -36,6 +36,55 @@ export async function updateStudent(studentId, studentData) {
   }
 }
 
+// export async function uploadAvatar(avatarFile, studentId) {
+//   const formData = new FormData();
+//   formData.append("avatar", avatarFile); // Đảm bảo tên này khớp với multer
+
+//   try {
+//     const response = await axios.post(
+//       `/students/${studentId}/avatar`, // Đường dẫn API
+//       formData,
+//       {
+//         withCredentials: true,
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+//     console.log("Avatar updated successfully", response.data);
+//     if (response.data && response.data.avatarUrl) {
+//       console.log("Avatar updated successfully", response.data.avatarUrl);
+//     } else {
+//       console.error(
+//         "Failed to update profile: Avatar URL not found in response."
+//       );
+//     }
+//   } catch (error) {
+//     console.error(
+//       "Error updating avatar",
+//       error.response ? error.response.data : error.message
+//     );
+//   }
+// }
+
+export async function uploadAvatar(id, avatarURL) {
+  try {
+    const res = await axios.put(
+      `/students/upload/${id}`,
+      { avatar: avatarURL },
+      {
+        withCredentials: true,
+      }
+    );
+    if (!res || !res.data) {
+      return null;
+    }
+    return res.data;
+  } catch (error) {
+    console.log({ message: error.message });
+  }
+}
+
 export async function getAttendanceById(id) {
   try {
     const res = await axios.get(`/students/attendance/${id}`, {
@@ -55,10 +104,10 @@ export async function getAttendanceReport(studentId) {
     const res = await axios.get(`/attendance-report/${studentId}`, {
       withCredentials: true,
     });
-    return res; // Ensure you return the data you need
+    return res;
   } catch (error) {
     console.error("Error fetching attendance report:", error);
-    throw error; // Rethrow if you want to handle this in the component
+    throw error;
   }
 }
 
@@ -83,7 +132,6 @@ export async function getClassById(classId) {
     const res = await axios.get(`/students/classes/${classId}`, {
       withCredentials: true,
     });
-
     if (res.status === 200) {
       return res.data;
     } else {
@@ -91,6 +139,19 @@ export async function getClassById(classId) {
     }
   } catch (error) {
     console.error("Error fetching center by ID:", error);
+    throw error;
+  }
+}
+
+export async function getTeacherById(idTeacher) {
+  try {
+    const res = await axios.get(`/teachers/${idTeacher}`, {
+      withCredentials: true,
+    });
+
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching teacher by ID:", error);
     throw error;
   }
 }

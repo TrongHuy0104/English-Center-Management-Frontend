@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
 import useUser from "../features/authentication/useUser";
+import { useState, useEffect, useRef } from "react";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import app from "../firebase";
 import {
   updateStudent,
-  getCenterById,
+  uploadAvatar,
   getClassById,
 } from "../services/apiStudent";
-import "../styles/StudentProfile.css";
-import Input from "../ui/Input";
-import Form from "../ui/Form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Button from "../ui/Button";
-import FormRow from "../ui/FormRow";
+import Select from "../ui/Select";
 import Heading from "../ui/Heading";
 
-function StudentProfile() {
+const DEFAULT_AVATAR =
+  "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
+
+const StudentProfile = () => {
   const { isLoading: isLoadingUser, user } = useUser();
-  const studentId = user?.roleDetails?._id;
-  const centers = user?.roleDetails?.centers || [];
+  const [imageURL, setImageURL] = useState(DEFAULT_AVATAR);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
   const classes = user?.roleDetails?.classes || [];
 
   const [formData, setFormData] = useState({
@@ -23,190 +28,309 @@ function StudentProfile() {
     phone: "",
     gender: "",
     dateOfBirth: "",
-    centers: "",
-    className: "",
   });
 
-  const [originalData, setOriginalData] = useState(null);
-  const [isFormDataLoaded, setIsFormDataLoaded] = useState(false);
-  const [notification, setNotification] = useState("");
+  const [classNames, setClassNames] = useState("");
+
+  const [hasData, setHasData] = useState(true);
+
+  const options = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "other", label: "Other" },
+  ];
+
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    return date.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
+  const fetchClassNames = async (classes) => {
+    try {
+      const classNamesPromises = classes.map((classId) =>
+        getClassById(classId).then(
+          (res) => res.data.classes.name || "Unknown Class"
+        )
+      );
+      const fetchedClassNames = await Promise.all(classNamesPromises);
+      setClassNames(fetchedClassNames.join(", "));
+    } catch (error) {
+      console.error("Error fetching class names:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchCenterAndClassNames = async () => {
-      try {
-        if (!user || !user.roleDetails) {
-          console.log("User or roleDetails not available yet.");
-          return;
-        }
-        const centerNames = [];
-        for (const centerId of centers) {
-          try {
-            console.log("Fetching center data for ID:", centerId);
-            const centerData = await getCenterById(centerId);
-            centerNames.push(centerData.data.centers.name || "Unknown Center");
-          } catch (error) {
-            console.error(
-              `Error fetching center name for ID ${centerId}:`,
-              error
-            );
-            centerNames.push("Center Not Found");
-          }
-        }
-
-        const classNames = [];
-        for (const classId of classes) {
-          try {
-            const classData = await getClassById(classId);
-            classNames.push(classData.data.classes.name || "Unknown Class");
-          } catch (error) {
-            console.error(
-              `Error fetching class name for ID ${classId}:`,
-              error
-            );
-            classNames.push("Class Not Found");
-          }
-        }
-
-        const initialData = {
-          name: user.roleDetails.name || "",
-          phone: user.roleDetails.phone || "",
-          gender: user.roleDetails.gender || "",
-          dateOfBirth: user.roleDetails.dateOfBirth
-            ? user.roleDetails.dateOfBirth.split("T")[0]
-            : "",
-          centers: centerNames.join(", "),
-          className: classNames.join(", "),
-        };
-
-        setFormData(initialData);
-        setOriginalData(initialData);
-        setIsFormDataLoaded(true);
-      } catch (error) {
-        console.error("Error fetching centers or classes:", error);
-      }
-    };
-
     if (user) {
-      fetchCenterAndClassNames();
+      setFormData({
+        name: user.roleDetails.name || "",
+        phone: user.roleDetails.phone || "",
+        gender: user.roleDetails.gender || "",
+        dateOfBirth: user.roleDetails.dateOfBirth
+          ? formatDate(user.roleDetails.dateOfBirth)
+          : "",
+      });
+      setImageURL(user.roleDetails.avatar || DEFAULT_AVATAR);
+      setHasData(true);
+
+      fetchClassNames(classes);
+    } else {
+      setHasData(false);
     }
-  }, [user]);
+  }, [user, classes]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  function handleChange(e) {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setNotification("");
+  function handleEditAvatar() {
+    fileInputRef.current.click();
+  }
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setImageURL(URL.createObjectURL(file));
+      setSelectedImage(file);
+    }
+  }
+
+  async function handleSave() {
     try {
-      await updateStudent(studentId, formData);
-      setOriginalData(formData);
-      setNotification("Profile updated successfully!");
+      let avatarUrl = imageURL;
+      if (selectedImage) {
+        const storage = getStorage(app);
+        const storageRef = ref(storage, `avatars/${selectedImage.name}`);
+        await uploadBytes(storageRef, selectedImage);
+        avatarUrl = await getDownloadURL(storageRef);
+
+        await uploadAvatar(user.roleDetails._id, avatarUrl);
+      }
+
+      await updateStudent(user.roleDetails._id, {
+        ...formData,
+        avatar: avatarUrl,
+      });
+
+      toast.success("Profile updated successfully.");
     } catch (error) {
       console.error("Error updating profile:", error);
-      setNotification("Failed to update profile.");
+      toast.error("Error updating profile.");
     }
-  };
+  }
 
-  const hasChanges = JSON.stringify(formData) !== JSON.stringify(originalData);
-
-  if (isLoadingUser || !isFormDataLoaded) {
+  if (isLoadingUser) {
     return <div>Loading...</div>;
+  }
+
+  if (!hasData) {
+    return <div>No data available.</div>;
   }
 
   return (
     <div>
-      <Form onSubmit={handleSubmit}>
-        <div
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Heading as="h1">Student Profile</Heading>
+        <Button
+          type="button"
+          onClick={handleSave}
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            color: "white",
           }}
         >
-          <Heading as="h1">Student Profile</Heading>
-          {hasChanges && <Button type="submit">Update Profile</Button>}
-        </div>
-        <div className="form-content">
-          <div className="avata">
-            <div className="form-content__avatar">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGBcKAZtzJFFI4jhSgqrXvgrMnfGQNNdCyr3Ho64RgWgOalZG9R9M5XBEDo9Kv4H0SSds&usqp=CAU" />
+          Update Profile
+        </Button>
+      </div>
+      <ToastContainer position="top-right" />
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "8px 20px",
+          borderRadius: "8px",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "120px", marginTop: "10px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                width: "300px",
+                height: "300px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <img
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  marginLeft: "50%",
+                  transform: "translateX(-50%)",
+                  cursor: "pointer",
+                }}
+                src={imageURL}
+                alt="avatar"
+                onClick={handleEditAvatar}
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+              <h3
+                style={{
+                  color: "#000",
+                  textAlign: "center",
+                  marginTop: "20px",
+                }}
+              >
+                {formData.name}
+              </h3>
             </div>
-            <Button className="button" type="submit" style={{ margin: "auto" }}>
-              Update Avatar
-            </Button>
           </div>
-          <div className="form-content">
-            <div className="container">
-              <FormRow>
-                <label>Name:</label>
-                <Input
+
+          <div style={{ width: "100%", marginBottom: "10px" }}>
+            <form>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "8px 0",
+                }}
+              >
+                <label style={{ marginRight: "100px", width: "15%" }}>
+                  Name
+                </label>
+                <input
+                  style={{
+                    width: "50%",
+                    padding: "8px 12px",
+                    borderRadius: "5px",
+                    border: "1px solid #d1d5db",
+                  }}
                   type="text"
-                  name="name"
                   value={formData.name}
+                  id="name"
                   onChange={handleChange}
                 />
-              </FormRow>
-              <FormRow>
-                <label>Phone:</label>
-                <Input
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "8px 0",
+                }}
+              >
+                <label style={{ marginRight: "100px", width: "15%" }}>
+                  Phone
+                </label>
+                <input
+                  style={{
+                    width: "50%",
+                    padding: "8px 12px",
+                    borderRadius: "5px",
+                    border: "1px solid #d1d5db",
+                  }}
                   type="text"
-                  name="phone"
                   value={formData.phone}
+                  id="phone"
                   onChange={handleChange}
                 />
-              </FormRow>
-              <FormRow>
-                <label>Gender:</label>
-                <select
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "8px 0",
+                }}
+              >
+                <label style={{ marginRight: "100px", width: "15%" }}>
+                  Gender
+                </label>
+                <Select
+                  id="gender"
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </FormRow>
-              <FormRow>
-                <label>Date of Birth:</label>
-                <Input
-                  type="date"
-                  name="dateOfBirth"
+                  options={options}
+                  style={{ width: "50%", padding: "12px" }}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "8px 0",
+                }}
+              >
+                <label style={{ marginRight: "100px", width: "15%" }}>
+                  Date Of Birth
+                </label>
+                <input
+                  style={{
+                    width: "50%",
+                    padding: "8px 12px",
+                    borderRadius: "5px",
+                    border: "1px solid #d1d5db",
+                  }}
+                  type="text"
                   value={formData.dateOfBirth}
+                  id="dateOfBirth"
                   onChange={handleChange}
                 />
-              </FormRow>
-              <FormRow>
-                <label>Center(s):</label>
-                <Input
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "8px 0",
+                }}
+              >
+                <label style={{ marginRight: "100px", width: "15%" }}>
+                  Class(s)
+                </label>
+                <input
+                  style={{
+                    width: "50%",
+                    padding: "8px 12px",
+                    borderRadius: "5px",
+                    border: "1px solid #d1d5db",
+                  }}
                   type="text"
-                  name="centers"
-                  value={formData.centers}
+                  value={classNames}
+                  id="class"
+                  onChange={handleChange}
                   readOnly
                 />
-              </FormRow>
-              <FormRow>
-                <label>Class Name(s):</label>
-                <Input
-                  type="text"
-                  name="className"
-                  value={formData.className}
-                  readOnly
-                />
-              </FormRow>
-              {notification && <p>{notification}</p>}
-            </div>
+              </div>
+            </form>
           </div>
         </div>
-      </Form>
+      </div>
     </div>
   );
-}
+};
 
 export default StudentProfile;
