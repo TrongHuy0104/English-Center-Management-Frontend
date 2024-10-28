@@ -1,5 +1,9 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { getFee, deleteClassInFee } from "../../../services/apiFee";
+import {
+  getFee,
+  deleteClassInFee,
+  createClassInFee,
+} from "../../../services/apiFee";
 
 function useFeeWithClass(feeId) {
   const queryClient = useQueryClient();
@@ -31,6 +35,26 @@ function useFeeWithClass(feeId) {
     removeClass({ feeId, classId });
   };
 
-  return { isLoading, feeDetail, error, handleDeleteClass, isDeleting };
+  // Mutation to handle class creation
+  const { mutate: createClass, isLoading: isCreating } = useMutation({
+    mutationFn: (newClassData) => createClassInFee(feeId, newClassData),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["feeDetail", feeId]);
+    },
+    onError: (error) => {
+      console.error("Error creating class:", error);
+      alert("Error creating class: " + error.message);
+    },
+  });
+
+  return {
+    isLoading,
+    feeDetail,
+    error,
+    handleDeleteClass,
+    isDeleting,
+    createClass,
+    isCreating,
+  };
 }
 export default useFeeWithClass;

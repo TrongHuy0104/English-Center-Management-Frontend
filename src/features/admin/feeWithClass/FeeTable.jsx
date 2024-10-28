@@ -120,7 +120,7 @@ import { useParams } from "react-router-dom";
 
 import CreateNewClassForm from "./CreateNewClassForm"; // Đổi từ CreateNewFeeForm sang CreateNewClassForm
 import Modal from "../../../ui/Modal";
-import { createClassInFee, deleteClassInFee } from "../../../services/apiFee";
+// import { createClassInFee, deleteClassInFee } from "../../../services/apiFee";
 import { useQueryClient } from "@tanstack/react-query";
 
 const StyledButton = styled(Button)`
@@ -149,6 +149,7 @@ function FeeTable() {
     error,
     handleDeleteClass,
     isDeleting,
+    createClass,
   } = useFeeWithClass(feeId);
   const [fees, setFees] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -162,45 +163,54 @@ function FeeTable() {
     }
   }, [initialFees]);
 
+  console.log("initialFees", initialFees);
+
+  // const handleCreateFee = async (newClassData) => {
+  //   try {
+  //     const response = await createClassInFee(feeId, newClassData);
+
+  //     if (response?.status === 400) {
+  //       alert("This class already exists in the fee");
+  //       return;
+  //     }
+
+  //     if (response?.data?.data) {
+  //       // Cập nhật fees với lớp học vừa được tạo
+  //       const updatedClass = response.data.data.classes.at(-1); // Lấy lớp học mới nhất vừa được thêm vào
+
+  //       // Cập nhật state của fees để hiển thị ngay lớp học mới
+  //       setFees((prevFees) =>
+  //         prevFees.map((fee) =>
+  //           fee._id === feeId
+  //             ? { ...fee, classes: [...fee.classes, updatedClass] } // Thêm lớp học mới vào danh sách classes của fee
+  //             : fee
+  //         )
+  //       );
+
+  //       setShowModal(false);
+  //       // Refetch lại dữ liệu từ API để đảm bảo đồng bộ
+  //       await queryClient.invalidateQueries("feeDetail");
+  //     } else {
+  //       console.error("Failed to create fee: No data returned from server");
+  //     }
+  //   } catch (error) {
+  //     console.error(
+  //       "Error creating fee:",
+  //       error.response?.data || error.message
+  //     );
+  //     if (error.response?.status === 400) {
+  //       alert("This class already exists in the fee");
+  //     }
+  //   }
+  // };
+
   const handleCreateFee = async (newClassData) => {
     try {
-      const response = await createClassInFee(feeId, newClassData);
-
-      if (response?.status === 400) {
-        alert("This class already exists in the fee");
-        return;
-      }
-
-      if (response?.data?.data) {
-        // Cập nhật fees với lớp học vừa được tạo
-        const updatedClass = response.data.data.classes.at(-1); // Lấy lớp học mới nhất vừa được thêm vào
-
-        // Cập nhật state của fees để hiển thị ngay lớp học mới
-        setFees((prevFees) =>
-          prevFees.map((fee) =>
-            fee._id === feeId
-              ? { ...fee, classes: [...fee.classes, updatedClass] } // Thêm lớp học mới vào danh sách classes của fee
-              : fee
-          )
-        );
-
-        setShowModal(false);
-        // Refetch lại dữ liệu từ API để đảm bảo đồng bộ
-        await queryClient.invalidateQueries("feeDetail");
-      } else {
-        console.error("Failed to create fee: No data returned from server");
-      }
+      createClass(newClassData); // Use the createClass function from useFeeWithClass
     } catch (error) {
-      console.error(
-        "Error creating fee:",
-        error.response?.data || error.message
-      );
-      if (error.response?.status === 400) {
-        alert("This class already exists in the fee");
-      }
+      console.error("Error creating fee:", error.message);
     }
   };
-
   const toggleModal = () => setShowModal(!showModal);
 
   if (isLoading) return <Spinner />;
