@@ -80,16 +80,16 @@ const navAdminList = [
         route: "user",
         icon: <HiUserGroup />,
     },
-    {
-        title: "Bookings",
-        route: "booking",
-        icon: <HiOutlineCalendarDays />,
-    },
-    {
-        title: "Cabins",
-        route: "cabin",
-        icon: <HiOutlineCalendarDays />,
-    },
+    // {
+    //     title: "Bookings",
+    //     route: "booking",
+    //     icon: <HiOutlineCalendarDays />,
+    // },
+    // {
+    //     title: "Cabins",
+    //     route: "cabin",
+    //     icon: <HiOutlineCalendarDays />,
+    // },
     {
         title: "Fee",
         route: "fees",

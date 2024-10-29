@@ -11,6 +11,7 @@ import Pagination from "../../../ui/Pagination";
 import Button from "../../../ui/Button";
 import Modal from "../../../ui/Modal";
 import { CreateSalary, deleteSalary } from "../../../services/apiSalary.js";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledButton = styled(Button)`
     color: white;
@@ -33,6 +34,8 @@ const StyledButton = styled(Button)`
 const PAGE_SIZE = 10;
 
 function AdminSalaryTable() {
+    const queryClient = useQueryClient();
+
     const [currentPage, setCurrentPage] = useState(1);
 
     const {
@@ -63,6 +66,7 @@ function AdminSalaryTable() {
             setSalaries((prevSalaries) =>
                 prevSalaries.filter((salary) => salary._id !== id)
             );
+            queryClient.invalidateQueries("salaries"); // Invalidate query
         } catch (error) {
             console.error("Error deleting salary:", error);
         }
