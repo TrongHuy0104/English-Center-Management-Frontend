@@ -64,6 +64,22 @@ function StudentList() {
         <div>
             {detailedAttendanceData && detailedAttendanceData.student_attendance.length > 0 ? (
                 <>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
+                        <button
+                            onClick={submitAttendance}
+                            disabled={isSubmitDisabled}
+                            style={{
+                                backgroundColor: isSubmitDisabled ? "#ccc" : "#4f46e5",
+                                color: "white",
+                                padding: "8px 12px",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: isSubmitDisabled ? "not-allowed" : "pointer",
+                            }}
+                        >
+                            Submit Attendance
+                        </button>
+                    </div>
                     <Table columns="0.5fr 1fr 1fr 1fr 1fr 1fr">
                         <Table.Header>
                             <div>No.</div>
@@ -94,20 +110,7 @@ function StudentList() {
                             )}
                         />
                     </Table>
-                    <button
-                        onClick={submitAttendance}
-                        disabled={isSubmitDisabled}
-                        style={{
-                            backgroundColor: isSubmitDisabled ? "#ccc" : "#4f46e5",
-                            color: "white",
-                            padding: "8px 12px",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: isSubmitDisabled ? "not-allowed" : "pointer",
-                        }}
-                    >
-                        Submit Attendance
-                    </button>
+                    
                 </>
             ) : (
                 <p>No student attendance data available.</p>
