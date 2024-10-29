@@ -18,6 +18,7 @@ import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Student from "./pages/Student";
+import Class from "./pages/Class";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -49,6 +50,7 @@ function App() {
                         <Route path="user" element={<User />} />
                         <Route path="admin" element={<Admin />} />
                         <Route path="student" element={<Student />} />
+                        <Route path="class" element={<Class />} />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
                         <Route path="fees" element={<FeesPage />} />
