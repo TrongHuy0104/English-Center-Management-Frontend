@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';
 
-const linearColor = [
+export const linearColor = [
   "linear-gradient(135deg, #ff9a9e 5%, #fad0c4 25%, #fad0c4 50%, #ffd1ff 75%, #fbc2eb 100%)",  // Pink to soft pink to lavender
   "linear-gradient(135deg, #a18cd1 5%, #fbc2eb 25%, #a6c1ee 50%, #b8cbb8 75%, #b5e7a0 100%)",  // Lavender to pink to blue to mint
   "linear-gradient(135deg, #fbc2eb 5%, #a6c1ee 25%, #d4fc79 60%, #96e6a1 100%)",  // Soft pink to blue to green
@@ -26,7 +26,7 @@ const linearColor = [
 
 ];
 
-const getColorIndex = (id) => {
+export const getColorIndex = (id) => {
   if (!id) return 0; // Trả về chỉ số mặc định nếu id không hợp lệ
   let hash = 0;
   for (let i = 0; i < id.length; i++) {
