@@ -7,7 +7,7 @@ function SchedulePage() {
   return (
     <>
       <Row type="horizontal">
-        <h2>TeacherSchedule</h2>
+        <h1>Teacher Schedule</h1>
       </Row>
       <TeacherSchedule />
     </>

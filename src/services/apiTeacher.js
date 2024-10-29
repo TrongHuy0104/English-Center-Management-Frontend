@@ -69,23 +69,24 @@ export async function getCenterByTeacherId(teacherId) {
         throw error;
     }
 }
-// // //Teacher take attendance
-// export async function takeAttendance(classId, date, slot, attendanceList) {
-//     try {
-//         const res = await axios.post(`/attendance/classes/${classId}/${date}/${slot}`,
-//             { attendanceList },
-//             { withCredentials: true }
-//         );
-        
-//         return res; 
-//     } catch (error) {
-//         console.error('Error taking attendance:', error);
-//         throw error; 
-//     }
-// }
-//Teacher get attendance data
+// //Teacher take attendance
+export async function takeAttendance(teacherId, date, slot, attendanceList = []) {
+    
+    try {
+        const res = await axios.put(`/teachers/${teacherId}/attendance/${date}/${slot}`, 
+            { attendanceList },
+            { withCredentials: true }
+        );
+        return res;
+    } catch (error) {
+        console.error("Error taking attendance:", error);
+        throw error;
+    }
+}
 
-export async function getAttendanceData(teacherId, date, slot) {
+
+// em test cái getAttendanceData 
+export async function getAttendanceData(teacherId, date, slot)  {
     try {
         const res = await axios.get(`/teachers/${teacherId}/attendance/${date}/${slot}`, { withCredentials: true }
         );
@@ -98,12 +99,29 @@ export async function getAttendanceData(teacherId, date, slot) {
 // Teacher get classes by teacherId
 export async function getClassesByTeacherId(teacherId) {
   try {
-    const res = await axios.get(`/teachers/${teacherId}/classes`, { withCredentials: true });
-    console.log(res);
+    const res = await axios.get(`teachers/${teacherId}/classes`, { withCredentials: true });
     return res; 
 
   } catch (error) {
     console.error('Error fetching classes by teacher ID:', error);
     throw error; 
+  }
+}
+
+export async function uploadAvatar(id, avatarURL) {
+  try {
+    const res = await axios.put(
+      `/teachers/upload/${id}`,
+      { avatar: avatarURL },
+      {
+        withCredentials: true,
+      }
+    );
+    if (!res || !res.data) {
+      return null;
+    }
+    return res.data;
+  } catch (error) {
+    console.log({ message: error.message });
   }
 }

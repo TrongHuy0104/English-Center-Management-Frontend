@@ -5,6 +5,7 @@ import styled, { ThemeProvider } from "styled-components";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import Heading from "../../../ui/Heading";
 
 // Define theme
 const retroTheme = {
@@ -62,10 +63,12 @@ function TeacherSchedule() {
       };
     })
   );
-  console.log(events);
+ 
   return (
+    
     <ThemeProvider theme={theme}>
       <div style={{ width: "100%", margin: "0 auto" }}>
+      
         <CalendarWrapper>
           <FullCalendar
             plugins={[timeGridPlugin, interactionPlugin]}

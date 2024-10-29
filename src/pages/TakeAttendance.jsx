@@ -6,7 +6,7 @@ function AttendancePage() {
   return (
     <>
       <Row type="horizontal">
-        <h2>Teacher Attendance</h2>
+        <h1>Teacher Attendance</h1>
       </Row>
       
       <TeacherAttendance />
