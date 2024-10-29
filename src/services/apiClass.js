@@ -25,3 +25,14 @@ export async function updateClass(data, id) {
     });
     return res;
 }
+
+export async function getClassScheduleById(classId) {
+    try {
+      const res = await axios.get(`/classes/${classId}/schedule`, {
+        withCredentials: true,
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
