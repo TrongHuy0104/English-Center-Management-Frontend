@@ -11,26 +11,32 @@ function TeacherAttendance() {
   const teacherId = user?.roleDetails?._id;
   const navigate = useNavigate();
 
+  const [classData, setClassData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sortBy] = useState("className-asc"); // Default sort option
+
+  // Calculate today's date in the adjusted timezone
   const date = new Date();
   date.setHours(date.getHours() + 7);
   const todayDate = date.toISOString().split("T")[0];
-
-  const [classData, setClassData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
       setIsLoading(true);
       try {
         const response = await getClassesByTeacherId(teacherId);
-        const classes = response.data?.data?.classes || [];
-        const slotsToday =
-          classes[0]?.schedule.filter(
-            (s) => s.date.split("T")[0] === todayDate
-          ) || [];
+        const allClasses = response.data?.data?.classes || [];
 
-        setClassData({ ...classes[0], schedule: slotsToday });
+        // Filter for today's slots for each class
+        const classesWithTodaySlots = allClasses.map((classItem) => ({
+          ...classItem,
+          schedule: classItem.schedule.filter(
+            (slot) => slot.date.split("T")[0] === todayDate
+          ),
+        })).filter((classItem) => classItem.schedule.length > 0); // Only keep classes with today's slots
+
+        setClassData(classesWithTodaySlots);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err);
@@ -42,14 +48,42 @@ function TeacherAttendance() {
     if (teacherId) fetchClassData();
   }, [teacherId, todayDate]);
 
-  const handleTakeAttendance = (slot) => {
+  const handleTakeAttendance = (classId, slot) => {
     navigate("/teacher/attendance/take-attendance", {
-      state: { teacherId, todayDate, slot },
+      state: { teacherId, classId, todayDate, slot },
     });
   };
 
+
+
+  // Sort the class data based on the selected sorting option
+  const sortedClassData = classData.flatMap((classItem) =>
+    classItem.schedule.map((slot) => ({
+      ...slot,
+      className: classItem.name,
+      classId: classItem._id,
+    }))
+  ).sort((a, b) => {
+    switch (sortBy) {
+      case "className-asc":
+        return a.className.localeCompare(b.className);
+      case "className-desc":
+        return b.className.localeCompare(a.className);
+      case "slot-asc":
+        return a.slot.localeCompare(b.slot);
+      case "slot-desc":
+        return b.slot.localeCompare(a.slot);
+      default:
+        return 0;
+    }
+  });
+
   if (isLoadingUser || isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
   }
 
   return (
@@ -77,7 +111,7 @@ function TeacherAttendance() {
                 </div>
                 <div>
                   <button
-                    onClick={() => handleTakeAttendance(slot.slot)}
+                    onClick={() => handleTakeAttendance(slot.classId, slot.slot)}
                     style={{
                       backgroundColor: "#4f46e5",
                       color: "white",
@@ -97,7 +131,6 @@ function TeacherAttendance() {
       ) : (
         <p>No attendance data available for today.</p>
       )}
-      {error && <p>Error: {error.message}</p>}
     </div>
   );
 }
