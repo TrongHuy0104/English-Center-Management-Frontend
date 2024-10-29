@@ -2,16 +2,14 @@ import useUser from "../../authentication/useUser";
 import { useState, useEffect, useRef } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import useTeacherSalary from "../profile/useTeacherSalary";
-import {
-  updateTeacherById,
-  uploadAvatar,
-} from "../../../services/apiTeacher";
+import { updateTeacherById, uploadAvatar } from "../../../services/apiTeacher";
 import app from "../../../services/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../../ui/Button";
 import Select from "../../../ui/Select";
 import Heading from "../../../ui/Heading";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const DEFAULT_AVATAR =
   "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
@@ -23,7 +21,7 @@ const TeacherProfile = () => {
   const [imageURL, setImageURL] = useState(DEFAULT_AVATAR);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
- 
+  const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,8 +29,6 @@ const TeacherProfile = () => {
     gender: "",
     dateOfBirth: "",
   });
-
-
 
   const [hasData, setHasData] = useState(true);
 
@@ -51,7 +47,6 @@ const TeacherProfile = () => {
     });
   };
 
-  
   useEffect(() => {
     if (user) {
       setFormData({
@@ -64,8 +59,6 @@ const TeacherProfile = () => {
       });
       setImageURL(user.roleDetails.avatar || DEFAULT_AVATAR);
       setHasData(true);
-      
-     
     } else {
       setHasData(false);
     }
@@ -88,28 +81,34 @@ const TeacherProfile = () => {
     }
   }
 
-  async function handleSave() {
-    try {
+  const mutation = useMutation({
+    mutationFn: async () => {
       let avatarUrl = imageURL;
       if (selectedImage) {
         const storage = getStorage(app);
         const storageRef = ref(storage, `avatars/${selectedImage.name}`);
         await uploadBytes(storageRef, selectedImage);
         avatarUrl = await getDownloadURL(storageRef);
-
         await uploadAvatar(user.roleDetails._id, avatarUrl);
       }
-
       await updateTeacherById(user.roleDetails._id, {
         ...formData,
         avatar: avatarUrl,
       });
-
+      return avatarUrl;
+    },
+    onSuccess: (newAvatarUrl) => {
+      queryClient.invalidateQueries("user"); // Tự động cập nhật ảnh đại diện
+      setImageURL(newAvatarUrl);
       toast.success("Profile updated successfully.");
-    } catch (error) {
-      console.error("Error updating profile:", error);
+    },
+    onError: () => {
       toast.error("Error updating profile.");
-    }
+    },
+  });
+
+  function handleSave() {
+    mutation.mutate();
   }
 
   if (isLoadingUser || isLoadingSalary) {
@@ -121,8 +120,7 @@ const TeacherProfile = () => {
   }
 
   return (
-     <div>
-    
+    <div>
       <div
         style={{
           display: "flex",
@@ -149,7 +147,6 @@ const TeacherProfile = () => {
           borderRadius: "8px",
           boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
           marginTop: "20px",
-         
         }}
       >
         <div style={{ display: "flex", gap: "120px", marginTop: "10px" }}>
@@ -204,10 +201,7 @@ const TeacherProfile = () => {
 
           <div style={{ width: "100%", marginBottom: "10px" }}>
             <form>
-              <div style={{ 
-              display: "flex", 
-              alignItems: "center", 
-              padding: "8px 0" }}>
+              <div style={{ display: "flex", alignItems: "center", padding: "8px 0" }}>
                 <label style={{ marginRight: "100px", width: "15%" }}>Name</label>
                 <input
                   style={{ width: "50%", padding: "8px 12px", borderRadius: "5px", border: "1px solid #d1d5db" }}
