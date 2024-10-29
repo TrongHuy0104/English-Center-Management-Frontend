@@ -1,12 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useStudentList from "./useStudentList";
 import Table from "../../../ui/Table";
+import { getStudentDetails } from "../../../services/apiStudent";
 
 function StudentList() {
     const location = useLocation();
     const { teacherId, todayDate, slot } = location.state || {};
     const { attendanceData, loading, error, handleSubmitAttendance, setAttendanceData } = useStudentList(teacherId, todayDate, slot);
+    const [detailedAttendanceData, setDetailedAttendanceData] = useState(null);
+
+    useEffect(() => {
+        if (attendanceData) {
+            const fetchStudentDetails = async () => {
+                const updatedStudentAttendance = await Promise.all(
+                    attendanceData.student_attendance.map(async (student) => {
+                        const studentDetails = await getStudentDetails(student.student_id);
+                        return {
+                            ...student,
+                            ...studentDetails.data.data,
+                        };
+                    })
+                );
+                setDetailedAttendanceData({
+                    ...attendanceData,
+                    student_attendance: updatedStudentAttendance,
+                });
+            };
+            fetchStudentDetails();
+        }
+    }, [attendanceData]);
 
     const handleStatusChange = (studentId) => {
         setAttendanceData((prevData) => ({
@@ -17,27 +40,46 @@ function StudentList() {
                     : student
             ),
         }));
+
+        setDetailedAttendanceData((prevData) => ({
+            ...prevData,
+            student_attendance: prevData.student_attendance.map((student) =>
+                student.student_id === studentId
+                    ? { ...student, status: student.status === "present" ? "absent" : "present" }
+                    : student
+            ),
+        }));
     };
+
+    const submitAttendance = async () => {
+        await handleSubmitAttendance(attendanceData);
+    };
+
+    const isSubmitDisabled = attendanceData && attendanceData.student_attendance.every((student) => student.status === "absent");
 
     if (loading) return <p>Loading attendance data...</p>;
     if (error) return <p>{error}</p>;
 
     return (
         <div>
-            {attendanceData && attendanceData.student_attendance.length > 0 ? (
+            {detailedAttendanceData && detailedAttendanceData.student_attendance.length > 0 ? (
                 <>
-                    <Table columns="0.5fr 1fr 1fr 1fr">
+                    <Table columns="0.5fr 1fr 1fr 1fr 1fr 1fr">
                         <Table.Header>
                             <div>No.</div>
-                            <div>Student ID</div>
+                            <div>Name</div>
+                            <div>Phone</div>
+                            <div>Gender</div>
                             <div>Mark Present</div>
                         </Table.Header>
                         <Table.Body
-                            data={attendanceData.student_attendance}
+                            data={detailedAttendanceData.student_attendance}
                             render={(student, index) => (
                                 <Table.Row key={student._id}>
                                     <div>{index + 1}</div>
-                                    <div>{student.student_id}</div>
+                                    <div>{student.name}</div>
+                                    <div>{student.phone}</div>
+                                    <div>{student.gender}</div>
                                     <div>
                                         <input
                                             type="checkbox"
@@ -53,14 +95,15 @@ function StudentList() {
                         />
                     </Table>
                     <button
-                        onClick={handleSubmitAttendance}
+                        onClick={submitAttendance}
+                        disabled={isSubmitDisabled}
                         style={{
-                            backgroundColor: "#4f46e5",
+                            backgroundColor: isSubmitDisabled ? "#ccc" : "#4f46e5",
                             color: "white",
                             padding: "8px 12px",
                             border: "none",
                             borderRadius: "4px",
-                            cursor: "pointer",
+                            cursor: isSubmitDisabled ? "not-allowed" : "pointer",
                         }}
                     >
                         Submit Attendance

@@ -7,7 +7,6 @@ function ProfilePage() {
   return (
     <>
       <Row type="horizontal">
-        <h2>TeacherProfile</h2>
       </Row>
       <TeacherProfile/>
     </>

@@ -12,7 +12,6 @@ import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import ProfileTeacher from "./pages/ProfileTeacher";
 import Schedule from "./pages/Schedule";
-import UpdateProfilePage from "./pages/UpdateTeacherProfile";
 import TakeAttendance from "./pages/TakeAttendance";
 import TakeAttendancePage from "./pages/Attendance";
 const queryClient = new QueryClient({
@@ -49,7 +48,6 @@ function App() {
                         <Route path="teacher/attendance" element={<TakeAttendance />} />
                         <Route path="teacher/schedule" element={<Schedule/>} />
                         <Route path="teacher/profile" element={<ProfileTeacher/>} />
-                        <Route path="/teacher/profile/update-profile" element={<UpdateProfilePage/>} />
                         <Route path="/teacher/attendance/take-attendance" element={<TakeAttendancePage />} />
                     </Route>
                     <Route path="login" element={<Login />} />

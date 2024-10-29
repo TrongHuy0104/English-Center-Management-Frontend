@@ -4,15 +4,14 @@ import StudentList from "../features/teacher/attendance/StudenList";
 
 function TakeAttendancePage() {
     const location = useLocation();
-    const students = location.state?.students || []; // Retrieve students data
-
+    const students = location.state?.students || []; 
     return (
         <>
             <Row type="horizontal">
-                <h2>Teacher Attendance</h2>
+                <h1>Teacher Attendance</h1>
             </Row>
             
-            <StudentList students={students} /> {/* Pass students as a prop */}
+            <StudentList students={students} /> 
         </>
     );
 }

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useUser from "../../authentication/useUser";
 import { useNavigate } from "react-router-dom";
-import {
-  getClassesByTeacherId,
-  takeAttendance,
-  getAttendanceData,
-} from "../../../services/apiTeacher";
+import {getClassesByTeacherId,} from "../../../services/apiTeacher";
 import Table from "../../../ui/Table";
+
 
 
 function TeacherAttendance() {
@@ -56,7 +53,7 @@ function TeacherAttendance() {
   }
 
   return (
-    <div>
+    <div >
       {classData?.schedule.length > 0 ? (
         <Table columns="0.5fr 1fr 1fr 1fr 1fr 1fr">
           <Table.Header>
@@ -71,7 +68,7 @@ function TeacherAttendance() {
             data={classData.schedule}
             render={(slot, index) => (
               <Table.Row key={slot.slot}>
-                <div>{index + 1}</div> {/* Auto-incremented index */}
+                <div>{index + 1}</div> 
                 <div>{classData.name}</div>
                 <div>{new Date().toLocaleDateString()}</div>
                 <div>{slot.slot}</div>

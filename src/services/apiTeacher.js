@@ -107,3 +107,21 @@ export async function getClassesByTeacherId(teacherId) {
     throw error; 
   }
 }
+
+export async function uploadAvatar(id, avatarURL) {
+  try {
+    const res = await axios.put(
+      `/teachers/upload/${id}`,
+      { avatar: avatarURL },
+      {
+        withCredentials: true,
+      }
+    );
+    if (!res || !res.data) {
+      return null;
+    }
+    return res.data;
+  } catch (error) {
+    console.log({ message: error.message });
+  }
+}
