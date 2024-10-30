@@ -18,73 +18,72 @@ import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Student from "./pages/Student";
+import Teacher from "./pages/Teacher";
 
 const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: 0,
-        },
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
     },
+  },
 });
 
 function App() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
-            <GlobalStyles />
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        element={
-                            <ProtectedRoutes>
-                                <AppLayout />
-                            </ProtectedRoutes>
-                        }
-                    >
-                        <Route
-                            index
-                            element={<Navigate replace to="dashboard" />}
-                        />
-                        <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="user" element={<User />} />
-                        <Route path="admin" element={<Admin />} />
-                        <Route path="student" element={<Student />} />
-                        <Route path="booking" element={<Bookings />} />
-                        <Route path="cabin" element={<Cabins />} />
-                        <Route path="fees" element={<FeesPage />} />
-                        <Route path="fees/:feeId" element={<FeeWithClass />} />
-                        <Route path="salaries" element={<AdminSalaryPage />} />
-                        {/* Student */}
-                        <Route path="student/my-class" element={<MyClass />} />
-                        <Route path="student/fees" element={<Fees />} />
-                    </Route>
-                    <Route path="register" element={<Register />} />
-                    <Route path="login" element={<Login />} />
-                </Routes>
-            </BrowserRouter>
-            <Toaster
-                position="top-right"
-                reverseOrder={false}
-                gutter={12}
-                containerStyle={{ margin: "8px" }}
-                toastOptions={{
-                    success: {
-                        duration: 3000,
-                    },
-                    error: {
-                        duration: 5000,
-                    },
-                    style: {
-                        fontSize: "16px",
-                        maxWidth: "500px",
-                        padding: "16px 24px",
-                        backgroundColor: "var(--color-grey-0)",
-                        color: "var(--color-grey-700)",
-                    },
-                }}
-            />
-        </QueryClientProvider>
-    );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <GlobalStyles />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            element={
+              <ProtectedRoutes>
+                <AppLayout />
+              </ProtectedRoutes>
+            }
+          >
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="user" element={<User />} />
+            <Route path="admin" element={<Admin />} />
+            <Route path="student" element={<Student />} />
+            <Route path="teacher" element={<Teacher />} />
+            <Route path="booking" element={<Bookings />} />
+            <Route path="cabin" element={<Cabins />} />
+            <Route path="fees" element={<FeesPage />} />
+            <Route path="fees/:feeId" element={<FeeWithClass />} />
+            <Route path="salaries" element={<AdminSalaryPage />} />
+            {/* Student */}
+            <Route path="student/my-class" element={<MyClass />} />
+            <Route path="student/fees" element={<Fees />} />
+          </Route>
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "var(--color-grey-0)",
+            color: "var(--color-grey-700)",
+          },
+        }}
+      />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

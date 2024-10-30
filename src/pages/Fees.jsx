@@ -8,7 +8,6 @@ export default function Fees() {
     <>
       <Row type="horizontal">
         <Heading as="h1">All fee</Heading>
-        <FeeTableOperations />
       </Row>
       <Row>
         <FeeTable />
