@@ -2,11 +2,8 @@ import useUser from "../features/authentication/useUser";
 import { useState, useEffect, useRef } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import app from "../firebase";
-import {
-  updateStudent,
-  uploadAvatar,
-  getClassById,
-} from "../services/apiStudent";
+import { updateStudent, uploadAvatar } from "../services/apiStudent";
+import useClass from "../features/student/useClass";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../ui/Button";
@@ -21,7 +18,8 @@ const StudentProfile = () => {
   const [imageURL, setImageURL] = useState(DEFAULT_AVATAR);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-  const classes = user?.roleDetails?.classes || [];
+
+  const { classes } = useClass(user?.roleDetails?.classes);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -29,10 +27,6 @@ const StudentProfile = () => {
     gender: "",
     dateOfBirth: "",
   });
-
-  const [classNames, setClassNames] = useState("");
-
-  const [hasData, setHasData] = useState(true);
 
   const options = [
     { value: "male", label: "Male" },
@@ -49,20 +43,6 @@ const StudentProfile = () => {
     });
   };
 
-  const fetchClassNames = async (classes) => {
-    try {
-      const classNamesPromises = classes.map((classId) =>
-        getClassById(classId).then(
-          (res) => res.data.classes.name || "Unknown Class"
-        )
-      );
-      const fetchedClassNames = await Promise.all(classNamesPromises);
-      setClassNames(fetchedClassNames.join(", "));
-    } catch (error) {
-      console.error("Error fetching class names:", error);
-    }
-  };
-
   useEffect(() => {
     if (user) {
       setFormData({
@@ -74,13 +54,8 @@ const StudentProfile = () => {
           : "",
       });
       setImageURL(user.roleDetails.avatar || DEFAULT_AVATAR);
-      setHasData(true);
-
-      fetchClassNames(classes);
-    } else {
-      setHasData(false);
     }
-  }, [user, classes]);
+  }, [user]);
 
   function handleChange(e) {
     const { id, value } = e.target;
@@ -125,10 +100,6 @@ const StudentProfile = () => {
 
   if (isLoadingUser) {
     return <div>Loading...</div>;
-  }
-
-  if (!hasData) {
-    return <div>No data available.</div>;
   }
 
   return (
@@ -319,7 +290,9 @@ const StudentProfile = () => {
                     border: "1px solid #d1d5db",
                   }}
                   type="text"
-                  value={classNames}
+                  value={classes
+                    .map((classItem) => classItem.data.classes.name)
+                    .join(",")}
                   id="class"
                   onChange={handleChange}
                   readOnly

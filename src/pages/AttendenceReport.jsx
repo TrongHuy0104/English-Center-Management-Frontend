@@ -1,52 +1,28 @@
 import useUser from "../features/authentication/useUser";
 import useAttendenceReport from "../features/student/useAttendenceReport";
 import Table from "../ui/Table";
-import { getClassById, getTeacherById } from "../services/apiStudent";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Heading from "../ui/Heading";
+import useClass from "../features/student/useClass";
+import useTeacher from "../features/student/useTeacher";
 
 const AttendanceReport = () => {
   const { user } = useUser();
   const attendance = user.roleDetails.attendances;
-
-  const [teachers, setTeachers] = useState({});
-  const [classNames, setClassNames] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
-
   const { isLoading, attendanceReports, error } =
     useAttendenceReport(attendance);
-
-  useEffect(() => {
-    const fetchClassNames = async () => {
-      const names = [];
-      const teacherMap = {};
-      const classPromises = attendanceReports.map(async (report) => {
-        const classId = report.class;
-        const teacherId = report.teacher_attendance.teacher_id;
-        try {
-          const classData = await getClassById(classId);
-          const teacherData = await getTeacherById(teacherId);
-          names.push({
-            id: classId,
-            name: classData.data.classes.name || "Unknown Class",
-          });
-          teacherMap[teacherId] = teacherData.data;
-        } catch (error) {
-          console.error(`Error fetching data for ID ${classId}:`, error);
-          names.push({ id: classId, name: "Class Not Found" });
-        }
-      });
-      await Promise.all(classPromises);
-      setClassNames(names);
-      setTeachers(teacherMap);
-    };
-
-    if (attendanceReports && attendanceReports.length > 0) {
-      fetchClassNames();
-    }
-  }, [attendanceReports]);
-
+  const classIds =
+    attendanceReports.length > 0
+      ? attendanceReports.map((rep) => rep.class)
+      : [];
+  const { classes } = useClass(classIds);
+  const teacherIds =
+    attendanceReports.length > 0
+      ? attendanceReports.map((report) => report.teacher_attendance.teacher_id)
+      : [];
+  const { teachers } = useTeacher(teacherIds);
   const getStatusColor = (status) => {
     switch (status) {
       case "Present":
@@ -57,15 +33,12 @@ const AttendanceReport = () => {
         return "gray";
     }
   };
-
   if (isLoading) {
     return <div>Loading attendance report...</div>;
   }
-
   if (error) {
     return <div>Error fetching attendance report: {error.message}</div>;
   }
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -89,29 +62,28 @@ const AttendanceReport = () => {
           Attendance Report
         </Heading>
       </div>
-
       <div style={{ display: "flex" }}>
-        {/* Class list section */}
         <div style={{ flex: 0.5, marginRight: "20px" }}>
           <Table columns="2fr">
             <Table.Header>
               <div>Classes</div>
             </Table.Header>
             <div>
-              {classNames
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map(({ id, name }) => (
-                  <StyledRow key={id} onClick={() => handleClassSelect(id)}>
-                    <Stacked>
-                      <span>{name}</span>
-                    </Stacked>
-                  </StyledRow>
-                ))}
+              {classes.map((classItem) => (
+                <StyledRow
+                  key={classItem._id}
+                  onClick={() =>
+                    handleClassSelect(classItem?.data?.classes._id)
+                  }
+                >
+                  <Stacked>
+                    <span>{classItem?.data?.classes.name}</span>
+                  </Stacked>
+                </StyledRow>
+              ))}
             </div>
           </Table>
         </div>
-
-        {/* Attendance details section */}
         <div style={{ flex: 2 }}>
           <Table columns="2fr 2fr 2fr 2fr 2fr">
             <Table.Header>
@@ -121,7 +93,6 @@ const AttendanceReport = () => {
               <div>Teacher</div>
               <div>Student Status</div>
             </Table.Header>
-
             <div>
               {selectedClass ? (
                 filteredReports.length > 0 ? (
@@ -130,7 +101,11 @@ const AttendanceReport = () => {
                       attendanceReport.student_attendance?.find(
                         (student) => student.student_id === user.roleDetails._id
                       );
-
+                    const matchedTeacher = teachers.find(
+                      (teacher) =>
+                        teacher.data._id ===
+                        attendanceReport.teacher_attendance.teacher_id
+                    );
                     return (
                       <Table.Row key={attendanceReport._id}>
                         <Stacked>
@@ -149,9 +124,9 @@ const AttendanceReport = () => {
                         </Stacked>
                         <Stacked>
                           <span>
-                            {teachers[
-                              attendanceReport.teacher_attendance.teacher_id
-                            ]?.name || "Unknown Teacher"}
+                            {matchedTeacher
+                              ? matchedTeacher.data.name
+                              : "Teacher not found"}
                           </span>
                         </Stacked>
                         <Stacked>

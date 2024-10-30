@@ -36,37 +36,6 @@ export async function updateStudent(studentId, studentData) {
   }
 }
 
-// export async function uploadAvatar(avatarFile, studentId) {
-//   const formData = new FormData();
-//   formData.append("avatar", avatarFile); // Đảm bảo tên này khớp với multer
-
-//   try {
-//     const response = await axios.post(
-//       `/students/${studentId}/avatar`, // Đường dẫn API
-//       formData,
-//       {
-//         withCredentials: true,
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       }
-//     );
-//     console.log("Avatar updated successfully", response.data);
-//     if (response.data && response.data.avatarUrl) {
-//       console.log("Avatar updated successfully", response.data.avatarUrl);
-//     } else {
-//       console.error(
-//         "Failed to update profile: Avatar URL not found in response."
-//       );
-//     }
-//   } catch (error) {
-//     console.error(
-//       "Error updating avatar",
-//       error.response ? error.response.data : error.message
-//     );
-//   }
-// }
-
 export async function uploadAvatar(id, avatarURL) {
   try {
     const res = await axios.put(
@@ -142,6 +111,22 @@ export async function getClassById(classId) {
     throw error;
   }
 }
+
+export const fetchClassNames = async (classes) => {
+  try {
+    const classNamesPromises = classes.map((classId) =>
+      getClassById(classId).then(
+        (res) => res.data.classes.name || "Unknown Class"
+      )
+    );
+    const fetchedClassNames = await Promise.all(classNamesPromises);
+    return fetchedClassNames.join(", ");
+    //setClassNames(fetchedClassNames.join(", "));
+  } catch (error) {
+    console.error("Error fetching class names:", error);
+    throw error;
+  }
+};
 
 export async function getTeacherById(idTeacher) {
   try {
