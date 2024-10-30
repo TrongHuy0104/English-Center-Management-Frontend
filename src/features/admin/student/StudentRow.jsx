@@ -9,12 +9,13 @@ import ConfirmDelete from "../../../ui/ConfirmDelete";
 import Table from "../../../ui/Table";
 import Tag from "../../../ui/Tag";
 import Menus from "../../../ui/Menus";
-import AdminForm from "./AdminForm";
-import useDisableAdmin from "./useDisableAdmin";
+import StudentForm from "./StudentForm";
+import useDisableStudent from "./useDisableStudent";
 import Confirm from "../../../ui/Confirm";
-import useEnableAdmin from "./useEnableAdmin";
+import useEnableStudent from "./useEnableStudent";
 
-const Admin = styled.div`
+
+const Student = styled.div`
     font-size: 1.6rem;
     font-weight: 600;
     color: var(--color-grey-600);
@@ -42,17 +43,21 @@ const StyledButton = styled.button`
     }
 `;
 
-function AdminRow({ admin }) {
-    const { id, name, phone, user } = admin;
+function StudentRow({ student }) {
+    const { id, name, phone, user } = student;
+    
     const { email, active } = user[0];
     
-    const { isLoadingDisable, disableAdmin } = useDisableAdmin();
-    const { isLoadingEnable, enableAdmin } = useEnableAdmin();
+    
+   
+
+    const { isLoadingDisable, disableStudent } = useDisableStudent();
+    const { isLoadingEnable, enableStudent} = useEnableStudent();
 
     return (
         <>
             <Table.Row>
-                <Admin>{name}</Admin>
+                <Student>{name}</Student>
                 <p>{phone}</p>
                 <p>{email}</p>
                 <Tag type={active ? "green" : "red"}>
@@ -84,15 +89,15 @@ function AdminRow({ admin }) {
                                 </Menus.Menu>
 
                                 <Modal.Window name="edit-form">
-                                    <AdminForm adminToEdit={admin} />
+                                    <StudentForm studentToEdit={student} />
                                 </Modal.Window>
 
                                 <Modal.Window name="delete-item">
                                     <ConfirmDelete
-                                        resourceName="admin"
+                                        resourceName="student"
                                         disabled={isLoadingDisable}
                                         onConfirm={() =>
-                                            disableAdmin(admin.user[0]?._id)
+                                            disableStudent(student.user[0]?._id)
                                         }
                                     />
                                 </Modal.Window>
@@ -107,10 +112,10 @@ function AdminRow({ admin }) {
                                 </Modal.Open>
                                 <Modal.Window name="enable-item">
                                     <Confirm
-                                        resourceName="admin"
+                                        resourceName="student"
                                         disabled={isLoadingEnable}
                                         onConfirm={() =>
-                                            enableAdmin(admin.user[0]?._id)
+                                            enableStudent(student.user[0]?._id)
                                         }
                                     />
                                 </Modal.Window>
@@ -123,4 +128,4 @@ function AdminRow({ admin }) {
     );
 }
 
-export default AdminRow;
+export default StudentRow;

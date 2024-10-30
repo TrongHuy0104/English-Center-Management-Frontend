@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import AdminOperations from "../features/admin/admin/AdminOperations";
-import AdminTable from "../features/admin/admin/AdminTable";
+import StudentOperations from "../features/admin/student/StudentOperations";
+import StudentTable from "../features/admin/student/StudentTable";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import useUser from "../features/authentication/useUser";
 import { useNavigate } from "react-router-dom";
+
 
 function Student() {
     const { user } = useUser();
@@ -19,10 +20,10 @@ function Student() {
         <>
             <Row type="horizontal">
                 <Heading as="h1">Students</Heading>
-                <AdminOperations />
+                <StudentOperations />
             </Row>
             <Row>
-                <AdminTable />
+                <StudentTable />
             </Row>
         </>
     );
