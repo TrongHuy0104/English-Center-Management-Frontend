@@ -51,7 +51,7 @@ function ClassRow({ item }) {
     };
 
     const handleScheduleClick = (classId) => {
-            navigate(`/class/${classId}/schedule`);
+        navigate(`/class/${classId}/schedule`);
     };
 
     const status = [
@@ -94,7 +94,10 @@ function ClassRow({ item }) {
                                     </Menus.Button>
                                 </Modal.Open>
 
-                                <Menus.Button icon={<FaRegEye />} onClick={()=> handleScheduleClick(_id)}>
+                                <Menus.Button
+                                    icon={<FaRegEye />}
+                                    onClick={() => handleScheduleClick(_id)}
+                                >
                                     Schedule
                                 </Menus.Button>
                             </Menus.List>
