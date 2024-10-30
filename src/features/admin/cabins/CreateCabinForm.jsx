@@ -85,6 +85,10 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
                     id="name"
                     {...register("name", {
                         required: "This field is required",
+                        pattern: {
+                            value: /^(?!\s*$).+/,
+                            message: "Please enter a valid name",
+                        },
                     })}
                     disabled={isWorking}
                 />

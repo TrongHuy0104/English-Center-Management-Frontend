@@ -1,9 +1,17 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { HiOutlineHome, HiUserGroup, HiEnvelopeOpen  } from "react-icons/hi2";
+import { HiOutlineHome, HiUserGroup, HiEnvelopeOpen } from "react-icons/hi2";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
+import {
+    HiBanknotes,
+    HiCurrencyDollar,
+    HiClipboardDocumentCheck,
+} from "react-icons/hi2";
+import { RiAdminFill } from "react-icons/ri";
+import { PiStudentDuotone } from "react-icons/pi";
+import { MdOutlineClass } from "react-icons/md";
 import useUser from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -58,19 +66,44 @@ const navAdminList = [
         icon: <HiOutlineHome />,
     },
     {
+        title: "Admins",
+        route: "admin",
+        icon: <RiAdminFill />,
+    },
+    {
+        title: "Students",
+        route: "student",
+        icon: <PiStudentDuotone />,
+    },
+    {
         title: "Users",
         route: "user",
         icon: <HiUserGroup />,
     },
+    // {
+    //     title: "Bookings",
+    //     route: "booking",
+    //     icon: <HiOutlineCalendarDays />,
+    // },
+    // {
+    //     title: "Cabins",
+    //     route: "cabin",
+    //     icon: <HiOutlineCalendarDays />,
+    // },
     {
-        title: "Bookings",
-        route: "booking",
-        icon: <HiOutlineCalendarDays />,
+        title: "Classes",
+        route: "class",
+        icon: <MdOutlineClass />,
     },
     {
-        title: "Cabins",
-        route: "cabin",
-        icon: <HiOutlineCalendarDays />,
+        title: "Fee",
+        route: "fees",
+        icon: <HiBanknotes />,
+    },
+    {
+        title: "Salary",
+        route: "salaries",
+        icon: <HiCurrencyDollar />,
     },
     {
         title: "Profile",
@@ -107,13 +140,38 @@ const navTeacherList = [
         icon: <HiOutlineUsers />,
     },
 ];
+const navStudentList = [
+    {
+        title: "My CLass",
+        route: "student/my-class",
+        icon: <HiOutlineCalendarDays />,
+    },
+    {
+        title: "Attendance",
+        route: "student/attendance",
+        icon: <HiClipboardDocumentCheck />,
+    },
+    {
+        title: "Fees",
+        route: "student/fees",
+        icon: <HiCurrencyDollar />,
+    },
+
+    {
+        title: "Messages",
+        route: "student/messages",
+        icon: <HiEnvelopeOpen />,
+    },
+];
+
+// const navTeacherList = [];
 
 function MainNav() {
     const { user } = useUser();
-
     let navList;
- if (user.user?.role === "admin") navList = navAdminList;
- if (user.user?.role === "teacher") navList = navTeacherList;
+    if (user.user?.role === "admin") navList = navAdminList;
+    if (user.user?.role === "teacher") navList = navTeacherList;
+    if (user.user?.role === "student") navList = navStudentList;
     return (
         <nav>
             <NavList>

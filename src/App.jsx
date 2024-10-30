@@ -14,6 +14,16 @@ import ProfileTeacher from "./pages/ProfileTeacher";
 import Schedule from "./pages/Schedule";
 import TakeAttendance from "./pages/TakeAttendance";
 import TakeAttendancePage from "./pages/Attendance";
+import MyClass from "./pages/MyClass";
+import Fees from "./pages/Fees";
+import FeesPage from "./pages/FeePages";
+import FeeWithClass from "./pages/FeeWithClass";
+import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
+import Register from "./pages/Register";
+import Admin from "./pages/Admin";
+import Student from "./pages/Student";
+import Class from "./pages/Class";
+
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -42,6 +52,9 @@ function App() {
                         />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="user" element={<User />} />
+                        <Route path="admin" element={<Admin />} />
+                        <Route path="student" element={<Student />} />
+                        <Route path="class" element={<Class />} />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
                         {/* Teacher */}
@@ -49,7 +62,14 @@ function App() {
                         <Route path="teacher/schedule" element={<Schedule/>} />
                         <Route path="teacher/profile" element={<ProfileTeacher/>} />
                         <Route path="/teacher/attendance/take-attendance" element={<TakeAttendancePage />} />
+                        <Route path="fees" element={<FeesPage />} />
+                        <Route path="fees/:feeId" element={<FeeWithClass />} />
+                        <Route path="salaries" element={<AdminSalaryPage />} />
+                        {/* Student */}
+                        <Route path="student/my-class" element={<MyClass />} />
+                        <Route path="student/fees" element={<Fees />} />
                     </Route>
+                    <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />
                 </Routes>
             </BrowserRouter>
