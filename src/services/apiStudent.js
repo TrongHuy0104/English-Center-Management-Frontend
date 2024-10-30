@@ -1,8 +1,9 @@
 import axios from "../utils/axios";
 
-export async function getAllFeeOfStudent() {
+export async function getAllFeeOfStudent({ page, limit , status }) {
   try {
-    const res = await axios.get("/student/fees", {
+    const res = await axios.get(`/student/fees`, {
+      params: {status, page, limit },
       withCredentials: true,
     });
     return res;

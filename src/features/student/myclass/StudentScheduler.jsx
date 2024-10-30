@@ -5,6 +5,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import styled, { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import useSchedule from "./useSchedule";
+import Spinner from "../../../ui/Spinner";
+import Empty from "../../../ui/Empty";
 
 // Định nghĩa các theme với styled-components
 const retroTheme = {
@@ -39,11 +41,11 @@ const ScheduleCalendar = () => {
   const navigate = useNavigate(); // Khởi tạo hook điều hướng
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner/>;
   }
 
-  if (error) {
-    return <div>Error loading schedules: {error.message}</div>;
+  if (!schedules.length) {
+    return <Empty resource="schedule"/>;
   }
 
   const events = schedules.flatMap((cls) =>

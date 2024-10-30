@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import useClass from '../features/student/myclass/useClass';
 import Row from '../ui/Row';
 import Heading from '../ui/Heading';
+import Spinner from '../ui/Spinner';
+import Empty from '../ui/Empty';
 
 const ClassContainer = styled.div`
   display: grid;
@@ -29,31 +31,15 @@ const StudentClass = () => {
     );
 
     if (isLoading) {
-        return <p>Loading classes...</p>;
+        return <Spinner/>;
     }
 
-    if (error) {
-        return <p>Failed to load classes. Please try again later.</p>;
+    if (!classes.length) {
+        return <Empty resource="classes"/>;
     }
 
     return (
         <Row type="vertical">
-            <SectionWrapper>
-                <Heading as="h1">All Classes</Heading>
-                <ClassContainer>
-                    {classes?.map((classItem) => (
-                        <ClassTag
-                            key={classItem._id}
-                            name={classItem.name}
-                            deadline={classItem.enrollment_deadline}
-                            imageUrl="https://24hstore.vn/upload_images/images/hinh-nen-may-tinh/hinh_nen_thien_nhien_(4).jpg"
-                            onClick={() => handleClassClick(classItem._id)}
-                            id={classItem._id}
-                        />
-                    ))}
-                </ClassContainer>
-            </SectionWrapper>
-
             <SectionWrapper>
                 <Heading as="h1">Classes not enrolled yet</Heading>
                 <ClassContainer>
@@ -62,7 +48,7 @@ const StudentClass = () => {
                             key={classItem._id}
                             name={classItem.name}
                             deadline={classItem.enrollment_deadline}
-                            imageUrl="https://24hstore.vn/upload_images/images/hinh-nen-may-tinh/hinh_nen_thien_nhien_(4).jpg"
+                            imageUrl=""
                             onClick={() => handleClassClick(classItem._id)}
                             id={classItem._id}
                         />
