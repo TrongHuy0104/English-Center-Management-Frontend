@@ -16,7 +16,7 @@ function FeeTableOperations() {
         ]}
       />
 
-      {/* <SortBy
+      <SortBy
         options={[
           {
             value: "dueDate-desc",
@@ -35,7 +35,7 @@ function FeeTableOperations() {
             label: "Sort by amount (low first)",
           },
         ]}
-      /> */}
+      />
     </TableOperations>
   );
 }
