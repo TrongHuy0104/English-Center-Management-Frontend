@@ -1,17 +1,6 @@
 import axios from "../utils/axios";
 
-export async function login(data) {
-  try {
-    const res = await axios({
-      method: "POST",
-      url: `/teachers/login`,
-      data: data,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}
+
 //Get data of a teacher by teacherId
     export async function getTeacherById(idTeacher) {
     try {
@@ -59,16 +48,7 @@ export async function getSalaryByTeacherId(teacherId) {
     }
 }
 
-//Get center of a teacher by teacherId
-export async function getCenterByTeacherId(teacherId) {
-    try {
-        const res = await axios.get(`/teachers/${teacherId}/centers`, { withCredentials: true });
-        return res;
-    } catch (error) {
-        console.error('Error fetching teacher center:', error);
-        throw error;
-    }
-}
+
 // //Teacher take attendance
 export async function takeAttendance(teacherId, date, slot, attendanceList = []) {
     
@@ -77,6 +57,7 @@ export async function takeAttendance(teacherId, date, slot, attendanceList = [])
             { attendanceList },
             { withCredentials: true }
         );
+        console.log(res);
         return res;
     } catch (error) {
         console.error("Error taking attendance:", error);
@@ -100,8 +81,9 @@ export async function getAttendanceData(teacherId, date, slot)  {
 export async function getClassesByTeacherId(teacherId) {
   try {
     const res = await axios.get(`teachers/${teacherId}/classes`, { withCredentials: true });
+    // console.log(res);
     return res; 
-
+    
   } catch (error) {
     console.error('Error fetching classes by teacher ID:', error);
     throw error; 

@@ -8,7 +8,8 @@ function useTeacherSalary(teacherId) {
         
     });
 
-    const salary = data?.data?.data; 
+    const salary = data?.data?.data;
+    console.log(salary);
     return { isLoading, salary, error };
 }
 
