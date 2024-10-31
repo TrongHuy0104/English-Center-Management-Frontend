@@ -7,16 +7,16 @@ import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
 
 function FeeTable() {
-    const {isLoading, fees, error} = useFee();
+    const {isLoading, fees, total, error} = useFee();
     
     if (isLoading) return <Spinner />;
     if (error) return <p>Error loading fees: {error.message}</p>;
-    const TableHeader = ['Class', 'Fee Type', 'Due Date', 'Status', 'Amount']
+    const TableHeader = ['Class', 'Fee Type', 'Due Date', 'Status', 'Amount', 'Payment date']
     if (!fees?.length) return <Empty resource="fees" />;
 
     return (
         <Menus>
-            <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
+            <Table columns="2fr 2fr 2.4fr 1.4fr 1fr 1.2fr">
                 <Table.Header>
                     {TableHeader.map((item) => (
                     <div key={item}>{item}</div>
@@ -31,7 +31,7 @@ function FeeTable() {
                 />
             </Table>
             <Table.Footer>
-                <Pagination count={fees.length} />
+                <Pagination count={total} />
             </Table.Footer>
         </Menus>
     );

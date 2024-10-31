@@ -16,6 +16,8 @@ import FeesPage from "./pages/FeePages";
 import FeeWithClass from "./pages/FeeWithClass";
 import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import Register from "./pages/Register";
+import StudentClass from "./pages/StudentClass";
+import StudentClassDetail from "./pages/StudentClassDetail";
 import Admin from "./pages/Admin";
 import Student from "./pages/Student";
 import Class from "./pages/Class";
@@ -60,6 +62,8 @@ function App() {
                         <Route path="salaries" element={<AdminSalaryPage />} />
                         {/* Student */}
                         <Route path="student/my-class" element={<MyClass />} />
+                        <Route path="student/classes" element={<StudentClass />} />
+                        <Route path="student/classes/:classid" element={<StudentClassDetail />} />
                         <Route path="student/fees" element={<Fees />} />
                     </Route>
                     <Route path="register" element={<Register />} />
