@@ -119,7 +119,6 @@ function updateData(data, newData) {
 
 function ClassTypeChart({ classType }) {
     const data = updateData(startDataLight, classType);
-    console.log("data", data);
 
     return (
         <StyledClassTypeChart>

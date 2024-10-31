@@ -18,9 +18,33 @@ export async function createClass(data) {
     });
     return res;
 }
+export async function createSchedule(data, id) {
+    const res = await axios.post(`/classes/${id}/schedule`, data, {
+        withCredentials: true,
+    });
+    return res;
+}
 
 export async function updateClass(data, id) {
     const res = await axios.patch(`/classes/${id}`, data, {
+        withCredentials: true,
+    });
+    return res;
+}
+
+export async function getClassScheduleById(classId) {
+    try {
+        const res = await axios.get(`/classes/${classId}/schedule`, {
+            withCredentials: true,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function removeSchedule(data, id) {
+    const res = await axios.patch(`/classes/${id}/schedule`, data, {
         withCredentials: true,
     });
     return res;
