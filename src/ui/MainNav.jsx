@@ -13,6 +13,7 @@ import { RiAdminFill } from "react-icons/ri";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { PiStudentDuotone } from "react-icons/pi";
+import { MdOutlineClass } from "react-icons/md";
 import useUser from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -81,15 +82,20 @@ const navAdminList = [
         route: "user",
         icon: <HiUserGroup />,
     },
+    // {
+    //     title: "Bookings",
+    //     route: "booking",
+    //     icon: <HiOutlineCalendarDays />,
+    // },
+    // {
+    //     title: "Cabins",
+    //     route: "cabin",
+    //     icon: <HiOutlineCalendarDays />,
+    // },
     {
-        title: "Bookings",
-        route: "booking",
-        icon: <HiOutlineCalendarDays />,
-    },
-    {
-        title: "Cabins",
-        route: "cabin",
-        icon: <HiOutlineCalendarDays />,
+        title: "Classes",
+        route: "class",
+        icon: <MdOutlineClass />,
     },
     {
         title: "Fee",
