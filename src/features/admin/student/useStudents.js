@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAdmins } from "../../../services/apiAdmin";
+import { getStudents } from "../../../services/apiStudent";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../../../utils/constants";
 
-function useAdmins() {
+function useStudents() {
     const [searchParams] = useSearchParams();
     const queryClient = useQueryClient();
 
@@ -20,30 +20,29 @@ function useAdmins() {
         : Number(searchParams.get("page"));
 
     const { isLoading, data, error } = useQuery({
-        queryKey: ["admins", filter, page],
-        queryFn: () => getAdmins({ filter, page }),
+        queryKey: ["students", filter, page],
+        queryFn: () => getStudents({ filter, page }),
         refetchOnWindowFocus: false,
     });
 
-    const admins = data?.data?.data?.data;
-    console.log(admins);
+    const students = data?.data?.data?.data;
+    console.log(students);
     const total = data?.data?.results;
 
     // PREFETCHING
     const pageCount = total < PAGE_SIZE ? total : Math.ceil(total / PAGE_SIZE);
     if (page < pageCount)
         queryClient.prefetchQuery({
-            queryKey: ["admins", filter, page + 1],
-            queryFn: () => getAdmins({ filter, page: page + 1 }),
+            queryKey: ["students", filter, page + 1],
+            queryFn: () => getStudents({ filter, page: page + 1 }),
         });
 
     if (page > 1)
         queryClient.prefetchQuery({
-            queryKey: ["admins", filter, page - 1],
-            queryFn: () => getAdmins({ filter, page: page - 1 }),
+            queryKey: ["students", filter, page - 1],
+            queryFn: () => getStudents({ filter, page: page - 1 }),
         });
-
-    return { isLoading, admins, total, error };
+    return { isLoading, students, total, error };
 }
 
-export default useAdmins;
+export default useStudents;

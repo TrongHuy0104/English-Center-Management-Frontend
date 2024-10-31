@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import { FaRegEye } from "react-icons/fa6";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
@@ -41,11 +42,16 @@ const active = true;
 
 function ClassRow({ item }) {
     const { _id, name, type, teacher, startDate, endDate } = item;
+    const navigate = useNavigate();
     const getStatus = () => {
         if (new Date(startDate) > Date.now()) return "not yet";
         if (new Date(startDate) <= Date.now() && new Date(endDate) > Date.now())
             return "active";
         return "finished";
+    };
+
+    const handleScheduleClick = (classId) => {
+        navigate(`/class/${classId}/schedule`);
     };
 
     const status = [
@@ -88,7 +94,10 @@ function ClassRow({ item }) {
                                     </Menus.Button>
                                 </Modal.Open>
 
-                                <Menus.Button icon={<FaRegEye />}>
+                                <Menus.Button
+                                    icon={<FaRegEye />}
+                                    onClick={() => handleScheduleClick(_id)}
+                                >
                                     Schedule
                                 </Menus.Button>
                             </Menus.List>

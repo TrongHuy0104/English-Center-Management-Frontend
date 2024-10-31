@@ -23,6 +23,7 @@ import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Student from "./pages/Student";
 import Class from "./pages/Class";
+import ClassSchedule from "./features/admin/classes/ClassSchedule";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -55,6 +56,7 @@ function App() {
                         <Route path="admin" element={<Admin />} />
                         <Route path="student" element={<Student />} />
                         <Route path="class" element={<Class />} />
+                        <Route path="class/:classId/schedule" element={<ClassSchedule />} />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
                         {/* Teacher */}
