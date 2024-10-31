@@ -16,6 +16,7 @@ const StudentDetailWrapper = styled.div`
   display: flex;
   height: 70vh;
   width: 100%;
+  gap: 50px;
 `;
 
 const EnrollButton = styled.button`
@@ -30,6 +31,7 @@ const EnrollButton = styled.button`
     background-color: white;
     color: #4f46e5;
   }
+  
 `;
 
 const LeftSection = styled.div`
@@ -104,6 +106,7 @@ const StudentDetail = () => {
   if (isLoading) return <Spinner />;
   if (classDetail.length) return <Empty resource="class list" />;
   if (!classDetail.schedule.length) return <Empty resource="class schedule" />;
+  
 
   const formattedDeadline = format(new Date(classDetail.enrollment_deadline), 'MMMM dd, yyyy');
   const firstSchedule = classDetail.schedule[0];

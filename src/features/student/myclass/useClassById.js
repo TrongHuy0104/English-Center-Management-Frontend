@@ -10,7 +10,6 @@ export default function useClassById(classId) {
     });
 
     const classDetail = data?.data?.class;
-    console.log(classDetail);
     
     return { isLoading, classDetail, error };
 }

@@ -6,6 +6,7 @@ import { HiEye, HiPencil, HiTrash } from "react-icons/hi2";
 
 import Tag from "../../../ui/Tag";
 import Table from "../../../ui/Table";
+import toast from "react-hot-toast";
 
 
 const ClassName = styled.div`
@@ -13,6 +14,32 @@ const ClassName = styled.div`
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
+  // cursor: pointer;
+  // &:hover {
+  //   color: #4f46e5;
+  // }
+  transition: color 1s ease;
+
+  /* Hover effect with animated gradient */
+  &:hover {
+    background: linear-gradient(45deg, #ff6ec4, #7873f5, #4caf50, #ffeb3b);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 10s ease infinite;
+  }
+
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 `;
 
 const Stacked = styled.div`
@@ -40,6 +67,15 @@ function FeeRow({
 }) {
   const navigate = useNavigate();
 
+  const handleEventClick = () => {
+    const classId = classInfo._id;
+    if (!classId) return toast.error("No class found with that ID!")
+      else{
+        toast.success("Descripton for this class!")
+      }
+    navigate(`/student/classes/${classId}`); 
+  };
+
   // Extract class and student information
   const classInfo = classDetails?.[0] || {}; // Avoid null
   const className = classInfo?.name || "Class not found";
@@ -62,8 +98,7 @@ function FeeRow({
 
   return (
     <Table.Row>
-      <ClassName>{className}</ClassName>
-
+      <ClassName onClick={handleEventClick} >{className}</ClassName>
       <Stacked>
         <span>{fee_name}</span>
       </Stacked>

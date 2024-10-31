@@ -92,6 +92,7 @@ const ScheduleCalendar = () => {
             locale="en"
             nowIndicator={true}
             weekNumbers={true}
+            allDaySlot={false}
           />
         </CalendarWrapper>
       </div>
