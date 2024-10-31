@@ -5,8 +5,9 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import styled, { ThemeProvider } from "styled-components";
 import useClass from "./useClass";
-import Spinner from "../../../ui/Spinner";
 import ScheduleForm from "./ScheduleForm";
+import ConfirmDelete from "../../../ui/ConfirmDelete";
+import useRemoveSchedule from "./useRemoveSchedule";
 
 const retroTheme = {
     buttonBackground: "#0d0149",
@@ -33,25 +34,44 @@ const CalendarWrapper = styled.div`
     }
 `;
 
+const StyledModal = styled.div`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-grey-0);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 3.2rem 4rem;
+    transition: all 0.5s;
+    max-height: 90vh;
+    overflow: auto;
+    z-index: 99;
+`;
+
+const Overlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--backdrop-color);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    transition: all 0.5s;
+`;
+
 const ClassSchedule = () => {
     const { classId } = useParams();
-    const { isLoading, classDetail, error } = useClass(classId);
+    const { isLoading, classDetail } = useClass(classId);
+    const { isLoadingDelete, removeSchedule } = useRemoveSchedule();
     const [events, setEvents] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
     const [currentScheduleSelect, setCurrentScheduleSelect] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
+    const [removeData, setRemoveData] = useState();
 
     const retroColors = ["#6B5B95"];
-
-    const slotTimeMapping = {
-        1: { start_time: "07:00", end_time: "08:30" },
-        2: { start_time: "08:45", end_time: "10:15" },
-        3: { start_time: "10:30", end_time: "12:00" },
-        4: { start_time: "12:30", end_time: "14:00" },
-        5: { start_time: "14:15", end_time: "15:45" },
-        6: { start_time: "16:00", end_time: "17:30" },
-        7: { start_time: "18:00", end_time: "19:30" },
-        8: { start_time: "19:45", end_time: "21:15" },
-    };
 
     // Generate initial events from class detail
     const generateInitialEvents = () => {
@@ -77,34 +97,49 @@ const ClassSchedule = () => {
         }
     }, [classDetail]);
 
+    const slotTimeMapping = [
+        { start_time: "07:00", end_time: "08:30", slot: 1 },
+        { start_time: "08:45", end_time: "10:15", slot: 2 },
+        { start_time: "10:30", end_time: "12:00", slot: 3 },
+        { start_time: "12:30", end_time: "14:00", slot: 4 },
+        { start_time: "14:15", end_time: "15:45", slot: 5 },
+        { start_time: "16:00", end_time: "17:30", slot: 6 },
+        { start_time: "18:00", end_time: "19:30", slot: 7 },
+        { start_time: "19:45", end_time: "21:15", slot: 8 },
+    ];
+
+    function extractTimes(dateString) {
+        // Regular expression to match the time format HH:MM
+        const timeRegex = /(\d{2}:\d{2})/g;
+
+        // Extracting times
+        const times = dateString.match(timeRegex);
+
+        return times || []; // Return an empty array if no matches found
+    }
+
     const handleEventClick = (info) => {
-        alert(
-            `Event: ${info.event.title}\nStart: ${info.event.start}\nEnd: ${info.event.end}`
+        const start_time = extractTimes(info.event.start.toString())[0];
+        const end_time = extractTimes(info.event.end.toString())[0];
+        const slot = slotTimeMapping.find(
+            (item) =>
+                item.start_time === start_time && item.end_time === end_time
         );
+        setIsOpenDelete(true);
+        setRemoveData({
+            postSchedule: {
+                date: `${
+                    new Date(info.event.start).toISOString().split("T")[0]
+                }T00:00:00.000Z`,
+                slot: slot.slot,
+            },
+        });
     };
 
     const handleDateClick = (arg) => {
-        console.log("arg", arg);
-
-        // const title = prompt("Enter Event Title:");
-        // if (title) {
-        //     const newEvent = {
-        //         title,
-        //         start: arg.date,
-        //         end: arg.date,
-        //         backgroundColor: "#ff9f00",
-        //         textColor: "#ffffff",
-        //     };
-        //     console.log("newEvent", newEvent);
-
-        //     setEvents((prevEvents) => [...prevEvents, newEvent]);
-        // }
         setModalOpen(true);
         setCurrentScheduleSelect(arg);
     };
-
-    if (isLoading) return <Spinner />;
-    console.log("generateInitialEvents", classDetail?.schedule);
 
     return (
         <ThemeProvider theme={retroTheme}>
@@ -120,7 +155,7 @@ const ClassSchedule = () => {
                             right: "timeGridWeek,timeGridDay",
                         }}
                         contentHeight="500px"
-                        slotMinTime="06:00:00"
+                        slotMinTime="07:00:00"
                         slotMaxTime="22:00:00"
                         events={events} // Set the events state to FullCalendar
                         selectable={true}
@@ -128,7 +163,7 @@ const ClassSchedule = () => {
                         locale="en"
                         nowIndicator={true}
                         weekNumbers={true}
-                        // eventClick={handleEventClick} // Add event click handler
+                        eventClick={handleEventClick} // Add event click handler
                         dateClick={handleDateClick} // Add date click handler
                     />
                 </CalendarWrapper>
@@ -137,6 +172,22 @@ const ClassSchedule = () => {
                         setModalOpen={setModalOpen}
                         currentScheduleSelect={currentScheduleSelect}
                     />
+                )}
+                {isOpenDelete && (
+                    <Overlay>
+                        <StyledModal>
+                            <ConfirmDelete
+                                resourceName="schedule"
+                                disabled={false}
+                                onConfirm={() => {
+                                    removeSchedule({
+                                        postSchedule: removeData,
+                                    });
+                                }}
+                                onCloseModal={() => setIsOpenDelete(false)}
+                            />
+                        </StyledModal>
+                    </Overlay>
                 )}
             </div>
         </ThemeProvider>

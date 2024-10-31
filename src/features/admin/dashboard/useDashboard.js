@@ -9,7 +9,6 @@ function useDashboard() {
     });
 
     const dashboard = data?.data;
-    console.log(dashboard);
 
     return { isLoading, dashboard, error };
 }

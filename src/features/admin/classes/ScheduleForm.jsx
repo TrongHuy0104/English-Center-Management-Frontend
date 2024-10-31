@@ -9,6 +9,8 @@ import Spinner from "../../../ui/Spinner";
 import styled from "styled-components";
 import useCreateSchedule from "./useCreateSchedule";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { format } from "date-fns";
 
 const StyledModal = styled.div`
     position: fixed;
@@ -36,12 +38,16 @@ const Overlay = styled.div`
     z-index: 1000;
     transition: all 0.5s;
 `;
+const Opinion = styled.div`
+    font-size: 1.4rem;
+`;
 
 function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
     const { register, handleSubmit, reset, getValues, formState } = useForm({
         defaultValues: {},
     });
     const { errors } = formState;
+    const [isAddMultiple, setIsAddMultiple] = useState(false);
 
     const slots = [
         { value: "", label: "--select --" },
@@ -58,31 +64,71 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
     const { isLoadingCreate, createSchedule } = useCreateSchedule();
     const { classId } = useParams();
 
-    // const false = isLoadingCreate || isLoadingUpdate;
-    function onSubmit(data) {
-        const items = data.slot.split("-");
-        const scheduleData = {
-            slot: items[0],
-            start_time: items[1],
-            end_time: items[2],
-            date: new Date(currentScheduleSelect.date),
-            endDate: null,
-        };
-        // {
-        //     "schedules": [
-        //       {
-        //         "slot": "1",
-        //         "start_time": "07:00",
-        //         "end_time": "08:30",
-        //         "date": "2024-10-31T00:30:00.000Z",
-        //         "endDate": null
-        //       }
-        //     ]
-        //   }
+    function calculateDaysBetween(startDate, endDate) {
+        // Convert to Date objects
+        const start = new Date(startDate).setHours(0, 0, 0, 0);
+        const end = new Date(endDate).setHours(0, 0, 0, 0);
 
-        let schedules = {
-            schedules: [scheduleData], // Wrap scheduleData in an array
-        };
+        // Calculate the difference in milliseconds
+        const diffMilliseconds = end - start;
+
+        // Convert milliseconds to days
+        const diffDays =
+            Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24)) - 1;
+
+        return diffDays;
+    }
+
+    function onSubmit(data) {
+        let schedules = { schedules: [] };
+        if (data?.endDate) {
+            const daysBetween =
+                calculateDaysBetween(currentScheduleSelect.date, data.endDate) +
+                1;
+            function getFutureDate(currentDate, i) {
+                const newDate = new Date(currentDate);
+                newDate.setHours(0, 0, 0, 0);
+                newDate.setDate(newDate.getDate() + 7 * i);
+                return newDate;
+            }
+
+            function toLocalISOString(date) {
+                const localDate = new Date(
+                    date.getTime() - date.getTimezoneOffset() * 60000
+                );
+                return localDate.toISOString();
+            }
+
+            const numLoop = Math.floor(daysBetween / 7);
+            for (let i = 0; i <= numLoop; i++) {
+                const items = data.slot.split("-");
+                const currentDate = new Date(currentScheduleSelect.date);
+                const scheduleData = {
+                    slot: items[0],
+                    start_time: items[1],
+                    end_time: items[2],
+                    date: toLocalISOString(getFutureDate(currentDate, i)),
+                    // `${
+                    //     new Date(info.event.start).toISOString().split("T")[0]
+                    // }T00:00:00.000Z`,
+                };
+                schedules.schedules.push(scheduleData);
+            }
+        } else {
+            const items = data.slot.split("-");
+            const scheduleData = {
+                slot: items[0],
+                start_time: items[1],
+                end_time: items[2],
+                date:
+                    new Date(currentScheduleSelect.date)
+                        .toISOString()
+                        .split("T")[0] + "T00:00:00.000Z",
+                endDate: data?.endDate,
+            };
+            schedules.schedules.push(scheduleData);
+        }
+
         console.log("schedules", schedules);
 
         createSchedule(
@@ -94,26 +140,6 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
                 },
             }
         );
-
-        // console.log("data", scheduleData);
-        // if (isEditSession) {
-        //     updateClass(
-        //         {
-        //             data,
-        //             id: editId,
-        //         },
-        //         { onSuccess: () => onCloseModal?.() }
-        //     );
-        // } else
-        //     createClass(
-        //         { ...data },
-        //         {
-        //             onSuccess: () => {
-        //                 reset();
-        //                 onCloseModal?.();
-        //             },
-        //         }
-        //     );
     }
 
     function onError(errors) {
@@ -121,9 +147,6 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
     }
 
     if (isLoadingCreate) return <Spinner />;
-    // const filterTeachers = teachers
-    //     .filter((teacher) => teacher.active)
-    //     .map((teacher) => ({ value: teacher._id, label: teacher.name }));
     return (
         <Overlay>
             <StyledModal>
@@ -138,6 +161,89 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
                             })}
                             disabled={false}
                         />
+                    </FormRow>
+
+                    {isAddMultiple && (
+                        <>
+                            <FormRow
+                                label="Start Date"
+                                error={errors?.startDate?.message}
+                            >
+                                <Input
+                                    type="date"
+                                    id="startDate"
+                                    defaultValue={format(
+                                        new Date(currentScheduleSelect.date),
+                                        "yyyy-MM-dd"
+                                    )}
+                                    {...register("startDate")}
+                                    disabled={true}
+                                />
+                            </FormRow>
+
+                            <FormRow
+                                label="End Date"
+                                error={errors?.endDate?.message}
+                            >
+                                <Input
+                                    type="date"
+                                    id="endDate"
+                                    {...register("endDate", {
+                                        validate: {
+                                            notEarlierThanStartDate: (
+                                                value
+                                            ) => {
+                                                const endDate = new Date(
+                                                    value
+                                                ).setHours(0, 0, 0, 0);
+                                                const start = new Date(
+                                                    currentScheduleSelect.date
+                                                );
+                                                return (
+                                                    endDate > start ||
+                                                    "End date cannot be earlier than start date"
+                                                );
+                                            },
+                                            notMoreThan30Days: (value) => {
+                                                const endDate = new Date(value);
+                                                const start = new Date(
+                                                    currentScheduleSelect.date
+                                                );
+                                                const diffDays =
+                                                    (endDate - start) /
+                                                    (1000 * 60 * 60 * 24);
+                                                return (
+                                                    diffDays <= 30 ||
+                                                    "End date cannot be more than 30 days after start date"
+                                                );
+                                            },
+                                        },
+                                    })}
+                                    disabled={false}
+                                />
+                            </FormRow>
+                        </>
+                    )}
+
+                    <FormRow>
+                        <Opinion>
+                            <input
+                                type="checkbox"
+                                id="multi"
+                                onChange={() =>
+                                    setIsAddMultiple(!isAddMultiple)
+                                }
+                            />
+                            <label
+                                htmlFor="multi"
+                                style={{
+                                    userSelect: "none",
+                                    marginLeft: "8px",
+                                }}
+                            >
+                                Add multiple
+                            </label>
+                        </Opinion>
                     </FormRow>
 
                     <FormRow>

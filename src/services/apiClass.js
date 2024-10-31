@@ -42,3 +42,10 @@ export async function getClassScheduleById(classId) {
         console.log(error);
     }
 }
+
+export async function removeSchedule(data, id) {
+    const res = await axios.patch(`/classes/${id}/schedule`, data, {
+        withCredentials: true,
+    });
+    return res;
+}
