@@ -2,32 +2,31 @@ import useUser from "../../authentication/useUser";
 import { useState, useEffect, useRef } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import useTeacherSalary from "../profile/useTeacherSalary";
-import { updateTeacherById, uploadAvatar } from "../../../services/apiTeacher";
+import { uploadAvatar } from "../../../services/apiTeacher";
 import app from "../../../services/firebase";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Button from "../../../ui/Button";
 import Select from "../../../ui/Select";
 import Heading from "../../../ui/Heading";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUpdateTeacher from "../profile/useUpdateTeacher"; // Adjust path if necessary
 
-const DEFAULT_AVATAR =
-  "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
+const DEFAULT_AVATAR = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
 
 const TeacherProfile = () => {
   const { isLoading: isLoadingUser, user } = useUser();
-  const teacherId = user?.roleDetails?._id;
+  const teacherId = user?.roleDetails?._id; // Move teacherId here to ensure it's defined
+
   const { isLoading: isLoadingSalary, salary } = useTeacherSalary(teacherId);
+  
+  const { updateTeacher, isUpdating } = useUpdateTeacher(teacherId);
   const [imageURL, setImageURL] = useState(DEFAULT_AVATAR);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-  const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     gender: "",
-    dateOfBirth: "",
+    dateOfBirth: "", // Keep this in 'yyyy-mm-dd' format
   });
 
   const [hasData, setHasData] = useState(true);
@@ -38,13 +37,13 @@ const TeacherProfile = () => {
     { value: "other", label: "Other" },
   ];
 
-  const formatDate = (isoDate) => {
+  const formatDateForInput = (isoDate) => {
     const date = new Date(isoDate);
-    return date.toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+    // Format as "yyyy-mm-dd"
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const TeacherProfile = () => {
         phone: user.roleDetails.phone || "",
         gender: user.roleDetails.gender || "",
         dateOfBirth: user.roleDetails.dateOfBirth
-          ? formatDate(user.roleDetails.dateOfBirth)
+          ? formatDateForInput(user.roleDetails.dateOfBirth) // Format for date input
           : "",
       });
       setImageURL(user.roleDetails.avatar || DEFAULT_AVATAR);
@@ -81,37 +80,21 @@ const TeacherProfile = () => {
     }
   }
 
-  const mutation = useMutation({
-    mutationFn: async () => {
-      let avatarUrl = imageURL;
-      if (selectedImage) {
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `avatars/${selectedImage.name}`);
-        await uploadBytes(storageRef, selectedImage);
-        avatarUrl = await getDownloadURL(storageRef);
-        await uploadAvatar(user.roleDetails._id, avatarUrl);
-      }
-      await updateTeacherById(user.roleDetails._id, {
-        ...formData,
-        avatar: avatarUrl,
-      });
-      return avatarUrl;
-    },
-    onSuccess: (newAvatarUrl) => {
-      queryClient.invalidateQueries("user"); // Tự động cập nhật ảnh đại diện
-      setImageURL(newAvatarUrl);
-      toast.success("Profile updated successfully.");
-    },
-    onError: () => {
-      toast.error("Error updating profile.");
-    },
-  });
+  async function handleSave() {
+    let avatarUrl = imageURL;
 
-  function handleSave() {
-    mutation.mutate();
+    if (selectedImage) {
+      const storage = getStorage(app);
+      const storageRef = ref(storage, `avatars/${selectedImage.name}`);
+      await uploadBytes(storageRef, selectedImage);
+      avatarUrl = await getDownloadURL(storageRef);
+      await uploadAvatar(user.roleDetails._id, avatarUrl);
+    }
+
+    updateTeacher({ ...formData, avatar: avatarUrl });
   }
 
-  if (isLoadingUser || isLoadingSalary) {
+  if (isLoadingUser || isLoadingSalary || isUpdating) {
     return <div>Loading...</div>;
   }
 
@@ -139,7 +122,7 @@ const TeacherProfile = () => {
           Update Profile
         </Button>
       </div>
-      <ToastContainer position="top-right" />
+      
       <div
         style={{
           backgroundColor: "#fff",
@@ -236,7 +219,7 @@ const TeacherProfile = () => {
                 <label style={{ marginRight: "100px", width: "15%" }}>Date Of Birth</label>
                 <input
                   style={{ width: "50%", padding: "8px 12px", borderRadius: "5px", border: "1px solid #d1d5db" }}
-                  type="text"
+                  type="date"
                   value={formData.dateOfBirth}
                   id="dateOfBirth"
                   onChange={handleChange}
@@ -245,7 +228,7 @@ const TeacherProfile = () => {
               <div style={{ display: "flex", alignItems: "center", padding: "8px 0" }}>
                 <label style={{ marginRight: "100px", width: "15%" }}>Salary</label>
                 <input
-                  style={{ width: "50%", padding: "8px 12px", borderRadius: "5px", border: "1px solid #d1d5db"}}
+                  style={{ width: "50%", padding: "8px 12px", borderRadius: "5px", border: "1px solid #d1d5db" }}
                   type="text"
                   value={salary ? salary.data[0].calculatedSalary : "N/A"}
                   id="salary"
