@@ -61,10 +61,10 @@ function App() {
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
                         <Route path="salaries" element={<AdminSalaryPage />} />
                         {/* Student */}
-                        <Route path="student/my-class" element={<MyClass />} />
-                        <Route path="student/classes" element={<StudentClass />} />
-                        <Route path="student/classes/:classid" element={<StudentClassDetail />} />
-                        <Route path="student/fees" element={<Fees />} />
+                        <Route path="students/my-class" element={<MyClass />} />
+                        <Route path="students/classes" element={<StudentClass />} />
+                        <Route path="students/classes/:classid" element={<StudentClassDetail />} />
+                        <Route path="students/fees" element={<Fees />} />
                     </Route>
                     <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />

@@ -2,7 +2,7 @@ import axios from "../utils/axios";
 
 export async function getAllFeeOfStudent({ page, limit , status }) {
   try {
-    const res = await axios.get(`/student/fees`, {
+    const res = await axios.get(`/students/fees`, {
       params: {status, page, limit },
       withCredentials: true,
     });
@@ -14,7 +14,7 @@ export async function getAllFeeOfStudent({ page, limit , status }) {
 
 export async function getScheduleOfStudent() {
   try {
-    const res = await axios.get("/student/my-class", {
+    const res = await axios.get("/students/my-class", {
       withCredentials: true,
     });
     return res;
@@ -25,7 +25,7 @@ export async function getScheduleOfStudent() {
 
 export async function getAllClass() {
   try {
-    const res = await axios.get("/student/classes", {
+    const res = await axios.get("/students/classes", {
       withCredentials: true,
     });
     return res;
@@ -36,7 +36,7 @@ export async function getAllClass() {
 
 export async function getClassById(classId) {
   try {
-    const res = await axios.get(`student/classes/${classId}`, {
+    const res = await axios.get(`students/classes/${classId}`, {
       withCredentials: true,
     });
     return res.data;
@@ -48,7 +48,7 @@ export async function getClassById(classId) {
 export async function sendEnrollRequest(classId) {
   try {
     const res = await axios.post(
-      "/student/classes/enroll-request",
+      "/students/classes/enroll-request",
       { classId }, // Gửi ID của lớp vào request body
       {
         withCredentials: true,

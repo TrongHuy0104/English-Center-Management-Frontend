@@ -117,28 +117,28 @@ const navAdminList = [
 const navStudentList = [
     {
         title: "My CLass",
-        route: "student/my-class",
+        route: "students/my-class",
         icon: <HiOutlineCalendarDays />,
     },
     {
         title: "Classes",
-        route: "student/classes",
+        route: "students/classes",
         icon: <HiOutlineAcademicCap />,
     },
     {
         title: "Attendance",
-        route: "student/attendance",
+        route: "students/attendance",
         icon: <HiClipboardDocumentCheck />,
     },
     {
         title: "Fees",
-        route: "student/fees",
+        route: "students/fees",
         icon: <HiCurrencyDollar />,
     },
 
     {
         title: "Messages",
-        route: "student/messages",
+        route: "students/messages",
         icon: <HiEnvelopeOpen />,
     },
 ];
