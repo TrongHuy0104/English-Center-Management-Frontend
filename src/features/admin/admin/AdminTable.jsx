@@ -8,7 +8,6 @@ import AdminRow from "./AdminRow";
 
 function AdminTable() {
     const { isLoading, admins, total } = useAdmins();
-    console.log(admins);
     if (isLoading) return <Spinner />;
 
     if (!admins.length) return <Empty resource="admin" />;
