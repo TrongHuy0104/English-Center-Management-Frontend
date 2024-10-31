@@ -42,7 +42,6 @@ function useStudents() {
             queryKey: ["students", filter, page - 1],
             queryFn: () => getStudents({ filter, page: page - 1 }),
         });
-        console.log(students);
     return { isLoading, students, total, error };
 }
 

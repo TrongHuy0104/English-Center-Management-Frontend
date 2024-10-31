@@ -14,7 +14,6 @@ import useDisableStudent from "./useDisableStudent";
 import Confirm from "../../../ui/Confirm";
 import useEnableStudent from "./useEnableStudent";
 
-
 const Student = styled.div`
     font-size: 1.6rem;
     font-weight: 600;
@@ -45,14 +44,11 @@ const StyledButton = styled.button`
 
 function StudentRow({ student }) {
     const { id, name, phone, user } = student;
-    
+
     const { email, active } = user[0];
-    
-    
-   
 
     const { isLoadingDisable, disableStudent } = useDisableStudent();
-    const { isLoadingEnable, enableStudent} = useEnableStudent();
+    const { isLoadingEnable, enableStudent } = useEnableStudent();
 
     return (
         <>
