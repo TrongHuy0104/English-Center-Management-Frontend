@@ -12,7 +12,6 @@ export const useClass = (classIds) => {
       if (!classIds || classIds.length === 0) return [];
       const classPromises = classIds.map(async (id) => {
         const result = await getClassById(id);
-        console.log(`Data for class ID ${id}:`, result);
         return result;
       });
       const classData = await Promise.all(classPromises);

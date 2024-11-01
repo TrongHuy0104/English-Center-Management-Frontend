@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 
 const useStudent = (user) => {
-  console.log("user", user);
-
   const [customFormData, setCustomFormData] = useState({
     name: "",
     phone: "",

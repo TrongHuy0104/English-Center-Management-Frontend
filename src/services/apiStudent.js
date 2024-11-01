@@ -23,11 +23,11 @@ export async function createStudent(data) {
   return res;
 }
 
-export async function updateStudent(data, id) {
+export async function updateStudent(id, data) {
   const res = await axios.patch(`/students/${id}`, data, {
     withCredentials: true,
   });
-  return res;
+  return res.data;
 }
 
 export async function disableStudent(id) {

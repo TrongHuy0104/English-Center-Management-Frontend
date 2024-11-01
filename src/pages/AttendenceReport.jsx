@@ -6,12 +6,10 @@ import styled from "styled-components";
 import Heading from "../ui/Heading";
 import useClass from "../features/student/profiles/useClass";
 import useTeacher from "../features/student/profiles/useTeacher";
-// import useTeacher from "../features/student/profiles/useAttendance";
 
 const AttendanceReport = () => {
   const { user } = useUser();
   const [selectedClass, setSelectedClass] = useState(null);
-  // const [selectedClass, setSelectedClass] = useState(null);
   const { isLoading, attendanceReports, error } = useAttendance(
     user.roleDetails._id
   );
@@ -70,7 +68,7 @@ const AttendanceReport = () => {
             </Table.Header>
             <div>
               {classes
-                .slice() // Create a shallow copy to avoid mutating the original array
+                .slice()
                 .sort((a, b) => {
                   const nameA = a?.data?.class?.name?.toLowerCase() || "";
                   const nameB = b?.data?.class?.name?.toLowerCase() || "";

@@ -8,7 +8,7 @@ import useStudent from "../features/student/profiles/useStudent";
 import useUser from "../features/authentication/useUser";
 import useClass from "../features/student/profiles/useClass";
 import defaultAvatar from "../../public/img/default-user.jpg";
-import { uploadAvatar } from "../services/apiStudent";
+import { updateStudent, uploadAvatar } from "../services/apiStudent";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -45,14 +45,21 @@ const StudentProfile = () => {
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
-      setImageURL(URL.createObjectURL(file));
+      const newImageURL = URL.createObjectURL(file);
+      setImageURL(newImageURL);
       setSelectedImage(file);
+
+      setLocalFormData((prevData) => ({
+        ...prevData,
+        avatar: newImageURL,
+      }));
     }
   }
 
   async function handleSave() {
     try {
       let avatarUrl = imageURL;
+
       if (selectedImage) {
         const storage = getStorage(app);
         const storageRef = ref(storage, `avatars/${selectedImage.name}`);
@@ -62,10 +69,10 @@ const StudentProfile = () => {
         await uploadAvatar(user.roleDetails._id, avatarUrl);
       }
 
-      // await updateStudent(user.roleDetails._id, {
-      //   ...formData,
-      //   avatar: avatarUrl,
-      // });
+      await updateStudent(user.roleDetails._id, {
+        ...localFormData,
+        avatar: avatarUrl,
+      });
 
       toast.success("Profile updated successfully.");
     } catch (error) {
@@ -85,7 +92,7 @@ const StudentProfile = () => {
       >
         <Heading as="h1">Student Profile</Heading>
         <Button
-          type="button"
+          type="submit"
           onClick={handleSave}
           style={{
             color: "white",
