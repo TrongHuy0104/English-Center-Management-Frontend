@@ -1,5 +1,6 @@
 import useUser from "../../authentication/useUser";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react"; 
+import { useQuery } from "@tanstack/react-query"; // Add this
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import useTeacherSalary from "../profile/useTeacherSalary";
 import { uploadAvatar } from "../../../services/apiTeacher";
@@ -7,29 +8,28 @@ import app from "../../../services/firebase";
 import Button from "../../../ui/Button";
 import Select from "../../../ui/Select";
 import Heading from "../../../ui/Heading";
-import useUpdateTeacher from "../profile/useUpdateTeacher"; // Adjust path if necessary
+import useUpdateTeacher from "../profile/useUpdateTeacher";
 
 const DEFAULT_AVATAR = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg";
 
 const TeacherProfile = () => {
   const { isLoading: isLoadingUser, user } = useUser();
-  const teacherId = user?.roleDetails?._id; // Move teacherId here to ensure it's defined
+  const teacherId = user?.roleDetails?._id;
 
   const { isLoading: isLoadingSalary, salary } = useTeacherSalary(teacherId);
-  
   const { updateTeacher, isUpdating } = useUpdateTeacher(teacherId);
+  
   const [imageURL, setImageURL] = useState(DEFAULT_AVATAR);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
+  const [hasData, setHasData] = useState(true);
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     gender: "",
-    dateOfBirth: "", // Keep this in 'yyyy-mm-dd' format
+    dateOfBirth: "",
   });
-
-  const [hasData, setHasData] = useState(true);
 
   const options = [
     { value: "male", label: "Male" },
@@ -39,29 +39,34 @@ const TeacherProfile = () => {
 
   const formatDateForInput = (isoDate) => {
     const date = new Date(isoDate);
-    // Format as "yyyy-mm-dd"
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        name: user.roleDetails.name || "",
-        phone: user.roleDetails.phone || "",
-        gender: user.roleDetails.gender || "",
-        dateOfBirth: user.roleDetails.dateOfBirth
-          ? formatDateForInput(user.roleDetails.dateOfBirth) // Format for date input
-          : "",
-      });
-      setImageURL(user.roleDetails.avatar || DEFAULT_AVATAR);
-      setHasData(true);
-    } else {
-      setHasData(false);
-    }
-  }, [user]);
+  // Replace useEffect with useQuery
+  useQuery({
+    queryKey: ['teacherProfile', user],
+    queryFn: () => {
+      if (user) {
+        setFormData({
+          name: user.roleDetails.name || "",
+          phone: user.roleDetails.phone || "",
+          gender: user.roleDetails.gender || "",
+          dateOfBirth: user.roleDetails.dateOfBirth
+            ? formatDateForInput(user.roleDetails.dateOfBirth)
+            : "",
+        });
+        setImageURL(user.roleDetails.avatar || DEFAULT_AVATAR);
+        setHasData(true);
+      } else {
+        setHasData(false);
+      }
+      return user;
+    },
+    enabled: !!user,
+  });
 
   function handleChange(e) {
     const { id, value } = e.target;
