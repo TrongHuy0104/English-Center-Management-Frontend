@@ -53,7 +53,6 @@ function FeeForm({ feeId, onCloseModal, onUpdate }) {
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-    console.log("Form data:", data);
     try {
       const response = await updateFee(feeId, data);
       const updatedFee = response.data.data;

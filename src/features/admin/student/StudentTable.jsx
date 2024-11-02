@@ -8,7 +8,6 @@ import StudentRow from "./StudentRow";
 
 function StudentTable() {
     const { isLoading, students, total } = useStudents();
-    console.log(students);
     if (isLoading) return <Spinner />;
 
     if (!students.length) return <Empty resource="student" />;

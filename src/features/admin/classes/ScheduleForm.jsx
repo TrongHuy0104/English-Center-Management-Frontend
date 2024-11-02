@@ -129,7 +129,6 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
             schedules.schedules.push(scheduleData);
         }
 
-        console.log("schedules", schedules);
 
         createSchedule(
             { data: schedules, id: classId },
@@ -142,9 +141,6 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
         );
     }
 
-    function onError(errors) {
-        console.log(errors);
-    }
 
     if (isLoadingCreate) return <Spinner />;
     return (
