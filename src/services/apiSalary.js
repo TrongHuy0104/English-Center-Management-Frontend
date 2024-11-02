@@ -19,7 +19,6 @@ export async function getSalary(id) {
         const res = await axios.get(`/salaries/${id}`, {
             withCredentials: true,
         });
-        console.log("res1", res);
 
         return res;
     } catch (error) {
@@ -32,7 +31,6 @@ export async function CreateSalary(formData) {
         const res = await axios.post("/salaries", formData, {
             withCredentials: true,
         });
-        console.log("Response from server:", res);
         return res;
     } catch (error) {
         if (error.response) {

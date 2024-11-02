@@ -1,9 +1,21 @@
 import axios from "../utils/axios";
+
 import { PAGE_SIZE } from "../utils/constants";
 export async function getClasses({ page }) {
     try {
         let route = `/classes?page=${page}&limit=${PAGE_SIZE}`;
         const res = await axios.get(`${route}`, {
+            withCredentials: true,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getAllClasses() {
+    try {
+        const res = await axios.get("classes/all-classes", {
             withCredentials: true,
         });
         return res;

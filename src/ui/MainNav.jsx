@@ -8,6 +8,7 @@ import {
     HiClipboardDocumentCheck,
     HiEnvelopeOpen,
 } from "react-icons/hi2";
+import { PiChalkboardTeacher } from "react-icons/pi";
 import { RiAdminFill } from "react-icons/ri";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
@@ -72,9 +73,19 @@ const navAdminList = [
         icon: <RiAdminFill />,
     },
     {
+        title: "Teachers",
+        route: "teacher",
+        icon: <PiChalkboardTeacher />,
+    },
+    {
         title: "Students",
         route: "student",
         icon: <PiStudentDuotone />,
+    },
+    {
+        title: "Classes",
+        route: "class",
+        icon: <MdOutlineClass />,
     },
     {
         title: "Users",
@@ -82,20 +93,15 @@ const navAdminList = [
         icon: <HiUserGroup />,
     },
     // {
-    //     title: "Bookings",
-    //     route: "booking",
-    //     icon: <HiOutlineCalendarDays />,
+    //   title: "Bookings",
+    //   route: "booking",
+    //   icon: <HiOutlineCalendarDays />,
     // },
     // {
-    //     title: "Cabins",
-    //     route: "cabin",
-    //     icon: <HiOutlineCalendarDays />,
+    //   title: "Cabins",
+    //   route: "cabin",
+    //   icon: <HiOutlineCalendarDays />,
     // },
-    {
-        title: "Classes",
-        route: "class",
-        icon: <MdOutlineClass />,
-    },
     {
         title: "Fee",
         route: "fees",

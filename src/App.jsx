@@ -18,6 +18,7 @@ import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Student from "./pages/Student";
+import Teacher from "./pages/Teacher";
 import Class from "./pages/Class";
 import ClassSchedule from "./features/admin/classes/ClassSchedule";
 
@@ -51,13 +52,18 @@ function App() {
                         <Route path="user" element={<User />} />
                         <Route path="admin" element={<Admin />} />
                         <Route path="student" element={<Student />} />
+                        <Route path="teacher" element={<Teacher />} />
                         <Route path="class" element={<Class />} />
-                        <Route path="class/:classId/schedule" element={<ClassSchedule />} />
+                        <Route
+                            path="class/:classId/schedule"
+                            element={<ClassSchedule />}
+                        />
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
                         <Route path="fees" element={<FeesPage />} />
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
                         <Route path="salaries" element={<AdminSalaryPage />} />
+
                         {/* Student */}
                         <Route path="student/my-class" element={<MyClass />} />
                         <Route path="student/fees" element={<Fees />} />

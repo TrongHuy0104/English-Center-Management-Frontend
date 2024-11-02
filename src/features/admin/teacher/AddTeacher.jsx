@@ -1,15 +1,15 @@
 import Button from "../../../ui/Button";
 import Modal from "../../../ui/Modal";
-import AdminForm from "./AdminForm";
+import TeacherForm from "./TeacherForm";
 
 function AddTeacher() {
   return (
     <Modal>
-      <Modal.Open opens="admin-form">
+      <Modal.Open opens="teacher-form">
         <Button>Add New Teacher</Button>
       </Modal.Open>
-      <Modal.Window name="admin-form">
-        <AdminForm />
+      <Modal.Window name="teacher-form">
+        <TeacherForm />
       </Modal.Window>
     </Modal>
   );
