@@ -9,7 +9,6 @@ function TeacherAttendance() {
   const teacherId = user?.roleDetails?._id;
 
   const navigate = useNavigate();
-  const [sortBy] = useState("className-asc"); // Default sort option
 
   // Calculate today's date in the adjusted timezone
   const date = new Date();
@@ -32,28 +31,6 @@ function TeacherAttendance() {
     }))
     .filter((classItem) => classItem.schedule.length > 0);
 
-  // Sort the class data based on the selected sorting option
-  const sortedClassData = filteredClassData.flatMap((classItem) =>
-    classItem.schedule.map((slot) => ({
-      ...slot,
-      className: classItem.name,
-      classId: classItem._id,
-    }))
-  ).sort((a, b) => {
-    switch (sortBy) {
-      case "className-asc":
-        return a.className.localeCompare(b.className);
-      case "className-desc":
-        return b.className.localeCompare(a.className);
-      case "slot-asc":
-        return a.slot.localeCompare(b.slot);
-      case "slot-desc":
-        return b.slot.localeCompare(a.slot);
-      default:
-        return 0;
-    }
-  });
-
   const handleTakeAttendance = (classId, slot) => {
     navigate("/teacher/attendance/take-attendance", {
       state: { teacherId, classId, todayDate, slot },
@@ -66,7 +43,7 @@ function TeacherAttendance() {
 
   return (
     <div>
-      {sortedClassData.length > 0 ? (
+      {filteredClassData.length > 0 ? (
         <Table columns="0.5fr 1fr 1fr 1fr 1fr 1fr">
           <Table.Header>
             <div>No.</div>
@@ -77,10 +54,14 @@ function TeacherAttendance() {
             <div>Action</div>
           </Table.Header>
           <Table.Body
-            data={sortedClassData.map((slot, index) => ({
-              ...slot,
-              index: index + 1,
-            }))}
+            data={filteredClassData.flatMap((classItem, index) =>
+              classItem.schedule.map((slot) => ({
+                ...slot,
+                className: classItem.name,
+                classId: classItem._id,
+                index: index + 1,
+              }))
+            )}
             render={(slot) => (
               <Table.Row key={`${slot.classId}-${slot.slot}`}>
                 <div>{slot.index}</div>
