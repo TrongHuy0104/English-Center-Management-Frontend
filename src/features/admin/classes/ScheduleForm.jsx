@@ -129,8 +129,6 @@ function ScheduleForm({ setModalOpen, currentScheduleSelect }) {
             schedules.schedules.push(scheduleData);
         }
 
-        console.log("schedules", schedules);
-
         createSchedule(
             { data: schedules, id: classId },
             {

@@ -15,7 +15,7 @@ export async function getClasses({ page }) {
 
 export async function getAllClasses() {
     try {
-        const res = await axios.get("/all-classes", {
+        const res = await axios.get("classes/all-classes", {
             withCredentials: true,
         });
         return res;

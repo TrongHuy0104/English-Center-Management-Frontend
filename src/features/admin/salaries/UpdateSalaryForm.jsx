@@ -8,104 +8,102 @@ import styled from "styled-components";
 import useSalary from "./useSalary";
 
 const StyledInput = styled(Input)`
-  width: 450px;
-  height: 40px;
+    width: 450px;
+    height: 40px;
 `;
 
 function UpdateSalaryForm({ salaryId, onCloseModal, onUpdate }) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm();
-  const { updateSalary } = useSalary();
-  const [salaryData, setSalaryData] = useState(null);
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm();
+    const { updateSalary } = useSalary();
+    const [salaryData, setSalaryData] = useState(null);
 
-  useEffect(() => {
-    if (salaryId) {
-      const fetchSalaryData = async () => {
-        try {
-          const res = await getSalary(salaryId);
-          const salary = res.data.data.salary;
+    useEffect(() => {
+        if (salaryId) {
+            const fetchSalaryData = async () => {
+                try {
+                    const res = await getSalary(salaryId);
+                    const salary = res.data.data.salary;
 
-          console.log("salary1:", salary);
-          console.log("salaryyy", salaryId);
-          console.log("salary2:", res);
+                    setSalaryData(salary);
 
-          setSalaryData(salary);
-
-          setValue("salary_name", salary.salary_name || "");
-          setValue("price", salary.price || 0);
-          setValue("description", salary.description || "");
-        } catch (error) {
-          console.error("Error fetching salary data:", error);
+                    setValue("salary_name", salary.salary_name || "");
+                    setValue("price", salary.price || 0);
+                    setValue("description", salary.description || "");
+                } catch (error) {
+                    console.error("Error fetching salary data:", error);
+                }
+            };
+            fetchSalaryData();
         }
-      };
-      fetchSalaryData();
-    }
-  }, [salaryId, setValue]);
+    }, [salaryId, setValue]);
 
-  const onSubmitHandler = async (formData) => {
-    console.log("Submitting data:", formData);
-    console.log("feidđ", salaryId);
-    try {
-      updateSalary({ id: salaryId, ...formData });
-      onCloseModal?.();
-    } catch (error) {
-      console.error("Error updating salary:", error);
-    }
-  };
+    const onSubmitHandler = async (formData) => {
+        try {
+            updateSalary({ id: salaryId, ...formData });
+            onCloseModal?.();
+        } catch (error) {
+            console.error("Error updating salary:", error);
+        }
+    };
 
-  return (
-    <form onSubmit={handleSubmit(onSubmitHandler)}>
-      {/* Field Salary Name */}
-      <FormRow label="Salary Name" error={errors?.salary_name?.message}>
-        <StyledInput
-          type="text"
-          id="salary_name"
-          placeholder={salaryData?.salary_name || "Enter salary name"}
-          {...register("salary_name", {
-            required: "This field is required",
-          })}
-        />
-      </FormRow>
+    return (
+        <form onSubmit={handleSubmit(onSubmitHandler)}>
+            {/* Field Salary Name */}
+            <FormRow label="Salary Name" error={errors?.salary_name?.message}>
+                <StyledInput
+                    type="text"
+                    id="salary_name"
+                    placeholder={salaryData?.salary_name || "Enter salary name"}
+                    {...register("salary_name", {
+                        required: "This field is required",
+                    })}
+                />
+            </FormRow>
 
-      {/* Field Price */}
-      <FormRow label="Price" error={errors?.price?.message}>
-        <StyledInput
-          type="number"
-          id="price"
-          placeholder={salaryData?.price || "Enter price"}
-          {...register("price", {
-            required: "This field is required",
-            min: { value: 1, message: "Price must be at least 1" },
-          })}
-        />
-      </FormRow>
+            {/* Field Price */}
+            <FormRow label="Price" error={errors?.price?.message}>
+                <StyledInput
+                    type="number"
+                    id="price"
+                    placeholder={salaryData?.price || "Enter price"}
+                    {...register("price", {
+                        required: "This field is required",
+                        min: { value: 1, message: "Price must be at least 1" },
+                    })}
+                />
+            </FormRow>
 
-      {/* Field Description */}
-      <FormRow label="Description" error={errors?.description?.message}>
-        <StyledInput
-          type="text"
-          id="description"
-          placeholder={salaryData?.description || "Enter description"}
-          {...register("description", {
-            required: "This field is required",
-          })}
-        />
-      </FormRow>
+            {/* Field Description */}
+            <FormRow label="Description" error={errors?.description?.message}>
+                <StyledInput
+                    type="text"
+                    id="description"
+                    placeholder={salaryData?.description || "Enter description"}
+                    {...register("description", {
+                        required: "This field is required",
+                    })}
+                />
+            </FormRow>
 
-      {/* Buttons */}
-      <FormRow>
-        <Button variation="secondary" type="button" onClick={onCloseModal}>
-          Cancel
-        </Button>
-        <Button type="submit">Update Salary</Button>
-      </FormRow>
-    </form>
-  );
+            {/* Buttons */}
+            <FormRow>
+                <Button
+                    variation="secondary"
+                    type="button"
+                    onClick={onCloseModal}
+                >
+                    Cancel
+                </Button>
+                <Button type="submit">Update Salary</Button>
+            </FormRow>
+        </form>
+    );
 }
 
 export default UpdateSalaryForm;

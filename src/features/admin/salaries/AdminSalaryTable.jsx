@@ -50,7 +50,6 @@ function AdminSalaryTable() {
             setSalaries(initialSalaries.salaries);
         }
     }, [initialSalaries, currentPage]);
-    console.log("initialSalaries", initialSalaries);
 
     const handleUpdateSalary = (updatedSalary) => {
         setSalaries((prevSalaries) =>
