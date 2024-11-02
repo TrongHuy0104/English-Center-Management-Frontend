@@ -8,7 +8,6 @@ import StudentRow from "./StudentRow";
 
 function StudentTable() {
     const { isLoading, students, total } = useStudents();
-    console.log(students);
     if (isLoading) return <Spinner />;
 
     if (!students.length) return <Empty resource="student" />;
@@ -26,7 +25,7 @@ function StudentTable() {
                 <Table.Body
                     data={students}
                     render={(student) => (
-                     <StudentRow key={student.id} student={student} />
+                        <StudentRow key={student.id} student={student} />
                     )}
                 ></Table.Body>
             </Table>

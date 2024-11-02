@@ -26,7 +26,6 @@ function useStudents() {
     });
 
     const students = data?.data?.data?.data;
-    console.log(students);
     const total = data?.data?.results;
 
     // PREFETCHING

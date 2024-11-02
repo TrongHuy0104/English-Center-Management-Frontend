@@ -9,7 +9,6 @@ function FeeWithClass() {
     <>
       <Row type="horizontal">
         <h2>Fees Management</h2>
-        <FeeTableOperations />
       </Row>
       <FeeTable />
     </>

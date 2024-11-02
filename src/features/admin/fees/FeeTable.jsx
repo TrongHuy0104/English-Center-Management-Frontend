@@ -78,8 +78,6 @@ function FeeTable() {
     if (error) return <p>Error loading fees: {error.message}</p>;
     if (!fees?.length) return <Empty resource="fees" />;
 
-    console.log("toggleModal: ", toggleModal, "modal: ", showModal);
-
     return (
         <Menus>
             <Modal>

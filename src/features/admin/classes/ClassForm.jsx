@@ -5,14 +5,14 @@ import Form from "../../../ui/Form";
 import Button from "../../../ui/Button";
 import FormRow from "../../../ui/FormRow";
 import Select from "../../../ui/Select";
-import useAllTeachers from "../../teacher/useAllTeachers";
 import Spinner from "../../../ui/Spinner";
 import useCreateClass from "./useCreateClass";
 import { format } from "date-fns";
 import useUpdateClass from "./useUpdateClass";
+import useTeachers from "./useTeachers";
 
 function ClassForm({ classToEdit = {}, onCloseModal }) {
-    const { isLoading: isLoadingTeachers, teachers } = useAllTeachers();
+    const { isLoading: isLoadingTeachers, teachers } = useTeachers();
 
     let editId, editValues;
 
@@ -80,6 +80,8 @@ function ClassForm({ classToEdit = {}, onCloseModal }) {
     ];
 
     if (isLoadingTeachers) return <Spinner />;
+    console.log("teachers", teachers);
+
     const filterTeachers = teachers
         .filter((teacher) => teacher.active)
         .map((teacher) => ({ value: teacher._id, label: teacher.name }));

@@ -1,4 +1,5 @@
 import axios from "../utils/axios";
+
 import { PAGE_SIZE } from "../utils/constants";
 export async function getClasses({ page }) {
   try {
@@ -10,6 +11,17 @@ export async function getClasses({ page }) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function getAllClasses() {
+    try {
+        const res = await axios.get("classes/all-classes", {
+            withCredentials: true,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async function createClass(data) {

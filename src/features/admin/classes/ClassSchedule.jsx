@@ -154,7 +154,7 @@ const ClassSchedule = () => {
                             center: "title",
                             right: "timeGridWeek,timeGridDay",
                         }}
-                        contentHeight="500px"
+                        contentHeight="70vh"
                         slotMinTime="07:00:00"
                         slotMaxTime="22:00:00"
                         events={events} // Set the events state to FullCalendar

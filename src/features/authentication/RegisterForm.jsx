@@ -68,7 +68,6 @@ function RegisterForm() {
         e.preventDefault();
         setErrors(validateValues(inputFields));
         setSubmitting(true);
-        console.log(inputFields);
     }
     useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
