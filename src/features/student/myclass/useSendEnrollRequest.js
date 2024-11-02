@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 
 export default function useSendEnrollRequest() {
   const mutation = useMutation({
-    mutationFn: sendEnrollRequest,
+    mutationFn: sendEnrollRequest(),
     onSuccess: () => {
       toast.success("Enroll request sent successfully!");
     },
