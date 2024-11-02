@@ -45,7 +45,7 @@ const TeacherProfile = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Replace useEffect with useQuery
+
   useQuery({
     queryKey: ['teacherProfile', user],
     queryFn: () => {

@@ -10,7 +10,7 @@ function StudentList() {
     const { teacherId, todayDate, slot } = location.state || {};
     const { attendanceData, loading, error, handleSubmitAttendance, setAttendanceData } = useStudentList(teacherId, todayDate, slot);
 
-    // Chuyển useEffect thành useQuery để fetch student details
+
     const { data: detailedAttendanceData } = useQuery({
         queryKey: ['studentDetails', attendanceData],
         queryFn: async () => {

@@ -58,7 +58,7 @@ function TeacherSchedule() {
         title: cls.name,
         start: `${item.date.split("T")[0]}T${item.start_time}:00`,
         end: `${item.date.split("T")[0]}T${item.end_time}:00`,
-        backgroundColor: randomColor,
+        backgroundColor: "#6a5b94",
         textColor: "#ffffff",
       };
     })
