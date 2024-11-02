@@ -1,32 +1,31 @@
 import Spinner from "../../../ui/Spinner";
 import Empty from "../../../ui/Empty";
-import useAdmins from "./useAdmins";
 import Menus from "../../../ui/Menus";
 import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
-import AdminRow from "./AdminRow";
+import ClassRow from "./ClassRow";
+import useClasses from "./useClasses";
 
-function AdminTable() {
-    const { isLoading, admins, total } = useAdmins();
+function ClassTable() {
+    const { isLoading, classes, total } = useClasses();
+
     if (isLoading) return <Spinner />;
 
-    if (!admins.length) return <Empty resource="admin" />;
+    if (!classes.length) return <Empty resource="admin" />;
 
     return (
         <Menus>
-            <Table columns="1.4fr 1.4fr 1.4fr 1fr 0.5fr">
+            <Table columns="1fr 1fr 1fr 0.6fr 0.6fr">
                 <Table.Header>
                     <div>Name</div>
-                    <div>Phone</div>
-                    <div>Email</div>
+                    <div>Teacher</div>
+                    <div>Type</div>
                     <div>Status</div>
                     <div></div>
                 </Table.Header>
                 <Table.Body
-                    data={admins}
-                    render={(admin) => (
-                        <AdminRow key={admin.id} admin={admin} />
-                    )}
+                    data={classes}
+                    render={(item) => <ClassRow key={item?.id} item={item} />}
                 ></Table.Body>
             </Table>
             <Table.Footer>
@@ -36,4 +35,4 @@ function AdminTable() {
     );
 }
 
-export default AdminTable;
+export default ClassTable;

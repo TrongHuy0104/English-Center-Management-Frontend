@@ -1,20 +1,21 @@
 import Spinner from "../../../ui/Spinner";
 import Empty from "../../../ui/Empty";
-import useAdmins from "./useAdmins";
+import useStudents from "./useStudents";
 import Menus from "../../../ui/Menus";
 import Table from "../../../ui/Table";
 import Pagination from "../../../ui/Pagination";
-import AdminRow from "./AdminRow";
+import StudentRow from "./StudentRow";
 
-function AdminTable() {
-    const { isLoading, admins, total } = useAdmins();
+function StudentTable() {
+    const { isLoading, students, total } = useStudents();
+    console.log(students);
     if (isLoading) return <Spinner />;
 
-    if (!admins.length) return <Empty resource="admin" />;
+    if (!students.length) return <Empty resource="student" />;
 
     return (
         <Menus>
-            <Table columns="1.4fr 1.4fr 1.4fr 1fr 0.5fr">
+            <Table columns="1.2fr 0.8fr 1.2fr 1fr 0.6fr">
                 <Table.Header>
                     <div>Name</div>
                     <div>Phone</div>
@@ -23,9 +24,9 @@ function AdminTable() {
                     <div></div>
                 </Table.Header>
                 <Table.Body
-                    data={admins}
-                    render={(admin) => (
-                        <AdminRow key={admin.id} admin={admin} />
+                    data={students}
+                    render={(student) => (
+                     <StudentRow key={student.id} student={student} />
                     )}
                 ></Table.Body>
             </Table>
@@ -36,4 +37,4 @@ function AdminTable() {
     );
 }
 
-export default AdminTable;
+export default StudentTable;
