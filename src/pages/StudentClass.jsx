@@ -1,41 +1,41 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import ClassTag from '../features/student/myclass/ClassTag';
-import styled from 'styled-components';
-import useClass from '../features/student/myclass/useClass';
-import Row from '../ui/Row';
-import Heading from '../ui/Heading';
-import Spinner from '../ui/Spinner';
-import Empty from '../ui/Empty';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ClassTag from "../features/student/myclass/ClassTag";
+import styled from "styled-components";
+import useClass from "../features/student/myclass/useClass";
+import Row from "../ui/Row";
+import Heading from "../ui/Heading";
+import Spinner from "../ui/Spinner";
+import Empty from "../ui/Empty";
 
 const ClassContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 60px;
 `;
 
 const SectionWrapper = styled.div`
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 `;
 
 const StudentClass = () => {
-    const { isLoading, classes, error } = useClass(); 
-    const navigate = useNavigate(); 
+    const { isLoading, classes, error } = useClass();
+    const navigate = useNavigate();
 
     const handleClassClick = (classId) => {
-        navigate(`/student/classes/${classId}`); 
+        navigate(`/students/classes/${classId}`);
     };
 
-    const notEnrolledClasses = classes?.filter(classItem =>
-        classItem.isEnrolled === false
+    const notEnrolledClasses = classes?.filter(
+        (classItem) => classItem.isEnrolled === false
     );
 
     if (isLoading) {
-        return <Spinner/>;
+        return <Spinner />;
     }
 
     if (!classes.length) {
-        return <Empty resource="classes"/>;
+        return <Empty resource="classes" />;
     }
 
     return (
