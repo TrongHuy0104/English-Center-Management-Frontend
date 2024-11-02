@@ -23,11 +23,7 @@ export async function getCurrentUser() {
         const res = await axios.get("/users/me", { withCredentials: true });
         return res;
     } catch (error) {
-        console.error(
-            "Failed to fetch current user:",
-            error.response?.data || error
-        );
-        throw error;
+        console.log(error);
     }
 }
 
