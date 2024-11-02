@@ -11,17 +11,17 @@ export async function getAllTeachers() {
 }
 
 //Update data of a teacher by teacherId
-export async function updateTeacherById(idTeacher, newData) {
-    try {
-        const res = await axios.put(`/teachers/${idTeacher}`, newData, {
-            withCredentials: true,
-        });
-        return res;
-    } catch (error) {
-        console.error("Error updating teacher profile:", error);
-        throw error;
-    }
-}
+// export async function updateTeacherById(idTeacher, newData) {
+//     try {
+//         const res = await axios.put(`/teachers/${idTeacher}`, newData, {
+//             withCredentials: true,
+//         });
+//         return res;
+//     } catch (error) {
+//         console.error("Error updating teacher profile:", error);
+//         throw error;
+//     }
+// }
 
 //Get schedule of a teacher by teacherId
 export async function getTeacherSchedule(teacherId) {
@@ -107,23 +107,23 @@ export async function getClassesByTeacherId(teacherId) {
     }
 }
 
-export async function uploadAvatar(id, avatarURL) {
-    try {
-        const res = await axios.put(
-            `/teachers/upload/${id}`,
-            { avatar: avatarURL },
-            {
-                withCredentials: true,
-            }
-        );
-        if (!res || !res.data) {
-            return null;
-        }
-        return res.data;
-    } catch (error) {
-        console.log({ message: error.message });
-    }
-}
+// export async function uploadAvatar(id, avatarURL) {
+//     try {
+//         const res = await axios.put(
+//             `/teachers/upload/${id}`,
+//             { avatar: avatarURL },
+//             {
+//                 withCredentials: true,
+//             }
+//         );
+//         if (!res || !res.data) {
+//             return null;
+//         }
+//         return res.data;
+//     } catch (error) {
+//         console.log({ message: error.message });
+//     }
+// }
 
 export async function getTeacher(id) {
     try {
