@@ -9,7 +9,7 @@ function useUser() {
     });
 
     const user = data?.data?.data?.data;
-
+    
     return { isLoading, user, error };
 }
 
