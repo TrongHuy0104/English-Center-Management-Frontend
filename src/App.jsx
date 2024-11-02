@@ -23,6 +23,8 @@ import Student from "./pages/Student";
 import Teacher from "./pages/Teacher";
 import Class from "./pages/Class";
 import ClassSchedule from "./features/admin/classes/ClassSchedule";
+import StudentProfile from "./pages/StudentProfile";
+import AttendanceReport from "./pages/AttendenceReport";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -68,9 +70,23 @@ function App() {
 
                         {/* Student */}
                         <Route path="students/my-class" element={<MyClass />} />
-                        <Route path="students/classes" element={<StudentClass />} />
-                        <Route path="students/classes/:classid" element={<StudentClassDetail />} />
+                        <Route
+                            path="students/classes"
+                            element={<StudentClass />}
+                        />
+                        <Route
+                            path="students/classes/:classid"
+                            element={<StudentClassDetail />}
+                        />
                         <Route path="students/fees" element={<Fees />} />
+                        <Route
+                            path="students/profile"
+                            element={<StudentProfile />}
+                        />
+                        <Route
+                            path="students/attendance"
+                            element={<AttendanceReport />}
+                        />
                     </Route>
                     <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />

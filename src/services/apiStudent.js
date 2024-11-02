@@ -9,7 +9,7 @@ export async function getStudents({ filter, page }) {
         const res = await axios.get(`${route}`, {
             withCredentials: true,
         });
-  
+
         return res;
     } catch (error) {
         console.log(error);
@@ -23,11 +23,11 @@ export async function createStudent(data) {
     return res;
 }
 
-export async function updateStudent(data, id) {
+export async function updateStudent(id, data) {
     const res = await axios.patch(`/students/${id}`, data, {
         withCredentials: true,
     });
-    return res;
+    return res.data;
 }
 
 export async function disableStudent(id) {
@@ -44,63 +44,81 @@ export async function enableStudent(id) {
     return res;
 }
 
-export async function getAllFeeOfStudent({ page, limit , status }) {
-  try {
-    const res = await axios.get(`/students/fees`, {
-      params: {status, page, limit },
-      withCredentials: true,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+export async function getAllFeeOfStudent({ page, limit, status }) {
+    try {
+        const res = await axios.get(`/students/fees`, {
+            params: { status, page, limit },
+            withCredentials: true,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async function getScheduleOfStudent() {
-  try {
-    const res = await axios.get("/students/my-class", {
-      withCredentials: true,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        const res = await axios.get("/students/my-class", {
+            withCredentials: true,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async function getAllClass() {
-  try {
-    const res = await axios.get("/students/classes", {
-      withCredentials: true,
-    });
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        const res = await axios.get("/students/classes", {
+            withCredentials: true,
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async function getClassById(classId) {
-  try {
-    const res = await axios.get(`students/classes/${classId}`, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        const res = await axios.get(`students/classes/${classId}`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async function sendEnrollRequest(classId) {
-  try {
-    const res = await axios.post(
-      "/students/classes/enroll-request",
-      { classId }, // Gửi ID của lớp vào request body
-      {
-        withCredentials: true,
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.error("Failed to send enroll request:", error);
-    throw error;
-  }
+    try {
+        const res = await axios.post(
+            "/students/classes/enroll-request",
+            { classId }, // Gửi ID của lớp vào request body
+            {
+                withCredentials: true,
+            }
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Failed to send enroll request:", error);
+        throw error;
+    }
+}
+
+export async function uploadAvatar(id, avatarURL) {
+    try {
+        const res = await axios.put(
+            `/students/upload/${id}`,
+            { avatar: avatarURL },
+            {
+                withCredentials: true,
+            }
+        );
+        if (!res || !res.data) {
+            return null;
+        }
+        return res.data;
+    } catch (error) {
+        console.log({ message: error.message });
+    }
 }

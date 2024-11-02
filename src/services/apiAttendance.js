@@ -22,3 +22,17 @@ export const getTeacherAttendanceSummary = async (
     throw error;
   }
 };
+
+export async function getAttendanceByStudentId(id) {
+  try {
+    const res = await axios.get(`/attendances/attendance/student/${id}`, {
+      withCredentials: true,
+    });
+    if (!res || !res.data) {
+      return null;
+    }
+    return res.data;
+  } catch (error) {
+    console.log("Error get student by id", error);
+  }
+}
