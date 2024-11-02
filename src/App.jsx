@@ -11,9 +11,9 @@ import User from "./pages/User";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import ProfileTeacher from "./pages/ProfileTeacher";
-import Schedule from "./pages/Schedule";
-import TakeAttendance from "./pages/TakeAttendance";
-import TakeAttendancePage from "./pages/Attendance";
+// import Schedule from "./pages/Schedule";
+// import TakeAttendance from "./pages/TakeAttendance";
+// import TakeAttendancePage from "./pages/Attendance";
 import MyClass from "./pages/MyClass";
 import Fees from "./pages/Fees";
 import FeesPage from "./pages/FeePages";
@@ -60,10 +60,10 @@ function App() {
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
                         {/* Teacher */}
-                        <Route path="teacher/attendance" element={<TakeAttendance />} />
-                        <Route path="teacher/schedule" element={<Schedule/>} />
+                        {/* <Route path="teacher/attendance" element={<TakeAttendance />} /> */}
+                        {/* <Route path="teacher/schedule" element={<Schedule/>} /> */}
                         <Route path="teacher/profile" element={<ProfileTeacher/>} />
-                        <Route path="/teacher/attendance/take-attendance" element={<TakeAttendancePage />} />
+                        {/* <Route path="/teacher/attendance/take-attendance" element={<TakeAttendancePage />} /> */}
                         <Route path="fees" element={<FeesPage />} />
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
                         <Route path="salaries" element={<AdminSalaryPage />} />
