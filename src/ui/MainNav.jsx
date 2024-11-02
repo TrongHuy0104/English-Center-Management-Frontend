@@ -7,6 +7,7 @@ import {
     HiCurrencyDollar,
     HiClipboardDocumentCheck,
     HiEnvelopeOpen,
+    HiOutlineAcademicCap,
 } from "react-icons/hi2";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { RiAdminFill } from "react-icons/ri";
@@ -122,23 +123,28 @@ const navAdminList = [
 const navStudentList = [
     {
         title: "My CLass",
-        route: "student/my-class",
+        route: "students/my-class",
         icon: <HiOutlineCalendarDays />,
     },
     {
+        title: "Classes",
+        route: "students/classes",
+        icon: <HiOutlineAcademicCap />,
+    },
+    {
         title: "Attendance",
-        route: "student/attendance",
+        route: "students/attendance",
         icon: <HiClipboardDocumentCheck />,
     },
     {
         title: "Fees",
-        route: "student/fees",
+        route: "students/fees",
         icon: <HiCurrencyDollar />,
     },
 
     {
         title: "Messages",
-        route: "student/messages",
+        route: "students/messages",
         icon: <HiEnvelopeOpen />,
     },
 ];

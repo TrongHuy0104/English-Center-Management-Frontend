@@ -6,15 +6,40 @@ import { HiEye, HiPencil, HiTrash } from "react-icons/hi2";
 
 import Tag from "../../../ui/Tag";
 import Table from "../../../ui/Table";
-import Menus from "../../../ui/Menus";
-import Modal from "../../../ui/Modal";
-import ConfirmDelete from "../../../ui/ConfirmDelete";
+import toast from "react-hot-toast";
+
 
 const ClassName = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
+  // cursor: pointer;
+  // &:hover {
+  //   color: #4f46e5;
+  // }
+  transition: color 1s ease;
+
+  /* Hover effect with animated gradient */
+  &:hover {
+    background: linear-gradient(45deg, #ff6ec4, #7873f5, #4caf50, #ffeb3b);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 10s ease infinite;
+  }
+
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 `;
 
 const Stacked = styled.div`
@@ -38,21 +63,27 @@ const Amount = styled.div`
 `;
 
 function FeeRow({
-  fee: { _id, classDetails, students, price, classes, fee_name },
-  onEdit,
-  onDelete,
+  fee: { _id, classDetails, students, price, classes, fee_name }
 }) {
   const navigate = useNavigate();
 
-  // Lấy thông tin của class từ classDetails
-  const classInfo = classDetails?.[0] || {};  // Tránh lỗi null
+  const handleEventClick = () => {
+    const classId = classInfo._id;
+    if (!classId) return toast.error("No class found with that ID!")
+      else{
+        toast.success("Descripton for this class!")
+      }
+    navigate(`/student/classes/${classId}`); 
+  };
+
+  // Extract class and student information
+  const classInfo = classDetails?.[0] || {}; // Avoid null
   const className = classInfo?.name || "Class not found";
-
-  // Lấy thông tin sinh viên và trạng thái thanh toán
-  const studentInfo = students?.[0] || {};  // Tránh lỗi null
+  const studentInfo = students?.[0] || {};
   const studentStatus = studentInfo?.status || "Status not found";
+  const paymentDate = studentInfo?.payment_date ? format(new Date(studentInfo.payment_date), "MMM dd yyyy") : "Not paid";
 
-  // Lấy trạng thái thanh toán của học phí
+  // Determine fee status
   const feeStatus = studentStatus === "paid"
     ? "paid"
     : new Date(classes?.[0]?.due_date) < new Date()
@@ -67,47 +98,26 @@ function FeeRow({
 
   return (
     <Table.Row>
-      {/* Hiển thị tên lớp */}
-      <ClassName>{className}</ClassName>
-
+      <ClassName onClick={handleEventClick} >{className}</ClassName>
       <Stacked>
-        {/* Hiển thị tên học phí */}
         <span>{fee_name}</span>
       </Stacked>
 
       <Stacked>
-        {/* Hiển thị ngày đến hạn */}
-        <span>Due Date: {format(new Date(classes?.[0]?.due_date), "MMM dd yyyy")}</span>
+        <span>
+          {classes?.[0]?.due_date
+            ? format(new Date(classes[0].due_date), "MMM dd yyyy")
+            : "No due date"}
+        </span>
       </Stacked>
 
-      {/* Hiển thị trạng thái thanh toán */}
       <Tag type={statusToTagName[feeStatus]}>{feeStatus}</Tag>
 
-      {/* Hiển thị số tiền */}
       <Amount>${price}</Amount>
 
-      <Modal>
-        <Menus.Menu>
-          <Menus.Toggle id={_id} />
-          <Menus.List id={_id}>
-            <Menus.Button
-              icon={<HiEye />}
-              onClick={() => navigate(`/fees/${_id}`)}
-            >
-              See Details
-            </Menus.Button>
-            <Menus.Button icon={<HiPencil />} onClick={() => onEdit(_id)}>
-              Edit
-            </Menus.Button>
-            <Modal.Open opens="delete-fee">
-              <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-            </Modal.Open>
-          </Menus.List>
-        </Menus.Menu>
-        <Modal.Window name="delete-fee">
-          <ConfirmDelete resourceName="fee" onConfirm={() => onDelete(_id)} />
-        </Modal.Window>
-      </Modal>
+      <Stacked>
+        <span>{paymentDate}</span>
+      </Stacked>
     </Table.Row>
   );
 }
