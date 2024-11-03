@@ -30,10 +30,6 @@ function UpdateFeeForm({ feeId, onCloseModal, onUpdate }) {
           const res = await getFee(feeId);
           const fee = res.data.data.fee;
 
-          console.log("fee1:", fee);
-          console.log("feidđ", feeId);
-          console.log("fee2:", res);
-
           setFeeData(fee);
 
           setValue("fee_name", fee.fee_name || "");
@@ -48,8 +44,6 @@ function UpdateFeeForm({ feeId, onCloseModal, onUpdate }) {
   }, [feeId, setValue]);
 
   const onSubmitHandler = async (formData) => {
-    console.log("Submitting data:", formData);
-    console.log("feidđ", feeId);
     try {
       updateFee({ id: feeId, ...formData });
       onCloseModal?.();
