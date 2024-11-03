@@ -60,10 +60,10 @@ function App() {
                         <Route path="booking" element={<Bookings />} />
                         <Route path="cabin" element={<Cabins />} />
                         {/* Teacher */}
-                        <Route path="teacher/attendance" element={<TakeAttendance />} />
-                        <Route path="teacher/schedule" element={<Schedule/>} />
+                        {/* <Route path="teacher/attendance" element={<TakeAttendance />} /> */}
+                        {/* <Route path="teacher/schedule" element={<Schedule/>} /> */}
                         <Route path="teacher/profile" element={<ProfileTeacher/>} />
-                        <Route path="/teacher/attendance/take-attendance" element={<TakeAttendancePage />} />
+                        {/* <Route path="/teacher/attendance/take-attendance" element={<TakeAttendancePage />} /> */}
                         <Route path="fees" element={<FeesPage />} />
                         <Route path="fees/:feeId" element={<FeeWithClass />} />
                         <Route path="salaries" element={<AdminSalaryPage />} />
