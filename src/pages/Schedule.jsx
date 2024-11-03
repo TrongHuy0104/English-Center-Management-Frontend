@@ -1,5 +1,5 @@
 // src/pages/FeesPage.jsx
-import TeacherSchedule from "../features/teacher/schedule/TeacherSchedule";
+// import TeacherSchedule from "../features/teacher/schedule/TeacherSchedule";
 import Row from "../ui/Row";
 
 

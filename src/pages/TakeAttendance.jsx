@@ -1,6 +1,6 @@
 // src/pages/FeesPage.jsx
 import Row from "../ui/Row";
-import TeacherAttendance from "../features/teacher/attendance/TeacherAttendance";
+// import TeacherAttendance from "../features/teacher/attendance/TeacherAttendance";
 
 function AttendancePage() {
   return (
