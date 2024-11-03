@@ -156,11 +156,6 @@ const navStudentList = [
 ];
 const navTeacherList = [
     {
-        title: "Home",
-        route: "dashboard",
-        icon: <HiOutlineHome />,
-    },
-    {
         title: "Attendance",
         route: "teacher/attendance",
         icon: <HiOutlineClipboardDocumentCheck />,
@@ -170,11 +165,6 @@ const navTeacherList = [
         title: "Schedule",
         route: "teacher/schedule",
         icon: <HiOutlineCalendarDays />,
-    },
-    {
-        title: "Messages",
-        route: "teacher/messages",
-        icon: <HiEnvelopeOpen />,
     },
     {
         title: "Profile",
