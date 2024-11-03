@@ -116,10 +116,10 @@ export async function getCenterByTeacherId(teacherId) {
 }
 
 // //Teacher take attendance
-export async function takeAttendance(teacherId, attendanceList = []) {
+export async function takeAttendance(teacherId, slot, attendanceList = []) {
     try {
         const res = await axios.patch(
-            `/teachers/${teacherId}/attendance`,
+            `/teachers/${teacherId}/attendance/${slot}`,
             { attendanceList },
             { withCredentials: true }
         );

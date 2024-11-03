@@ -27,9 +27,9 @@ function ProtectedRoutes({ children }) {
             setHasNavigated(true);
             navigate("/teacher/schedule");
         }
-        if (user?.user.role !== "student" && !hasNavigated) {
+        if (user?.user.role === "student" && !hasNavigated) {
             setHasNavigated(true);
-            navigate("students/my-class");
+            navigate("/students/my-class");
         }
     }, [error, isLoading, navigate, user?.user.role, hasNavigated]);
 

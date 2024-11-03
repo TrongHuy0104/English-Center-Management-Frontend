@@ -175,18 +175,6 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
                 </SelectWrapper>
             </FormRow>
 
-            {/* Field Month */}
-            <FormRow label="Month" error={errors?.month?.message}>
-                <StyledInput
-                    type="string"
-                    id="month"
-                    placeholder={"Enter month"}
-                    {...register("month", {
-                        required: "This field is required",
-                    })}
-                />
-            </FormRow>
-
             {/* Hidden Field for Salary */}
             <input
                 type="hidden"
@@ -240,6 +228,17 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
                     readOnly
                 />
             </FormRow>
+
+            {/* Field Month */}
+            <FormRow label="Note" error={errors?.month?.message}>
+                <StyledInput
+                    type="string"
+                    id="month"
+                    placeholder={"Enter note"}
+                    {...register("month")}
+                />
+            </FormRow>
+
             <FormRow>
                 <Button
                     variation="secondary"
