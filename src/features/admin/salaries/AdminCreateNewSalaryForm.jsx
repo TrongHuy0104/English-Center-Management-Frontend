@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSalary from "./useSalary";
 import Button from "../../../ui/Button";
@@ -64,6 +64,7 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
     const fetchTeachers = async () => {
       try {
         const res = await getClassTeachers();
+
         setTeachers(res.data.data.data);
       } catch (error) {
         console.error("Error fetching teacher list:", error);
