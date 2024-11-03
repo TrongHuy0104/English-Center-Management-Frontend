@@ -123,23 +123,13 @@ const navTeacherList = [
         route: "teacher/attendance",
         icon: <HiOutlineClipboardDocumentCheck />,
     },
-
-    {
-        title: "Schedule",
-        route: "teacher/schedule",
-        icon: <HiOutlineCalendarDays />,
-    },
     {
         title: "Messages",
         route: "teaher/messages",
         icon: <HiEnvelopeOpen />,
     },
-    {
-        title: "Profile",
-        route: "teacher/profile",
-        icon: <HiOutlineUsers />,
-    },
 ];
+
 const navStudentList = [
     {
         title: "My CLass",
