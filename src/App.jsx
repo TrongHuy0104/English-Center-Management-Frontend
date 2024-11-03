@@ -25,6 +25,7 @@ import Class from "./pages/Class";
 import ClassSchedule from "./features/admin/classes/ClassSchedule";
 import StudentProfile from "./pages/StudentProfile";
 import AttendanceReport from "./pages/AttendenceReport";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -80,8 +81,8 @@ function App() {
                         />
                         <Route path="students/fees" element={<Fees />} />
                         <Route
-                            path="students/profile"
-                            element={<StudentProfile />}
+                            path="/profile"
+                            element={<UserProfile />}
                         />
                         <Route
                             path="students/attendance"

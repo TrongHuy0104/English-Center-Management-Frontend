@@ -141,17 +141,6 @@ const navStudentList = [
         route: "students/fees",
         icon: <HiCurrencyDollar />,
     },
-
-    {
-        title: "Messages",
-        route: "students/messages",
-        icon: <HiEnvelopeOpen />,
-    },
-    {
-        title: "Profile",
-        route: "students/profile",
-        icon: <HiOutlineUsers />,
-    },
 ];
 
 // const navTeacherList = [];

@@ -4,8 +4,10 @@ import Table from "../ui/Table";
 import { useState } from "react";
 import styled from "styled-components";
 import Heading from "../ui/Heading";
-import useClass from "../features/student/profiles/useClass";
+import useClass from "../features/student/myclass/useClass";
 import useTeacher from "../features/student/profiles/useTeacher";
+import Empty from "../ui/Empty";
+import Spinner from "../ui/Spinner";
 
 const AttendanceReport = () => {
   const { user } = useUser();
@@ -14,7 +16,9 @@ const AttendanceReport = () => {
     user.roleDetails._id
   );
   const classIds = attendanceReports.map((report) => report.class);
-  const { classes } = useClass(classIds);
+  console.log(classIds);
+  
+  const { classes } = useClass();
   const teacherIds = attendanceReports.map(
     (report) => report.teacher_attendance.teacher_id
   );
@@ -32,10 +36,13 @@ const AttendanceReport = () => {
   };
 
   if (isLoading) {
-    return <div>Loading attendance report...</div>;
+    return <Spinner/>;
   }
   if (error) {
-    return <div>Error fetching attendance report: {error.message}</div>;
+    return <Error message={error.message}/> ;
+  }
+  if (!attendanceReports.length) {
+    return <Empty resource="attendance report"/>;
   }
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -51,7 +58,8 @@ const AttendanceReport = () => {
 
   const filteredReports = selectedClass
     ? attendanceReports.filter((report) => report.class === selectedClass)
-    : [];
+    : attendanceReports; // Show all reports if no class is selected
+
 
   return (
     <div>
@@ -68,25 +76,25 @@ const AttendanceReport = () => {
             </Table.Header>
             <div>
               {classes
-                .slice()
-                .sort((a, b) => {
-                  const nameA = a?.data?.class?.name?.toLowerCase() || "";
-                  const nameB = b?.data?.class?.name?.toLowerCase() || "";
-                  return nameA.localeCompare(nameB);
-                })
+                .filter((classItem) =>
+                  classItem.students.some(
+                    (student) =>
+                      student._id === user.roleDetails._id &&
+                      student.enrollStatus !== "Not Enroll"
+                  )
+                )
                 .map((classItem) => (
                   <StyledRow
                     key={classItem._id}
-                    onClick={() =>
-                      handleClassSelect(classItem?.data?.class._id)
-                    }
+                    onClick={() => handleClassSelect(classItem._id)}
                   >
                     <Stacked>
-                      <span>{classItem?.data?.class?.name}</span>
+                      <span>{classItem.name}</span>
                     </Stacked>
                   </StyledRow>
                 ))}
             </div>
+
           </Table>
         </div>
         <div style={{ flex: 2 }}>
@@ -122,9 +130,8 @@ const AttendanceReport = () => {
                         <Stacked>
                           <span>
                             {" "}
-                            {`${attendanceReport.start_time || "N/A"} - ${
-                              attendanceReport.end_time || "N/A"
-                            }`}
+                            {`${attendanceReport.start_time || "N/A"} - ${attendanceReport.end_time || "N/A"
+                              }`}
                           </span>
                         </Stacked>
                         <Stacked>
