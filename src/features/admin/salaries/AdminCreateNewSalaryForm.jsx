@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSalary from "./useSalary";
 import Button from "../../../ui/Button";
 import FormRow from "../../../ui/FormRow";
 import Input from "../../../ui/Input";
 import styled from "styled-components";
-import { getAllTeachers, getTeacher } from "../../../services/apiTeacher";
+import { getClassTeachers, getTeacher } from "../../../services/apiTeacher";
 import { getTeacherAttendanceSummary } from "../../../services/apiAttendance";
 
 const StyledInput = styled(Input)`
@@ -63,7 +63,7 @@ function AdminCreateNewSalaryForm({ onCloseModal, onSubmit }) {
     useEffect(() => {
         const fetchTeachers = async () => {
             try {
-                const res = await getAllTeachers();
+                const res = await getClassTeachers();
 
                 setTeachers(res.data.data.data);
             } catch (error) {

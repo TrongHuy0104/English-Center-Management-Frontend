@@ -15,6 +15,7 @@ import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { PiStudentDuotone } from "react-icons/pi";
 import { MdOutlineClass } from "react-icons/md";
+import { HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
 import useUser from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -153,6 +154,34 @@ const navStudentList = [
         icon: <HiOutlineUsers />,
     },
 ];
+const navTeacherList = [
+    {
+        title: "Home",
+        route: "dashboard",
+        icon: <HiOutlineHome />,
+    },
+    {
+        title: "Attendance",
+        route: "teacher/attendance",
+        icon: <HiOutlineClipboardDocumentCheck />,
+    },
+
+    {
+        title: "Schedule",
+        route: "teacher/schedule",
+        icon: <HiOutlineCalendarDays />,
+    },
+    {
+        title: "Messages",
+        route: "teacher/messages",
+        icon: <HiEnvelopeOpen />,
+    },
+    {
+        title: "Profile",
+        route: "teacher/profile",
+        icon: <HiOutlineUsers />,
+    },
+];
 
 // const navTeacherList = [];
 
@@ -161,6 +190,7 @@ function MainNav() {
     let navList;
     if (user.user?.role === "admin") navList = navAdminList;
     if (user.user?.role === "student") navList = navStudentList;
+    if (user.user?.role === "teacher") navList = navTeacherList;
     return (
         <nav>
             <NavList>

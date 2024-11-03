@@ -25,6 +25,10 @@ import Class from "./pages/Class";
 import ClassSchedule from "./features/admin/classes/ClassSchedule";
 import StudentProfile from "./pages/StudentProfile";
 import AttendanceReport from "./pages/AttendenceReport";
+import ProfileTeacher from "./pages/ProfileTeacher";
+import TeacherClassSchedule from "./pages/TeacherSchedule";
+import TakeAttendanceStudent from "./pages/TakeAttendanceStudent";
+import TeacherClass from "./pages/TeacherClass";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -86,6 +90,23 @@ function App() {
                         <Route
                             path="students/attendance"
                             element={<AttendanceReport />}
+                        />
+                        {/* Teacher */}
+                        <Route
+                            path="teacher/attendance"
+                            element={<TeacherClass />}
+                        />
+                        <Route
+                            path="teacher/profile"
+                            element={<ProfileTeacher />}
+                        />
+                        <Route
+                            path="teacher/schedule"
+                            element={<TeacherClassSchedule />}
+                        />
+                        <Route
+                            path="/teacher/attendance/:slot"
+                            element={<TakeAttendanceStudent />}
                         />
                     </Route>
                     <Route path="register" element={<Register />} />
