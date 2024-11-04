@@ -48,6 +48,7 @@ function FeeRow({ fee, onDelete, onUpdate }) {
       <StudentName>{fee.fee_name || "Fee not found"}</StudentName>
       <Amount>${fee.price}</Amount>
       <p>{fee.description}</p>
+      <div></div>
 
       <div>
         <Modal>

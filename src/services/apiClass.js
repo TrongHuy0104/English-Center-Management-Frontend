@@ -14,14 +14,14 @@ export async function getClasses({ page }) {
 }
 
 export async function getAllClasses() {
-    try {
-        const res = await axios.get("classes/all-classes", {
-            withCredentials: true,
-        });
-        return res;
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    const res = await axios.get("classes/all-classes", {
+      withCredentials: true,
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function createClass(data) {
