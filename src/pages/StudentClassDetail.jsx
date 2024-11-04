@@ -108,11 +108,21 @@ const StudentDetail = () => {
   if (!classDetail.schedule.length) return <Empty resource="class schedule" />;
   
 
-  const formattedDeadline = format(new Date(classDetail.enrollment_deadline), 'MMMM dd, yyyy');
-  const firstSchedule = classDetail.schedule[0];
-  const lastSchedule = classDetail.schedule[classDetail.schedule.length - 1];
-  const formattedFirstDate = format(new Date(firstSchedule.date), 'dd/MM/yyyy');
-  const formattedLastDate = format(new Date(lastSchedule.date), 'dd/MM/yyyy');
+  const formattedDeadline = classDetail.enrollment_deadline
+  ? format(new Date(classDetail.enrollment_deadline), 'MMMM dd, yyyy')
+  : 'No deadline available';
+
+const firstSchedule = classDetail.schedule[0];
+const lastSchedule = classDetail.schedule[classDetail.schedule.length - 1];
+
+const formattedFirstDate = firstSchedule?.date
+  ? format(new Date(firstSchedule.date), 'dd/MM/yyyy')
+  : 'N/A';
+
+const formattedLastDate = lastSchedule?.date
+  ? format(new Date(lastSchedule.date), 'dd/MM/yyyy')
+  : 'N/A';
+
 
   return (
     <Row type="vertical">
@@ -145,7 +155,7 @@ const StudentDetail = () => {
           </ClassInfo>
 
           <ClassDetailTitle>Schedule</ClassDetailTitle>
-            {classDetail.schedule.map((item, index) => (
+            {classDetail?.schedule.map((item, index) => (
               <ClassInfo key={index}>
                 <p><strong>Slot {item.slot}:</strong> {item.start_time} - {item.end_time}</p>
                 <p><strong>Date:</strong> {format(new Date(item.date), 'dd/MM/yyyy')}</p>

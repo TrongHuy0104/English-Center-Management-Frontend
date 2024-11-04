@@ -114,11 +114,11 @@ const navAdminList = [
         route: "salaries",
         icon: <HiCurrencyDollar />,
     },
-    {
-        title: "Profile",
-        route: "users",
-        icon: <HiOutlineUsers />,
-    },
+    // {
+    //     title: "Profile",
+    //     route: "users",
+    //     icon: <HiOutlineUsers />,
+    // },
 ];
 
 const navStudentList = [
@@ -142,17 +142,6 @@ const navStudentList = [
         route: "students/fees",
         icon: <HiCurrencyDollar />,
     },
-
-    {
-        title: "Messages",
-        route: "students/messages",
-        icon: <HiEnvelopeOpen />,
-    },
-    {
-        title: "Profile",
-        route: "students/profile",
-        icon: <HiOutlineUsers />,
-    },
 ];
 const navTeacherList = [
     {
@@ -166,11 +155,11 @@ const navTeacherList = [
         route: "teacher/schedule",
         icon: <HiOutlineCalendarDays />,
     },
-    {
-        title: "Profile",
-        route: "teacher/profile",
-        icon: <HiOutlineUsers />,
-    },
+    // {
+    //     title: "Profile",
+    //     route: "teacher/profile",
+    //     icon: <HiOutlineUsers />,
+    // },
 ];
 
 // const navTeacherList = [];

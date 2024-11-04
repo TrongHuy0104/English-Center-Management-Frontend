@@ -25,6 +25,7 @@ import Class from "./pages/Class";
 import ClassSchedule from "./features/admin/classes/ClassSchedule";
 import StudentProfile from "./pages/StudentProfile";
 import AttendanceReport from "./pages/AttendenceReport";
+import UserProfile from "./pages/UserProfile";
 import ProfileTeacher from "./pages/ProfileTeacher";
 import TeacherClassSchedule from "./pages/TeacherSchedule";
 import TakeAttendanceStudent from "./pages/TakeAttendanceStudent";
@@ -119,6 +120,7 @@ function App() {
                                 path="/teacher/attendance/:slot"
                                 element={<TakeAttendanceStudent />}
                             />
+                            <Route path="/profile" element={<UserProfile />} />
                         </Route>
                         <Route path="register" element={<Register />} />
                         <Route path="login" element={<Login />} />

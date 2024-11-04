@@ -23,14 +23,14 @@ function ProtectedRoutes({ children }) {
             setHasNavigated(false);
             navigate("/login");
         }
-        if (user?.user.role === "teacher" && !hasNavigated) {
-            setHasNavigated(true);
-            navigate("/teacher/schedule");
-        }
-        if (user?.user.role === "student" && !hasNavigated) {
-            setHasNavigated(true);
-            navigate("/students/my-class");
-        }
+        // if (user?.user.role === "teacher" && !hasNavigated) {
+        //     setHasNavigated(true);
+        //     navigate("/teacher/schedule");
+        // }
+        // if (user?.user.role === "student" && !hasNavigated) {
+        //     setHasNavigated(true);
+        //     navigate("/students/my-class");
+        // }
     }, [error, isLoading, navigate, user?.user.role, hasNavigated]);
 
     // 2. While loading show s spinner
