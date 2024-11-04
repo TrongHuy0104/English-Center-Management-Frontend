@@ -39,7 +39,7 @@ function UpdateFeeForm({ feeId, onCloseModal, onUpdate }) {
           console.error("Error fetching fee data:", error);
         }
       };
-      fetchFeeData();
+      fetchFeeData(); // Gọi hàm fetchFeeData trong useEffect
     }
   }, [feeId, setValue]);
 

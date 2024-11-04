@@ -38,10 +38,8 @@ export async function CreateFee(formData) {
       // Một lỗi xảy ra trong quá trình thiết lập yêu cầu
       console.error("Error in setting up the request:", error.message);
     }
-    throw error;
   }
 }
-
 export async function deleteFee(id) {
   try {
     const res = await axios.patch(

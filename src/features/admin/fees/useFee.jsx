@@ -30,6 +30,7 @@ function useFee(page = 1, limit = 10) {
 
   // Lấy danh sách phí từ dữ liệu trả về
   const fees = data?.data;
+  console.log("fees", fees);
 
   return {
     isLoading,

@@ -10,9 +10,25 @@ import Dashboard from "./pages/Dashboard";
 import User from "./pages/User";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
-import AdminFeesPage from "./pages/AdminFeePages";
-import AdminFeeWithClass from "./pages/AdminFeeWithClass";
+import MyClass from "./pages/MyClass";
+import Fees from "./pages/Fees";
+import FeesPage from "./pages/AdminFeePages";
+import FeeWithClass from "./pages/AdminFeeWithClass";
+import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import Register from "./pages/Register";
+import StudentClass from "./pages/StudentClass";
+import StudentClassDetail from "./pages/StudentClassDetail";
+import Admin from "./pages/Admin";
+import Student from "./pages/Student";
+import Teacher from "./pages/Teacher";
+import Class from "./pages/Class";
+import ClassSchedule from "./features/admin/classes/ClassSchedule";
+import StudentProfile from "./pages/StudentProfile";
+import AttendanceReport from "./pages/AttendenceReport";
+import ProfileTeacher from "./pages/ProfileTeacher";
+import TeacherClassSchedule from "./pages/TeacherSchedule";
+import TakeAttendanceStudent from "./pages/TakeAttendanceStudent";
+import TeacherClass from "./pages/TeacherClass";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,10 +55,35 @@ function App() {
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="user" element={<User />} />
+            <Route path="admin" element={<Admin />} />
+            <Route path="student" element={<Student />} />
+            <Route path="teacher" element={<Teacher />} />
+            <Route path="class" element={<Class />} />
+            <Route path="class/:classId/schedule" element={<ClassSchedule />} />
             <Route path="booking" element={<Bookings />} />
             <Route path="cabin" element={<Cabins />} />
-            <Route path="fees" element={<AdminFeesPage />} />
-            <Route path="fees/:feeId" element={<AdminFeeWithClass />} />
+            <Route path="fees" element={<FeesPage />} />
+            <Route path="fees/:feeId" element={<FeeWithClass />} />
+            <Route path="salaries" element={<AdminSalaryPage />} />
+
+            {/* Student */}
+            <Route path="students/my-class" element={<MyClass />} />
+            <Route path="students/classes" element={<StudentClass />} />
+            <Route
+              path="students/classes/:classid"
+              element={<StudentClassDetail />}
+            />
+            <Route path="students/fees" element={<Fees />} />
+            <Route path="students/profile" element={<StudentProfile />} />
+            <Route path="students/attendance" element={<AttendanceReport />} />
+            {/* Teacher */}
+            <Route path="teacher/attendance" element={<TeacherClass />} />
+            <Route path="teacher/profile" element={<ProfileTeacher />} />
+            <Route path="teacher/schedule" element={<TeacherClassSchedule />} />
+            <Route
+              path="/teacher/attendance/:slot"
+              element={<TakeAttendanceStudent />}
+            />
           </Route>
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
