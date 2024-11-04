@@ -29,6 +29,7 @@ import ProfileTeacher from "./pages/ProfileTeacher";
 import TeacherClassSchedule from "./pages/TeacherSchedule";
 import TakeAttendanceStudent from "./pages/TakeAttendanceStudent";
 import TeacherClass from "./pages/TeacherClass";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -40,101 +41,112 @@ const queryClient = new QueryClient({
 
 function App() {
     return (
-        <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
-            <GlobalStyles />
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        element={
-                            <ProtectedRoutes>
-                                <AppLayout />
-                            </ProtectedRoutes>
-                        }
-                    >
+        <DarkModeProvider>
+            <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools initialIsOpen={false} />
+                <GlobalStyles />
+                <BrowserRouter>
+                    <Routes>
                         <Route
-                            index
-                            element={<Navigate replace to="dashboard" />}
-                        />
-                        <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="user" element={<User />} />
-                        <Route path="admin" element={<Admin />} />
-                        <Route path="student" element={<Student />} />
-                        <Route path="teacher" element={<Teacher />} />
-                        <Route path="class" element={<Class />} />
-                        <Route
-                            path="class/:classId/schedule"
-                            element={<ClassSchedule />}
-                        />
-                        <Route path="booking" element={<Bookings />} />
-                        <Route path="cabin" element={<Cabins />} />
-                        <Route path="fees" element={<FeesPage />} />
-                        <Route path="fees/:feeId" element={<FeeWithClass />} />
-                        <Route path="salaries" element={<AdminSalaryPage />} />
+                            element={
+                                <ProtectedRoutes>
+                                    <AppLayout />
+                                </ProtectedRoutes>
+                            }
+                        >
+                            <Route
+                                index
+                                element={<Navigate replace to="dashboard" />}
+                            />
+                            <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="user" element={<User />} />
+                            <Route path="admin" element={<Admin />} />
+                            <Route path="student" element={<Student />} />
+                            <Route path="teacher" element={<Teacher />} />
+                            <Route path="class" element={<Class />} />
+                            <Route
+                                path="class/:classId/schedule"
+                                element={<ClassSchedule />}
+                            />
+                            <Route path="booking" element={<Bookings />} />
+                            <Route path="cabin" element={<Cabins />} />
+                            <Route path="fees" element={<FeesPage />} />
+                            <Route
+                                path="fees/:feeId"
+                                element={<FeeWithClass />}
+                            />
+                            <Route
+                                path="salaries"
+                                element={<AdminSalaryPage />}
+                            />
 
-                        {/* Student */}
-                        <Route path="students/my-class" element={<MyClass />} />
-                        <Route
-                            path="students/classes"
-                            element={<StudentClass />}
-                        />
-                        <Route
-                            path="students/classes/:classid"
-                            element={<StudentClassDetail />}
-                        />
-                        <Route path="students/fees" element={<Fees />} />
-                        <Route
-                            path="students/profile"
-                            element={<StudentProfile />}
-                        />
-                        <Route
-                            path="students/attendance"
-                            element={<AttendanceReport />}
-                        />
-                        {/* Teacher */}
-                        <Route
-                            path="teacher/attendance"
-                            element={<TeacherClass />}
-                        />
-                        <Route
-                            path="teacher/profile"
-                            element={<ProfileTeacher />}
-                        />
-                        <Route
-                            path="teacher/schedule"
-                            element={<TeacherClassSchedule />}
-                        />
-                        <Route
-                            path="/teacher/attendance/:slot"
-                            element={<TakeAttendanceStudent />}
-                        />
-                    </Route>
-                    <Route path="register" element={<Register />} />
-                    <Route path="login" element={<Login />} />
-                </Routes>
-            </BrowserRouter>
-            <Toaster
-                position="top-right"
-                reverseOrder={false}
-                gutter={12}
-                containerStyle={{ margin: "8px" }}
-                toastOptions={{
-                    success: {
-                        duration: 3000,
-                    },
-                    error: {
-                        duration: 5000,
-                    },
-                    style: {
-                        fontSize: "16px",
-                        maxWidth: "500px",
-                        padding: "16px 24px",
-                        backgroundColor: "var(--color-grey-0)",
-                        color: "var(--color-grey-700)",
-                    },
-                }}
-            />
-        </QueryClientProvider>
+                            {/* Student */}
+                            <Route
+                                path="students/my-class"
+                                element={<MyClass />}
+                            />
+                            <Route
+                                path="students/classes"
+                                element={<StudentClass />}
+                            />
+                            <Route
+                                path="students/classes/:classid"
+                                element={<StudentClassDetail />}
+                            />
+                            <Route path="students/fees" element={<Fees />} />
+                            <Route
+                                path="students/profile"
+                                element={<StudentProfile />}
+                            />
+                            <Route
+                                path="students/attendance"
+                                element={<AttendanceReport />}
+                            />
+                            {/* Teacher */}
+                            <Route
+                                path="teacher/attendance"
+                                element={<TeacherClass />}
+                            />
+                            <Route
+                                path="teacher/profile"
+                                element={<ProfileTeacher />}
+                            />
+                            <Route
+                                path="teacher/schedule"
+                                element={<TeacherClassSchedule />}
+                            />
+                            <Route
+                                path="/teacher/attendance/:slot"
+                                element={<TakeAttendanceStudent />}
+                            />
+                        </Route>
+                        <Route path="register" element={<Register />} />
+                        <Route path="login" element={<Login />} />
+                    </Routes>
+                </BrowserRouter>
+                <Toaster
+                    position="top-right"
+                    reverseOrder={false}
+                    gutter={12}
+                    containerStyle={{ margin: "8px" }}
+                    toastOptions={{
+                        success: {
+                            duration: 3000,
+                        },
+                        error: {
+                            duration: 5000,
+                        },
+                        style: {
+                            fontSize: "16px",
+                            maxWidth: "500px",
+                            padding: "16px 24px",
+                            backgroundColor: "var(--color-grey-0)",
+                            color: "var(--color-grey-700)",
+                        },
+                    }}
+                />
+            </QueryClientProvider>
+        </DarkModeProvider>
     );
 }
 
