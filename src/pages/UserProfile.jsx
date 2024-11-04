@@ -1,34 +1,36 @@
-import { useState, useEffect, useRef } from 'react';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import app from '../firebase';
-import Button from '../ui/Button';
-import Select from '../ui/Select';
-import Heading from '../ui/Heading';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import defaultAvatar from '../../public/img/default-user.jpg';
-import { useUserProfile } from '../features/student/profiles/useUserProfile';
-import useUser from '../features/authentication/useUser';
+import { useState, useEffect, useRef } from "react";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import app from "../firebase";
+import Button from "../ui/Button";
+import Select from "../ui/Select";
+import Heading from "../ui/Heading";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import defaultAvatar from "../../public/img/default-user.jpg";
+import { useUserProfile } from "../features/student/profiles/useUserProfile";
+import useUser from "../features/authentication/useUser";
 
 const UserProfile = () => {
     const { user } = useUser();
-    const { profileData, isLoading, error, updateProfile } = useUserProfile(user.user._id);
+    const { profileData, isLoading, error, updateProfile } = useUserProfile(
+        user.user._id
+    );
     // const [formData, setFormData] = useState(profileData || {});
     const [formData, setFormData] = useState({});
-    const [imageURL, setImageURL] = useState('');
+    const [imageURL, setImageURL] = useState("");
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
     console.log(profileData);
-    
+
     useEffect(() => {
         if (profileData) {
             setFormData({
-                name: profileData.roleDetails.name || '',
-                email: profileData.user.email || '',
-                phone: profileData.roleDetails.phone || '',
-                gender: profileData.roleDetails.gender || '',
-                dateOfBirth: profileData.roleDetails.dateOfBirth || '',
-                avatar: profileData.roleDetails.avatar || ''
+                name: profileData.roleDetails.name || "",
+                email: profileData.user.email || "",
+                phone: profileData.roleDetails.phone || "",
+                gender: profileData.roleDetails.gender || "",
+                dateOfBirth: profileData.roleDetails.dateOfBirth || "",
+                avatar: profileData.roleDetails.avatar || "",
             });
         }
     }, [profileData]);
@@ -60,86 +62,99 @@ const UserProfile = () => {
         e.preventDefault();
         try {
             let avatarUrl = imageURL;
-    
+
             if (selectedImage) {
                 const storage = getStorage(app);
-                const storageRef = ref(storage, `avatars/${selectedImage.name}`);
+                const storageRef = ref(
+                    storage,
+                    `avatars/${selectedImage.name}`
+                );
                 await uploadBytes(storageRef, selectedImage);
                 avatarUrl = await getDownloadURL(storageRef);
             }
-    
+
             // Update both user and role-specific data
             await updateProfile({
                 ...formData,
                 avatar: avatarUrl,
             });
-    
-            console.log('Saving data:', { ...formData, avatar: avatarUrl });
-            toast.success('Profile updated successfully.');
+
+            console.log("Saving data:", { ...formData, avatar: avatarUrl });
+            toast.success("Profile updated successfully.");
         } catch (error) {
-            console.error('Error updating profile:', error);
-            toast.error('Error updating profile.');
+            console.error("Error updating profile:", error);
+            toast.error("Error updating profile.");
         }
     }
-    
-    
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
     if (!profileData) return <div>No profile data found.</div>;
 
     const options = [
-        { value: 'male', label: 'Male' },
-        { value: 'female', label: 'Female' },
-        { value: 'other', label: 'Other' },
+        { value: "male", label: "Male" },
+        { value: "female", label: "Female" },
+        { value: "other", label: "Other" },
     ];
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+            >
                 <Heading as="h1">User Profile</Heading>
-                <Button type="submit" onClick={handleSave} style={{ color: 'white' }}>
+                <Button
+                    type="submit"
+                    onClick={handleSave}
+                    style={{ color: "white" }}
+                >
                     Update Profile
                 </Button>
             </div>
             <ToastContainer position="top-right" />
             <div
                 style={{
-                    backgroundColor: '#fff',
-                    padding: '8px 20px',
-                    borderRadius: '8px',
-                    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-                    marginTop: '20px',
+                    backgroundColor: "var(--color-grey-0)",
+                    padding: "8px 20px",
+                    borderRadius: "8px",
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    marginTop: "20px",
                 }}
             >
-                <div style={{ display: 'flex', gap: '120px', marginTop: '10px' }}>
+                <div
+                    style={{ display: "flex", gap: "120px", marginTop: "10px" }}
+                >
                     <div
                         style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'column',
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
                         }}
                     >
                         <div
                             style={{
-                                backgroundColor: '#fff',
-                                width: '300px',
-                                height: '60vh',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
+                                backgroundColor: "var(--color-grey-0)",
+                                width: "300px",
+                                height: "60vh",
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
                             }}
                         >
                             <img
                                 style={{
-                                    width: '200px',
-                                    height: '200px',
-                                    borderRadius: '50%',
-                                    objectFit: 'cover',
-                                    marginLeft: '50%',
-                                    transform: 'translateX(-50%)',
-                                    cursor: 'pointer',
+                                    width: "200px",
+                                    height: "200px",
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                    marginLeft: "50%",
+                                    transform: "translateX(-50%)",
+                                    cursor: "pointer",
                                 }}
                                 src={formData.avatar || defaultAvatar}
                                 alt="avatar"
@@ -148,10 +163,16 @@ const UserProfile = () => {
                             <input
                                 type="file"
                                 ref={fileInputRef}
-                                style={{ display: 'none' }}
+                                style={{ display: "none" }}
                                 onChange={handleImageChange}
                             />
-                            <h3 style={{ color: '#000', textAlign: 'center', marginTop: '20px' }}>
+                            <h3
+                                style={{
+                                    color: "var(--color-grey-900)",
+                                    textAlign: "center",
+                                    marginTop: "20px",
+                                }}
+                            >
                                 {formData.name}
                             </h3>
                         </div>
@@ -159,81 +180,140 @@ const UserProfile = () => {
 
                     <div
                         style={{
-                            width: '100%',
-                            marginBottom: '10px',
-                            display: 'flex',
-                            alignItems: 'center',
+                            width: "100%",
+                            marginBottom: "10px",
+                            display: "flex",
+                            alignItems: "center",
                         }}
                     >
-                        <form style={{ width: '90%' }} onSubmit={handleSave}>
-                            <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
-                                <label style={{ paddingRight: 100, width: '15%' }}>Name</label>
+                        <form style={{ width: "90%" }} onSubmit={handleSave}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "8px 0",
+                                }}
+                            >
+                                <label
+                                    style={{ paddingRight: 100, width: "15%" }}
+                                >
+                                    Name
+                                </label>
                                 <input
                                     style={{
-                                        width: '100%',
-                                        padding: '8px 12px',
-                                        borderRadius: '5px',
-                                        border: '1px solid #d1d5db',
+                                        width: "100%",
+                                        padding: "8px 12px",
+                                        borderRadius: "5px",
+                                        backgroundColor: "var(--color-grey-0)",
+                                        border: " 1px solid var(--color-grey-300)",
                                     }}
                                     type="text"
                                     name="name"
-                                    value={formData.name || ''}
+                                    value={formData.name || ""}
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
-                                <label style={{ paddingRight: 100, width: '15%' }}>Email</label>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "8px 0",
+                                }}
+                            >
+                                <label
+                                    style={{ paddingRight: 100, width: "15%" }}
+                                >
+                                    Email
+                                </label>
                                 <input
                                     style={{
-                                        width: '100%',
-                                        padding: '8px 12px',
-                                        borderRadius: '5px',
-                                        border: '1px solid #d1d5db',
+                                        width: "100%",
+                                        padding: "8px 12px",
+                                        borderRadius: "5px",
+                                        border: " 1px solid var(--color-grey-300)",
+                                        backgroundColor: "var(--color-grey-0)",
                                     }}
                                     type="email"
                                     name="email"
-                                    value={formData.email || ''}
+                                    value={formData.email || ""}
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
-                                <label style={{ paddingRight: 100, width: '15%' }}>Phone</label>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "8px 0",
+                                }}
+                            >
+                                <label
+                                    style={{ paddingRight: 100, width: "15%" }}
+                                >
+                                    Phone
+                                </label>
                                 <input
                                     style={{
-                                        width: '100%',
-                                        padding: '8px 12px',
-                                        borderRadius: '5px',
-                                        border: '1px solid #d1d5db',
+                                        width: "100%",
+                                        padding: "8px 12px",
+                                        borderRadius: "5px",
+                                        border: " 1px solid var(--color-grey-300)",
+                                        backgroundColor: "var(--color-grey-0)",
                                     }}
                                     type="text"
                                     name="phone"
-                                    value={formData.phone || ''}
+                                    value={formData.phone || ""}
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
-                                <label style={{ paddingRight: 100, width: '15%' }}>Gender</label>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "8px 0",
+                                }}
+                            >
+                                <label
+                                    style={{ paddingRight: 100, width: "15%" }}
+                                >
+                                    Gender
+                                </label>
                                 <Select
                                     name="gender"
-                                    value={formData.gender || ''}
+                                    value={formData.gender || ""}
                                     onChange={handleChange}
                                     options={options}
-                                    style={{ width: '100%', padding: '12px' }}
+                                    style={{ width: "100%", padding: "12px" }}
                                 />
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
-                                <label style={{ paddingRight: 100, width: '15%' }}>Date Of Birth</label>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "8px 0",
+                                }}
+                            >
+                                <label
+                                    style={{ paddingRight: 100, width: "15%" }}
+                                >
+                                    Date Of Birth
+                                </label>
                                 <input
                                     style={{
-                                        width: '100%',
-                                        padding: '8px 12px',
-                                        borderRadius: '5px',
-                                        border: '1px solid #d1d5db',
+                                        width: "100%",
+                                        padding: "8px 12px",
+                                        borderRadius: "5px",
+                                        border: " 1px solid var(--color-grey-300)",
+                                        backgroundColor: "var(--color-grey-0)",
                                     }}
                                     type="date"
                                     name="dateOfBirth"
-                                    value={formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString().split('T')[0] : ''}  
-                                    
+                                    value={
+                                        formData.dateOfBirth
+                                            ? new Date(formData.dateOfBirth)
+                                                  .toISOString()
+                                                  .split("T")[0]
+                                            : ""
+                                    }
                                     onChange={handleChange}
                                 />
                             </div>

@@ -29,6 +29,12 @@ export async function updateStudent(id, data) {
     });
     return res.data;
 }
+export async function getStudent(id, data) {
+    const res = await axios.get(`/students/${id}`, data, {
+        withCredentials: true,
+    });
+    return res.data;
+}
 
 export async function disableStudent(id) {
     const res = await axios.patch(`/students/${id}/disable`, true, {

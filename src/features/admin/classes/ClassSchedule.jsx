@@ -10,10 +10,10 @@ import ConfirmDelete from "../../../ui/ConfirmDelete";
 import useRemoveSchedule from "./useRemoveSchedule";
 
 const retroTheme = {
-    buttonBackground: "#0d0149",
-    buttonText: "#ffffff",
-    buttonHoverBackground: "#4f46e5",
-    buttonActiveBackground: "#ffffff",
+    buttonBackground: "var(--color-brand-700)",
+    buttonText: "var(--color-brand-50)",
+    buttonHoverBackground: "var(--color-brand-700)",
+    buttonActiveBackground: "var(--color-brand-50)",
 };
 
 const CalendarWrapper = styled.div`
@@ -165,6 +165,7 @@ const ClassSchedule = () => {
                         weekNumbers={true}
                         eventClick={handleEventClick} // Add event click handler
                         dateClick={handleDateClick} // Add date click handler
+                        allDaySlot={false}
                     />
                 </CalendarWrapper>
                 {modalOpen && (
